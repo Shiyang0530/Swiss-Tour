@@ -238,8 +238,8 @@ assert "按瑞士一般情况估计" in a
 a = rep(a, 'x>=12.5&&t!=="momiji"?x-12:x', 'x>=12.5&&t!=="autumn"?x-12:x')
 # toc
 a = rep(a, 'const open=new Set(["root","kyoto"]);', 'const open=new Set(["root"]);')
-a = re.sub(r'const G=\[\["时令","sakura momiji snow matsuri newyear"\].*?\];\n', lambda m: 'const G=[["时令","ski hike autumn xmas matsuri"],["徒步时长","d4h d1 dmulti"],["交通","transport mtn train boat rail bus"],["自然风景","alps rhine view glacier lake waterfall nature spa"],["历史文化","history unesco arch castle church museum art"],["适合人群","elderly couple family"],["吃喝玩乐","hot food town shopping"],["实用信息","free crossborder"]];\n', a, count=1, flags=re.S)
-assert '["徒步时长","d4h d1 dmulti"],["交通"' in a
+a = re.sub(r'const G=\[\["时令","sakura momiji snow matsuri newyear"\].*?\];\n', lambda m: 'const G=[["时令","ski hike autumn xmas matsuri"],["交通","transport"],["自然风景","alps rhine view glacier lake waterfall nature spa"],["历史文化","history unesco arch castle church museum art"],["适合人群","elderly couple family"],["吃喝玩乐","hot food town shopping"],["实用信息","free crossborder"]];\n', a, count=1, flags=re.S)
+assert '["交通"' in a
 
 # ---- multi-base auto planner ----
 AUTOFN = r"""function apAutoDays(S,days,mode,pace){
@@ -325,6 +325,7 @@ a = rep(a, 'if(SC_TAGS.includes(t))return seasonTagPages(t,list);', 'if(SC_TAGS.
 a = rep(a, 'function seasonTagPages(t,list){', 'function seasonTagPages(t,list,T=t){')
 a = rep(a, 'const L=`<span class="eyebrow">时令</span><div class="tagtitle">${esc(TAGS[t])}</div><p style="color:var(--ink-2)">', 'const L=`<span class="eyebrow">时令</span><div class="tagtitle">${esc(tagLabel(T))}</div>${subBar(ORDER.filter(n=>hasTag(n,t)),T,"data-tag")}<p style="color:var(--ink-2)">')
 a = a.replace('<span class="cur">标签 · ${esc(TAGS[p.tag])}</span>', '<span class="cur">标签 · ${esc(tagLabel(p.tag))}</span>')
+a = rep(a, 'const rest=Object.keys(TAGS).filter(k=>!used.has(k)&&TAGCOUNT[k]&&!TAG_PARENT[k]);', 'const rest=Object.keys(TAGS).filter(k=>!used.has(k)&&TAGCOUNT[k]&&!TAG_PARENT[k]&&!SUBHIDE.has(k));')
 a = rep(a, "const ks=Object.keys(cnt).sort(", "const ks=Object.keys(cnt).filter(k=>!SUBHIDE.has(k)).sort(")
 a = rep(a, 'const chip=(k,i)=>`<button class="fchip${FILTER===k?" on":""}${i>=LIM&&FILTER!==k?" extra":""}"', 'const chip=(k,i)=>`<button class="fchip${fBase()===k?" on":""}${i>=LIM&&fBase()!==k?" extra":""}"')
 a = rep(a, """${more?`<button class="fmore" data-fmore="1">${FBAR_OPEN?"收起 ▴":`更多 ${ks.length-LIM} ▾`}</button>`:""}</div>`;""", """${more?`<button class="fmore" data-fmore="1">${FBAR_OPEN?"收起 ▴":`更多 ${ks.length-LIM} ▾`}</button>`:""}</div>${subBar(pool)}`;""")
