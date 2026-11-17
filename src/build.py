@@ -326,6 +326,7 @@ def bg_svg(P, routes=None, labels=True):
         if gi.is_empty: continue
         s.append(f'<path d="{path_of(gi, P)}" style="fill:var(--water)"/>')
     s.append(rail_svg(P, path_of))
+    s.append(f'<g class="geoP" data-p="{P.cx:.6f} {P.cy:.6f} {P.cl:.6f} {P.k:.3f}"></g>')
     if routes:
         for r in routes:
             pts = [P.xy(a, b) for a, b in r]

@@ -35,3 +35,7 @@
 - 文字为本书原创；票价、时刻和开放时间请以官方信息为准。
 
 构建需要 Natural Earth 的 10m 国界、湖泊、河流 GeoJSON（放在 `/home/claude/geo/`，未包含在仓库中）。
+
+## 地图底图
+
+详细地图（小镇、老城区、目的地、徒步路线）在联网时会叠加瑞士国家地图（© swisstopo，可免费使用、需署名），也可切换为 OpenStreetMap 街道图（© OpenStreetMap 贡献者）。浏览过的地图瓦片由 Service Worker 缓存，离线时仍可显示；未缓存的区域显示内置示意图。

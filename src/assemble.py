@@ -15,7 +15,7 @@ def rep(s, old, new, count=1, name=""):
 # ---------------- app.js ----------------
 PASSJS = r"""function viaBlock(n){const V=(n.via||[]).filter(v=>NODES[v[0]]);if(!V.length)return "";return `<div class="sec">途经这里的徒步路线</div><div class="vias">${V.map(([id,l])=>`<button class="mylink" data-go="${id}">${esc(NODES[id].n)}${l?` <small>${esc(l)}</small>`:""} →</button>`).join("")}</div>`}
 function rmBlock(n){const L=n.rm;return `<div class="tmhead"><span class="eyebrow">线路图</span></div><div class="lmwrap"><svg class="map lmap" viewBox="0 0 600 440" role="img" aria-label="${esc(n.n)}线路图"><rect width="600" height="440" style="fill:var(--land)"/>${L.svg.replace("__HY__",HYPSO)}</svg>${lgHtml(L.lg)}<p class="tmnote">示意图：红线为列车大致走向，车站位置为近似值。</p></div>`}
-function lmBlock(n){const L=n.lm;return `<div class="tmhead"><span class="eyebrow">${n.ty==="old"?"老城区地图":"小镇地图"}</span></div><div class="lmwrap"><svg class="map lmap" viewBox="0 0 600 440" role="img" aria-label="${esc(n.n)}地图"><rect width="600" height="440" style="fill:var(--land)"/>${L.svg.replace("__HY__",HYPSO)}</svg>${lgHtml(L.lg)}${L.near&&L.near.length?`<div class="lmnear">${L.near.filter(x=>NODES[x[0]]).map(([id])=>`<button data-go="${id}">${esc(NODES[id].n)}</button>`).join("")}</div>`:""}<p class="tmnote">示意图：地图上标出附近收录的景点、车站与缆车；街道细节有待补充。</p></div>`}
+function lmBlock(n){const L=n.lm;return `<div class="tmhead"><span class="eyebrow">${n.ty==="old"?"老城区地图":"小镇地图"}</span></div><div class="lmwrap"><svg class="map lmap" viewBox="0 0 600 440" role="img" aria-label="${esc(n.n)}地图"><rect width="600" height="440" style="fill:var(--land)"/>${L.svg.replace("__HY__",HYPSO)}</svg>${lgHtml(L.lg)}${L.near&&L.near.length?`<div class="lmnear">${L.near.filter(x=>NODES[x[0]]).map(([id])=>`<button data-go="${id}">${esc(NODES[id].n)}</button>`).join("")}</div>`:""}<p class="tmnote">地图上标出附近收录的景点、车站与缆车。联网时默认叠加瑞士国家地图（swisstopo），可显示街道、步道和等高线；点地图右上角的 ◩ 可在示意图、地形图、街道图（OpenStreetMap）之间切换。看过的区域会缓存，离线时也能显示。</p></div>`}
 const WILDK=t=>t&&(t.k==="野生动物"||t.k==="高山植物"||t.k==="地质与地貌");
 function wildInfo(t){let h="";const pct=x=>((x-1)/12*100).toFixed(2);
 if(t.sm&&t.sm.length)h+=`<div class="scal"><div class="sec">季节</div><div class="scgrid"><div class="scrow"><span class="scl">较易见到</span><div class="sctrack">${t.sm.map(([a,b,l])=>`<i class="sc-food" style="left:${pct(a)}%;width:${Math.max(1.2,(Math.min(b,13)-a)/12*100).toFixed(2)}%"${l?` title="${esc(l)}"`:""}></i>`).join("")}</div></div><div class="scrow scm"><span class="scl"></span><div class="sctrack">${[1,2,3,4,5,6,7,8,9,10,11,12].map(m=>`<span style="left:${((m-0.5)/12*100).toFixed(2)}%">${m}</span>`).join("")}</div></div></div><ul class="evl">${t.sm.map(([a,b,l])=>`<li><b>${esc(l||"")}</b><span>${b-a>=11.5?"全年":mlabel(a)+"–"+mlabel(Math.min(b,12.99)-0.01)}</span></li>`).join("")}</ul></div>`;
@@ -39,15 +39,15 @@ function multiBlock(n){const ks=n.multi||[];if(!ks.length)return "";const leaf=!
 function setStage(mk,s){const on=!document.querySelector(`.stgrow[data-mk="${mk}"][data-s="${s}"].on`);document.querySelectorAll(`[data-mk="${mk}"] .stg,[data-mk="${mk}"] .pstg,[data-mk="${mk}"] .pstl,.stgrow[data-mk="${mk}"]`).forEach(e=>e.classList.toggle("on",on&&e.dataset.s===String(s)));if(on){const m=[...document.querySelectorAll(`[data-mk="${mk}"] svg.map`)].find(e=>e.getBoundingClientRect().width>0);if(m){const r=m.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)m.scrollIntoView({behavior:"smooth",block:"center"})}}}
 document.addEventListener("click",e=>{const r=e.target.closest(".stgrow");if(r){setStage(r.dataset.mk,r.dataset.s);return}const p=e.target.closest(".stg,.pstg");if(p){const w=p.closest("[data-mk]");if(w)setStage(w.dataset.mk,p.dataset.s)}});
 function hotRef(n){const h=n.hotref;if(!h||!NODES[h[0]])return "";return `<div class="hotref">🔥 热门度：在「${esc(NODES[h[0]].n)}」热门徒步路线中排第 ${h[1]}，有 ${h[2]} 个榜单或指南推荐。<button class="mylink" data-go="${h[0]}">查看排行 →</button></div>`}
-function zoomify(svg){if(svg.__z||svg.closest(".cover-img"))return;svg.__z=1;const b=svg.viewBox.baseVal,W0=b.width,H0=b.height;let v={x:0,y:0,w:W0,h:H0};const w=document.createElement("div");w.className="zw";svg.parentNode.insertBefore(w,svg);w.appendChild(svg);const c=document.createElement("div");c.className="zc";c.innerHTML='<button type="button" data-z="in" aria-label="放大" title="放大">+</button><button type="button" data-z="out" aria-label="缩小" title="缩小">−</button><button type="button" data-z="reset" aria-label="还原" title="还原">⤢</button>';w.appendChild(c);
-const set=n=>{n.w=Math.max(W0/8,Math.min(W0,n.w));n.h=n.w*H0/W0;n.x=Math.max(0,Math.min(W0-n.w,n.x));n.y=Math.max(0,Math.min(H0-n.h,n.y));v=n;svg.setAttribute("viewBox",`${n.x.toFixed(2)} ${n.y.toFixed(2)} ${n.w.toFixed(2)} ${n.h.toFixed(2)}`);const z=n.w<W0-.5;svg.classList.toggle("zoomed",z);w.classList.toggle("zoomed",z);cs(n.w/W0)};
+function zoomify(svg){if(svg.__z||svg.closest(".cover-img"))return;svg.__z=1;const b=svg.viewBox.baseVal,W0=b.width,H0=b.height;let v={x:0,y:0,w:W0,h:H0};const w=document.createElement("div");w.className="zw";svg.parentNode.insertBefore(w,svg);w.appendChild(svg);const c=document.createElement("div");c.className="zc";c.innerHTML='<button type="button" data-z="in" aria-label="放大" title="放大">+</button><button type="button" data-z="out" aria-label="缩小" title="缩小">−</button><button type="button" data-z="reset" aria-label="还原" title="还原">⤢</button>'+(svg.querySelector("g.geoP")?'<button type="button" data-z="bm" aria-label="切换底图" title="切换底图：示意图 / 地形图 / 街道图" class="bmb">◩</button>':'');w.appendChild(c);
+const set=n=>{n.w=Math.max(W0/8,Math.min(W0,n.w));n.h=n.w*H0/W0;n.x=Math.max(0,Math.min(W0-n.w,n.x));n.y=Math.max(0,Math.min(H0-n.h,n.y));v=n;svg.setAttribute("viewBox",`${n.x.toFixed(2)} ${n.y.toFixed(2)} ${n.w.toFixed(2)} ${n.h.toFixed(2)}`);const z=n.w<W0-.5;svg.classList.toggle("zoomed",z);w.classList.toggle("zoomed",z);cs(n.w/W0);svg.__v=n;tilesSoon(svg)};
 let ZL=null;const ctr=e=>{if(e.tagName==="circle")return[+e.getAttribute("cx"),+e.getAttribute("cy")];try{const b=e.getBBox();return[b.x+b.width/2,b.y+b.height/2]}catch(_){return null}};
 const MKS=".tnm,.pkm,.psm";const GRP="g.mk,g.tst,g.twp,g.lfn,g.ill,g.pmk,g.lmk";
 const cs=k=>{if(!ZL){ZL=[];svg.querySelectorAll(GRP).forEach(g=>{const s=g.querySelector("circle,rect,path");const a=g.dataset.cx?[+g.dataset.cx,+g.dataset.cy]:s&&ctr(s);if(a)ZL.push([g,a])});svg.querySelectorAll(MKS).forEach(e=>{if(e.closest(GRP))return;const a=ctr(e);if(a)ZL.push([e,a])});svg.querySelectorAll("text").forEach(t=>{if(t.closest(GRP+",.sbar"))return;const p=t.previousElementSibling;let a=p&&p.matches(MKS)?ctr(p):null;if(!a){const x=parseFloat(t.getAttribute("x")),y=parseFloat(t.getAttribute("y"));if(isNaN(x)||isNaN(y))return;a=[x,y]}ZL.push([t,a])})}
 ZL.forEach(([e,[x,y]])=>{if(k>.999)e.removeAttribute("data-zt"),e.style.transform="";else e.style.transform=`translate(${x}px,${y}px) scale(${k.toFixed(4)}) translate(${-x}px,${-y}px)`})};
 const pt=(cx,cy)=>{const r=svg.getBoundingClientRect();return[v.x+(cx-r.left)/r.width*v.w,v.y+(cy-r.top)/r.height*v.h]};
 const zoomAt=(f,px,py)=>{const nw=Math.max(W0/8,Math.min(W0,v.w/f)),k=nw/v.w;set({x:px-(px-v.x)*k,y:py-(py-v.y)*k,w:nw})};
-c.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;e.stopPropagation();const m=t.dataset.z;if(m==="reset")set({x:0,y:0,w:W0});else zoomAt(m==="in"?1.6:1/1.6,v.x+v.w/2,v.y+v.h/2)});
+c.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;e.stopPropagation();const m=t.dataset.z;if(m==="bm"){bmCycle(svg);return}if(m==="reset")set({x:0,y:0,w:W0});else zoomAt(m==="in"?1.6:1/1.6,v.x+v.w/2,v.y+v.h/2)});
 svg.addEventListener("dblclick",e=>{e.preventDefault();const[p,q]=pt(e.clientX,e.clientY);zoomAt(e.shiftKey?1/2:2,p,q)});
 svg.addEventListener("wheel",e=>{if(!e.ctrlKey&&!e.metaKey&&!svg.classList.contains("zoomed"))return;e.preventDefault();const[p,q]=pt(e.clientX,e.clientY);zoomAt(Math.exp(-e.deltaY*(e.deltaMode?.05:.002)),p,q)},{passive:false});
 const P=new Map;let moved=0,start=null,pinch=null;
@@ -55,7 +55,34 @@ svg.addEventListener("pointerdown",e=>{P.set(e.pointerId,{x:e.clientX,y:e.client
 svg.addEventListener("pointermove",e=>{if(!P.has(e.pointerId))return;P.set(e.pointerId,{x:e.clientX,y:e.clientY});const r=svg.getBoundingClientRect();if(P.size>=2&&pinch){const[a,d]=[...P.values()];const dd=Math.hypot(a.x-d.x,a.y-d.y);if(!pinch.d)return;const f=dd/pinch.d,nw=Math.max(W0/8,Math.min(W0,pinch.v.w/f)),mx=(a.x+d.x)/2,my=(a.y+d.y)/2;set({x:pinch.m[0]-(mx-r.left)/r.width*nw,y:pinch.m[1]-(my-r.top)/r.height*nw*H0/W0,w:nw});e.preventDefault()}else if(P.size===1&&start&&start.v.w<W0-.5){const dx=e.clientX-start.x,dy=e.clientY-start.y;if(!moved&&Math.hypot(dx,dy)<5)return;if(!moved){moved=1;try{svg.setPointerCapture(e.pointerId)}catch(_){}}set({x:start.v.x-dx/r.width*start.v.w,y:start.v.y-dy/r.height*start.v.h,w:start.v.w});e.preventDefault()}});
 const up=e=>{P.delete(e.pointerId);if(P.size<2)pinch=null;if(P.size===1){const[a]=[...P.values()];start={x:a.x,y:a.y,v:{...v}}}if(!P.size)start=null};
 ["pointerup","pointercancel","pointerleave"].forEach(t=>svg.addEventListener(t,up));
-svg.addEventListener("click",e=>{if(moved){e.stopPropagation();e.preventDefault();moved=0}},true);if(svg.dataset.fit){const f=svg.dataset.fit.split(" ").map(Number);set({x:f[0],y:f[1],w:f[2]})}}
+svg.addEventListener("click",e=>{if(moved){e.stopPropagation();e.preventDefault();moved=0}},true);if(svg.dataset.fit){const f=svg.dataset.fit.split(" ").map(Number);set({x:f[0],y:f[1],w:f[2]})}else{svg.__v=v;tilesSoon(svg)}}
+const BMS={topo:{u:"https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg",mz:18,a:"底图 © swisstopo",n:"地形图"},osm:{u:"https://tile.openstreetmap.org/{z}/{x}/{y}.png",mz:19,a:"底图 © OpenStreetMap 贡献者",n:"街道图"}};
+let BMPREF=null;try{BMPREF=localStorage.getItem("bm")}catch(_){}
+function bmOf(svg){if(svg.__bm!==undefined)return svg.__bm;const p=svg.querySelector("g.geoP");if(!p)return "off";if(BMPREF==="off")return "off";const[cx,cy,cl,k]=p.dataset.p.split(" ").map(Number);return (BMPREF&&BMS[BMPREF]&&k*cl>900)?BMPREF:(k*cl>900?"topo":"off")}
+function bmCycle(svg){const o=["off","topo","osm"];const cur=bmOf(svg);const nx=o[(o.indexOf(cur)+1)%3];svg.__bm=nx;BMPREF=nx;try{localStorage.setItem("bm",nx)}catch(_){}
+  const w=svg.closest(".zw");if(w){let t=w.querySelector(".bmtip");if(!t){t=document.createElement("div");t.className="bmtip";w.appendChild(t)}t.textContent=nx==="off"?"底图：示意图":"底图："+BMS[nx].n+(navigator.onLine===false?"（离线时只显示浏览过的区域）":"");t.classList.add("on");clearTimeout(t.__h);t.__h=setTimeout(()=>t.classList.remove("on"),1800)}
+  drawTiles(svg)}
+function tilesSoon(svg){clearTimeout(svg.__th);svg.__th=setTimeout(()=>drawTiles(svg),120)}
+function drawTiles(svg){const p=svg.querySelector("g.geoP");if(!p)return;let L=svg.querySelector("g.tiles");const mode=bmOf(svg);svg.classList.toggle("bmon",mode!=="off");
+  if(mode==="off"){if(L)L.remove();const a=svg.querySelector(".bmattr");if(a)a.remove();return}
+  const S=BMS[mode];if(!L||L.dataset.m!==mode){if(L)L.remove();L=document.createElementNS("http://www.w3.org/2000/svg","g");L.setAttribute("class","tiles");L.dataset.m=mode;p.parentNode.insertBefore(L,p)}
+  const[cx,cy,cl,k]=p.dataset.p.split(" ").map(Number);const vb=svg.viewBox.baseVal;const v={x:vb.x,y:vb.y,w:vb.width,h:vb.height};
+  const lon=X=>cx+(X-300)/(cl*k),lat=Y=>cy-(Y-220)/k;const X=lo=>300+(lo-cx)*cl*k,Y=la=>220-(la-cy)*k;
+  const r=svg.getBoundingClientRect();const pxw=Math.max(300,r.width||600)*(window.devicePixelRatio||1);
+  const ppd=pxw/v.w*cl*k;let z=Math.round(Math.log2(ppd*360/256));z=Math.max(3,Math.min(S.mz,z));
+  const lo0=lon(v.x),lo1=lon(v.x+v.w),la1=lat(v.y),la0=lat(v.y+v.h);
+  const tx=(lo,z)=>(lo+180)/360*2**z,ty=(la,z)=>{const t=la*Math.PI/180;return(1-Math.log(Math.tan(t)+1/Math.cos(t))/Math.PI)/2*2**z};
+  let xa,xb,ya,yb;for(;;){xa=Math.floor(tx(lo0,z));xb=Math.floor(tx(lo1,z));ya=Math.floor(ty(la1,z));yb=Math.floor(ty(la0,z));if((xb-xa+1)*(yb-ya+1)<=60||z<=3)break;z--}
+  const ilo=(x,z)=>x/2**z*360-180,ila=(y,z)=>{const n=Math.PI*(1-2*y/2**z);return Math.atan(Math.sinh(n))*180/Math.PI};
+  const want=new Set;const have=new Map;L.querySelectorAll("image").forEach(i=>have.set(i.dataset.t,i));
+  for(let x=xa;x<=xb;x++)for(let y=ya;y<=yb;y++){const key=z+"/"+x+"/"+y;want.add(key);if(have.has(key))continue;
+    const i=document.createElementNS("http://www.w3.org/2000/svg","image");const x0=X(ilo(x,z)),x1=X(ilo(x+1,z)),y0=Y(ila(y,z)),y1=Y(ila(y+1,z));
+    i.setAttribute("x",x0.toFixed(2));i.setAttribute("y",y0.toFixed(2));i.setAttribute("width",(x1-x0+.4).toFixed(2));i.setAttribute("height",(y1-y0+.4).toFixed(2));i.setAttribute("preserveAspectRatio","none");i.dataset.t=key;i.dataset.z=z;
+    i.addEventListener("error",()=>i.remove());i.setAttribute("href",S.u.replace("{z}",z).replace("{x}",x).replace("{y}",y));L.appendChild(i)}
+  // keep lower-zoom tiles underneath until new ones load; drop tiles of other zooms that are far off
+  have.forEach((i,key)=>{if(!want.has(key)&&+i.dataset.z!==z){if(+i.dataset.z>z||L.childNodes.length>160)i.remove()}else if(!want.has(key)&&L.childNodes.length>160)i.remove()});
+  [...L.querySelectorAll("image")].sort((a,b)=>a.dataset.z-b.dataset.z).forEach(i=>L.appendChild(i));
+  let a=svg.querySelector(".bmattr");if(!a){a=document.createElementNS("http://www.w3.org/2000/svg","text");a.setAttribute("class","bmattr");svg.appendChild(a)}a.setAttribute("x",(v.x+6).toFixed(1));a.setAttribute("y",(v.y+14*v.w/600).toFixed(1));a.setAttribute("font-size",(10*v.w/600).toFixed(2));a.textContent=S.a}
 const zScan=r=>{(r.matches&&r.matches("svg.map")?[r]:[]).concat([...(r.querySelectorAll?r.querySelectorAll("svg.map"):[])]).forEach(zoomify)};
 new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1&&!(n.classList&&n.classList.contains("zw")))zScan(n)}))).observe(document.documentElement,{childList:true,subtree:true});
 document.addEventListener("DOMContentLoaded",()=>zScan(document));setTimeout(()=>zScan(document),0);
@@ -356,6 +383,11 @@ svg.map.zoomed g.mk,svg.map.zoomed text,svg.map.zoomed .tnm,svg.map.zoomed .pkm,
 .zc{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:4px;z-index:2}
 .zc button{width:30px;height:30px;border-radius:7px;border:1px solid var(--line,#ccc);background:var(--paper,#fff);color:var(--ink,#222);font:600 17px/1 system-ui,sans-serif;cursor:pointer;opacity:.88;box-shadow:0 1px 3px rgba(0,0,0,.15);padding:0}
 .zc button:hover{opacity:1}
+.zc .bmb{font-size:15px}
+.zw .bmtip{position:absolute;right:46px;top:8px;background:rgba(30,30,30,.82);color:#fff;font:12px/1.4 system-ui,sans-serif;padding:5px 9px;border-radius:6px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:3}
+.zw .bmtip.on{opacity:1}
+svg.map .bmattr{fill:#333;text-anchor:start;paint-order:stroke;stroke:#fff;stroke-width:3px;font-family:system-ui,sans-serif}
+svg.map.bmon g.tiles image{opacity:.93}
 .zc button[data-z=reset]{font-size:14px}
 .zw:not(.zoomed) .zc button[data-z=out],.zw:not(.zoomed) .zc button[data-z=reset]{opacity:.35}
 @media print{.zc{display:none}}
@@ -397,8 +429,8 @@ D = "/home/claude/swiss/site"; os.makedirs(D, exist_ok=True)
 open(D + "/index.html", "w", encoding="utf-8").write(html)
 ver = hashlib.sha1(html.encode()).hexdigest()[:10]
 open(D + "/sw.js", "w").write(f'const CACHE="swiss-techo-{ver}";const FILES={json.dumps(FILES)};\n' + '''self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)));self.skipWaiting()});
-self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
-self.addEventListener("fetch",e=>{const r=e.request;if(r.method!=="GET")return;const u=new URL(r.url);if(u.origin!==location.origin)return;
+self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE&&k!=="swiss-tiles").map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
+self.addEventListener("fetch",e=>{const r=e.request;if(r.method!=="GET")return;const u=new URL(r.url);if(u.host==="wmts.geo.admin.ch"||u.host==="tile.openstreetmap.org"){e.respondWith(caches.open("swiss-tiles").then(c=>c.match(r).then(m=>m||fetch(r).then(res=>{if(res.ok||res.type==="opaque")c.put(r,res.clone());return res}))));return}if(u.origin!==location.origin)return;
   if(r.mode==="navigate"){e.respondWith(fetch(r).then(res=>{const c=res.clone();caches.open(CACHE).then(x=>x.put("index.html",c));return res}).catch(()=>caches.match("index.html")));return}
   e.respondWith(caches.match(r).then(m=>m||fetch(r)))});
 ''')
