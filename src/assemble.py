@@ -348,6 +348,21 @@ t = rep(t, "const N=379,", f"const N={len(FILES)},")
 t = rep(t, 'k.startsWith("kyoto-techo-")', 'k.startsWith("swiss-techo-")')
 t = rep(t, 'localStorage.getItem("kyoto-offline")', 'localStorage.getItem("swiss-offline")')
 t = rep(t, 'localStorage.setItem("kyoto-offline",String(N))', 'localStorage.setItem("swiss-offline",String(N))')
+import re as _re
+_i = t.index('<script>if("serviceWorker"'); _j = t.index('</script>', _i) + len('</script>')
+t = t[:_i] + """<script>if("serviceWorker" in navigator&&/^https?:/.test(location.protocol)){addEventListener("load",()=>{
+ const t=document.createElement("div");t.id="offst";t.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:40;background:#1F2B45;color:#fff;font:13px/1.4 system-ui,sans-serif;padding:7px 14px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:opacity .4s;pointer-events:none;white-space:nowrap";t.hidden=true;document.body.appendChild(t);
+ const hide=(ms)=>setTimeout(()=>{t.style.opacity=0;setTimeout(()=>t.hidden=true,500)},ms);
+ navigator.serviceWorker.register("sw.js").then(()=>{let last=-1,still=0,tries=0;const N=__N__;
+  const ck=async()=>{try{tries++;const ks=(await caches.keys()).filter(k=>k.startsWith("swiss-techo-"));let n=0,ok=false;
+   for(const k of ks){const c=await caches.open(k);if(await c.match("__offline_done__"))ok=true;n=Math.max(n,(await c.keys()).length)}
+   let done=false;try{done=localStorage.getItem("swiss-offline")===CACHEV}catch(e){}
+   if(ok){if(!done){t.textContent="✓ 已下载完成，断网也能使用";t.hidden=false;t.style.opacity=1;hide(4000);try{localStorage.setItem("swiss-offline",CACHEV)}catch(e){}}else{t.hidden=true}return}
+   if(n===last)still++;else{still=0;last=n}
+   if(still>=24||tries>200){if(!done){t.textContent="离线内容未能全部下载，联网时可正常使用";t.hidden=false;hide(5000)}return}
+   if(!done&&tries>1){t.hidden=false;t.style.opacity=1;t.textContent="正在下载离线内容 "+Math.min(n,N)+" / "+N+"，请保持联网…"}
+   setTimeout(ck,2500)}catch(e){t.hidden=true}};setTimeout(ck,1500)}).catch(()=>{});
+ const CACHEV=__CV__;})}</script>""" + t[_j:]
 
 # ---------------- css additions ----------------
 css = css.rstrip()
@@ -457,9 +472,10 @@ for bad in ["京都"]:
     idx = [m.start() for m in re.finditer(bad, html)]
     if idx: print("WARN html contains", bad, len(idx), [html[i-40:i+20] for i in idx[:4]])
 D = "/home/claude/swiss/site"; os.makedirs(D, exist_ok=True)
+html = html.replace("__N__", str(len(FILES))).replace("__CV__", json.dumps(str(len(FILES))))
 open(D + "/index.html", "w", encoding="utf-8").write(html)
 ver = hashlib.sha1(html.encode()).hexdigest()[:10]
-open(D + "/sw.js", "w").write(f'const CACHE="swiss-techo-{ver}";const FILES={json.dumps(FILES)};\n' + '''self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)));self.skipWaiting()});
+open(D + "/sw.js", "w").write(f'const CACHE="swiss-techo-{ver}";const FILES={json.dumps(FILES)};\n' + '''self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(async c=>{let i=0;const one=async f=>{try{const r=await fetch(f,{cache:"reload"});if(r.ok)await c.put(f,r)}catch(_){}};const q=[...FILES];await Promise.all([0,1,2,3,4,5].map(async()=>{while(q.length)await one(q.shift())}));await c.put("__offline_done__",new Response("1"))}));self.skipWaiting()});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE&&k!=="swiss-tiles").map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener("fetch",e=>{const r=e.request;if(r.method!=="GET")return;const u=new URL(r.url);if(u.host==="wmts.geo.admin.ch"||u.host==="tile.openstreetmap.org"){e.respondWith(caches.open("swiss-tiles").then(c=>c.match(r).then(m=>m||fetch(r).then(res=>{if(res.ok||res.type==="opaque")c.put(r,res.clone());return res}))));return}if(u.origin!==location.origin)return;
   if(r.mode==="navigate"){e.respondWith(fetch(r).then(res=>{const c=res.clone();caches.open(CACHE).then(x=>x.put("index.html",c));return res}).catch(()=>caches.match("index.html")));return}

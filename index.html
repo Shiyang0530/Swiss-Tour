@@ -1649,11 +1649,18 @@ document.addEventListener("click",e=>{const a=e.target.closest("a[data-dp]");if(
 })();
 
 </script>
-<script>if("serviceWorker" in navigator&&/^https?:/.test(location.protocol)){addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{});
- const N=285,t=document.createElement("div");t.id="offst";t.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:40;background:#1F2B45;color:#fff;font:13px/1.4 system-ui,sans-serif;padding:7px 14px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:opacity .4s;pointer-events:none;white-space:nowrap";t.hidden=true;document.body.appendChild(t);
- let shown=false;const ck=async()=>{try{if(!("caches" in window))return;const ks=(await caches.keys()).filter(k=>k.startsWith("swiss-techo-"));let n=0;for(const k of ks){n=Math.max(n,(await (await caches.open(k)).keys()).length)}
-  let done=false;try{done=localStorage.getItem("swiss-offline")===String(N)}catch(e){}
-  if(n>=N){if(!done){t.textContent="✓ 已下载完成，断网也能使用";t.hidden=false;setTimeout(()=>{t.style.opacity=0},4000);try{localStorage.setItem("swiss-offline",String(N))}catch(e){}}return}
-  if(!done){t.hidden=false;t.textContent="正在下载离线内容，请保持联网…";}setTimeout(ck,2500)}catch(e){}};setTimeout(ck,1500)})}</script>
+<script>if("serviceWorker" in navigator&&/^https?:/.test(location.protocol)){addEventListener("load",()=>{
+ const t=document.createElement("div");t.id="offst";t.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:40;background:#1F2B45;color:#fff;font:13px/1.4 system-ui,sans-serif;padding:7px 14px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,.25);transition:opacity .4s;pointer-events:none;white-space:nowrap";t.hidden=true;document.body.appendChild(t);
+ const hide=(ms)=>setTimeout(()=>{t.style.opacity=0;setTimeout(()=>t.hidden=true,500)},ms);
+ navigator.serviceWorker.register("sw.js").then(()=>{let last=-1,still=0,tries=0;const N=285;
+  const ck=async()=>{try{tries++;const ks=(await caches.keys()).filter(k=>k.startsWith("swiss-techo-"));let n=0,ok=false;
+   for(const k of ks){const c=await caches.open(k);if(await c.match("__offline_done__"))ok=true;n=Math.max(n,(await c.keys()).length)}
+   let done=false;try{done=localStorage.getItem("swiss-offline")===CACHEV}catch(e){}
+   if(ok){if(!done){t.textContent="✓ 已下载完成，断网也能使用";t.hidden=false;t.style.opacity=1;hide(4000);try{localStorage.setItem("swiss-offline",CACHEV)}catch(e){}}else{t.hidden=true}return}
+   if(n===last)still++;else{still=0;last=n}
+   if(still>=24||tries>200){if(!done){t.textContent="离线内容未能全部下载，联网时可正常使用";t.hidden=false;hide(5000)}return}
+   if(!done&&tries>1){t.hidden=false;t.style.opacity=1;t.textContent="正在下载离线内容 "+Math.min(n,N)+" / "+N+"，请保持联网…"}
+   setTimeout(ck,2500)}catch(e){t.hidden=true}};setTimeout(ck,1500)}).catch(()=>{});
+ const CACHEV="285";})}</script>
 </body>
 </html>
