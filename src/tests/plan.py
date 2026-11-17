@@ -18,7 +18,7 @@ async def main():
         await pg.screenshot(path="/home/claude/swiss/tests/plan.png", full_page=False)
         # winter test
         await pg.fill("#ap-start","2027-01-20"); await pg.fill("#ap-end","2027-01-24")
-        await pg.click("[data-aptag='ski']")
+        await pg.click("[data-apck='ski']")
         await pg.click("[data-apgo]")
         await pg.wait_for_timeout(1000)
         txt = await pg.inner_text("#R")

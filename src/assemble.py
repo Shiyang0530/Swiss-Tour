@@ -326,6 +326,73 @@ a = rep(a, 'function seasonTagPages(t,list){', 'function seasonTagPages(t,list,T
 a = rep(a, 'const L=`<span class="eyebrow">时令</span><div class="tagtitle">${esc(TAGS[t])}</div><p style="color:var(--ink-2)">', 'const L=`<span class="eyebrow">时令</span><div class="tagtitle">${esc(tagLabel(T))}</div>${subBar(ORDER.filter(n=>hasTag(n,t)),T,"data-tag")}<p style="color:var(--ink-2)">')
 a = a.replace('<span class="cur">标签 · ${esc(TAGS[p.tag])}</span>', '<span class="cur">标签 · ${esc(tagLabel(p.tag))}</span>')
 a = rep(a, 'const rest=Object.keys(TAGS).filter(k=>!used.has(k)&&TAGCOUNT[k]&&!TAG_PARENT[k]);', 'const rest=Object.keys(TAGS).filter(k=>!used.has(k)&&TAGCOUNT[k]&&!TAG_PARENT[k]&&!SUBHIDE.has(k));')
+# ================= autoplan v2 =================
+a = rep(a, 'const AP_SUBPICK=["grindelwald","lauterbrunnen","muerren","zermatt","saasfee","aletsch","chamonix","luzerncity","titlis","stmoritz","bernina","davos","lugano","locarno","geneve","montreux","gruyeres","zurichcity","appenzell","liechtenstein","basel","berncity"];',
+  'if(AP_SUBDATA.luzerncity)AP_SUBDATA.luzernx=["琉森",AP_SUBDATA.luzerncity[1],"琉森"];\nconst AP_SUBPICK=["zurichcity","jungfrauregion","luzernx","zermatt","chamonix","geneve"];const AP_SUBLBL={zurichcity:"苏黎世",jungfrauregion:"因特拉肯与少女峰",luzernx:"琉森",zermatt:"马特洪峰",chamonix:"勃朗峰",geneve:"日内瓦"};\nconst AP_ALIAS={luzerncity:"luzernx",luzernsee:"luzern"+"x"};\nconst AP_PLREG={zrh:"zurichcity",zhb:"zurichcity",gva:"geneve",gvst:"geneve",bsl:"basel",bslst:"basel",mxp:"lugano"};')
+a = rep(a, 'const AP_REG_SUB=Object.fromEntries(AP_SUBPICK.filter(k=>AP_SUBDATA[k]).map(k=>[k,AP_SUBDATA[k][0]]));', 'const AP_REG_SUB=Object.fromEntries(AP_SUBPICK.filter(k=>AP_SUBDATA[k]).map(k=>[k,AP_SUBLBL[k]||AP_SUBDATA[k][0]]));')
+a = rep(a, 'const apRegion=id=>{const R=AP_CURREG||AP.regions;let n=NODES[id];while(n){if(R[n.id])return n.id;n=n.parent}return ""};', 'const apRegion=id=>{const R=AP_CURREG||AP.regions;let n=NODES[id];while(n){if(R[n.id])return n.id;const al=AP_ALIAS[n.id];if(al&&R[al])return al;n=n.parent}return ""};')
+a = rep(a, 'if(!AP.regions||typeof AP.regions!=="object")AP.regions={};', 'if(!AP.regions||typeof AP.regions!=="object")AP.regions={};Object.keys(AP.regions).forEach(k=>{if(!AP_REG_TOP[k]&&!AP_REG_SUB[k])delete AP.regions[k]});AP.tags=(AP.tags||[]).filter(k=>!["ski","hike","d4h","d1","dmulti","easy","moderate","hard"].includes(k));if(!Array.isArray(AP.hikeDur))AP.hikeDur=["d4h","d1"];')
+a = rep(a, 'const AP_TAG_G=[["时令","ski autumn xmas matsuri"],["徒步","hike d4h d1 dmulti"],', 'const AP_TAG_G=[["时令","autumn xmas matsuri"],')
+# scenic trains
+a = rep(a, 'function apAutoDays(S,days,mode,pace){', """const AP_TRAINS=(()=>{const o=[];const P=n=>{const m=/约\\s*(\\d+)\\s*小时(?:\\s*(\\d+)\\s*分钟)?/.exec(n)||/约\\s*(\\d+)\\s*分钟/.exec(n);if(!m)return 0;return /小时/.test(m[0])?+m[1]*60+ +(m[2]||0):+m[1]};
+  ORDER.forEach(n=>{if(!n.route||!(n.t||[]).includes("train")||!n.i||!n.i.l||n.route.length<2)return;const min=P(n.i.l.split(/[；;]/)[0]);if(!min)return;let L=0;const cum=[0];for(let i=1;i<n.route.length;i++){L+=km(n.route[i-1],n.route[i]);cum.push(L)}o.push({id:n.id,n:n.n,r:n.route,cum,L,min})});return o})();
+function apTrain(a,b){let best=null;AP_TRAINS.forEach(T=>{const near=g=>{let bi=-1,bd=1e9;T.r.forEach((p,i)=>{const d=km(g,p);if(d<bd){bd=d;bi=i}});return bd<=22?bi:-1};const i=near(a),j=near(b);if(i<0||j<0||i===j)return;const seg=Math.abs(T.cum[j]-T.cum[i]);if(seg<T.L*0.35||seg<35)return;const m=Math.round(T.min*seg/T.L/5)*5;if(m>apTravel(a,b,"public",false)*2.3)return;if(!best||seg>best.seg)best={id:T.id,n:T.n,min:m,seg}});return best}
+function apAutoDays(S,days,mode,pace){""")
+a = rep(a, 'let ord=bs,bc=1e9;perms(bs).forEach(p=>{let c=tt(A,p[0].g)+tt(p[p.length-1].g,Z);', 'let ord=bs,bc=1e9;perms(bs).forEach(p=>{let c=tt(A,p[0].g)*1.3+tt(p[p.length-1].g,Z);')
+a = rep(a, "const regDay={},dayBase={},dayBaseN={};days.forEach((d,i)=>{const x=seq[Math.min(i,seq.length-1)];", """const fixEnd=(pl,atStart)=>{const P=AP_PLACES[pl]||AP_PLACES.zrh;const r=AP_PLREG[pl]||"zurichcity";if(!AP_HUB[r]||seq.length<3)return;const x=atStart?seq[0]:seq[seq.length-1];if(!x||x[0]===r||tt(P.g,x[1].g)<=100)return;
+    const c={};seq.forEach(q=>c[q[0]]=(c[q[0]]||0)+1);let rm=-1;const ks=Object.keys(c).filter(k=>c[k]>1).sort((p,q)=>c[q]-c[p]);if(ks.length){for(let i=seq.length-1;i>=0;i--)if(seq[i][0]===ks[0]){rm=i;break}}else{let lo=1e18;seq.forEach((q,i)=>{if((val[q[0]]||0)<lo&&i!==(atStart?seq.length-1:0)){lo=val[q[0]]||0;rm=i}})}
+    if(rm<0)return;const k0=seq[rm][0];seq.splice(rm,1);cnt[k0]--;if(!cnt[k0])delete cnt[k0];const e=[r,{g:AP_HUB[r],k:r}];if(atStart)seq.unshift(e);else seq.push(e);cnt[r]=(cnt[r]||0)+1};
+  if(seq.length>=3){fixEnd(AP.arrP||"zrh",true);fixEnd(AP.depP||AP.arrP||"zrh",false)}
+  const regDay={},dayBase={},dayBaseN={};days.forEach((d,i)=>{const x=seq[Math.min(i,seq.length-1)];""")
+# manual region ordering by geography
+a = rep(a, "const order=[];for(let j=0;j<want.length;j++){if(pi>=pref.length){warn.push(`日期不够，「${AP_REGIONS[want[j]]}」少排了 1 天`);continue}order.push([pref[pi++],want[j]])}\n    order.sort((a,b)=>a[0]<b[0]?-1:1);const seen={};order.forEach(([d,r])=>{regDay[d]=r});}",
+  """const dsel=[];for(let j=0;j<want.length;j++){if(pi>=pref.length){warn.push(`日期不够，「${AP_REGIONS[want[j]]}」少排了 1 天`);continue}dsel.push(pref[pi++])}dsel.sort();
+    const A=(AP_PLACES[AP.arrP]||AP_PLACES.zrh).g,Z=(AP_PLACES[AP.depP]||AP_PLACES[AP.arrP]||AP_PLACES.zrh).g,tt=(p,q)=>apTravel(p,q,mode,false),hub=k=>AP_HUB[k]||B0;
+    const ks=[...new Set(want)];const perms=x=>x.length<2?[x]:x.flatMap((y,i)=>perms([...x.slice(0,i),...x.slice(i+1)]).map(p=>[y,...p]));let ord=ks,bc=1e18;(ks.length<=7?perms(ks):[ks]).forEach(p=>{let c=tt(A,hub(p[0]))*1.3+tt(hub(p[p.length-1]),Z);for(let i=1;i<p.length;i++)c+=tt(hub(p[i-1]),hub(p[i]));if(c<bc){bc=c;ord=p}});
+    const seqR=ord.flatMap(k=>want.filter(x=>x===k));dsel.forEach((d,i)=>{if(seqR[i])regDay[d]=seqR[i]});}""")
+# hike / ski gating
+a = rep(a, "for(const id of ids){const n=NODES[id],[la,lo,dur,f]=PLANDATA[id];const has=k=>(n.t||[]).includes(k)||!!(n.sm&&n.sm[k]);",
+  """const inSeasonAny=k=>ms.some(m=>segHit(SC_DEF[k],m));
+  for(const id of ids){const n=NODES[id],[la,lo,dur,f]=PLANDATA[id];const has=k=>(n.t||[]).includes(k)||!!(n.sm&&n.sm[k]);const MUST=AP.must.includes(id);
+    if(n.kind==="多日路线"&&!MUST)continue;
+    if(n.mk==="hike"&&!MUST){if(!AP.hike)continue;if(!ms.some(m=>segHit((n.sm&&n.sm.hike)||SC_DEF.hike,m)))continue;if(AP.hikeDur.length&&!AP.hikeDur.some(k=>(n.t||[]).includes(k)))continue}
+    if(n.mk==="ski"&&!MUST){if(!AP.ski)continue;if(!ms.some(m=>segHit((n.sm&&n.sm.ski)||SC_DEF.ski,m)))continue}""")
+a = rep(a, "    if(AP.must.includes(id))s+=1000;\n", "    if(AP.must.includes(id))s+=1000;\n    if(AP.hike&&n.mk===\"hike\")s+=20;if(AP.ski&&n.mk===\"ski\")s+=25;\n")
+a = rep(a, "  const reserved=new Set();Object.values(fixed).forEach(a=>a.forEach(x=>reserved.add(x.id)));", """  if(AP.hike&&!inSeasonAny("hike"))warn.push("出行日期不在徒步季（大致 6 月至 10 月），没有安排徒步路线");
+  if(AP.ski&&!inSeasonAny("ski"))warn.push("出行日期不在滑雪季（大致 12 月中旬至次年 4 月中旬），没有安排滑雪");
+  const reserved=new Set();Object.values(fixed).forEach(a=>a.forEach(x=>reserved.add(x.id)));""")
+# base change with scenic train
+a = rep(a, "if(di>0&&PREVB&&km(PREVB,B)>3){const tr=apTravel(PREVB,B,mode,false);const at=cx.start;cx.pre.push({mv:1,at,txt:`退房，前往${DAYHUBN||AP_HUBN[regDay[d]]||\"新的住处\"}，约 ${tr} 分钟，寄存行李`});",
+  "if(di>0&&PREVB&&km(PREVB,B)>3){let tr=apTravel(PREVB,B,mode,false);const at=cx.start;const dest=DAYHUBN||AP_HUBN[regDay[d]]||\"新的住处\";const TR=AP.scenic!==false&&mode!==\"car\"?apTrain(PREVB,B):null;if(TR){tr=Math.max(tr,TR.min);cx.pre.push({mv:1,at,go:TR.id,txt:`退房，乘坐观景列车「${TR.n}」前往${dest}，约 ${durTx(tr)}（多数需预订座位），到后寄存行李`})}else cx.pre.push({mv:1,at,txt:`退房，前往${dest}，约 ${tr} 分钟，寄存行李`});")
+a = a.replace('`<li class="lunch mv"><time>${hm(r.at)}</time><span>${esc(r.txt)}</span></li>`', '`<li class="lunch mv"><time>${hm(r.at)}</time><span>${esc(r.txt)}${r.go&&NODES[r.go]?` <button class="mylink" data-go="${r.go}">查看列车 →</button>`:""}</span></li>`')
+# UI
+a = rep(a, '   <label>换宿</label><div class="aprow wrap">', """   <label>徒步与滑雪（不勾选就不安排；勾选后也只在当季安排）</label><div class="aprow wrap"><button class="fchip${AP.hike?" on":""}" data-apck="hike" aria-pressed="${!!AP.hike}">${AP.hike?"☑":"☐"} 徒步</button>${AP.hike?["d4h","d1"].map(k=>`<button class="fchip sub${AP.hikeDur.includes(k)?" on":""}" data-aphd="${k}">${esc(TAGS[k])}</button>`).join(""):""}<button class="fchip${AP.ski?" on":""}" data-apck="ski" aria-pressed="${!!AP.ski}">${AP.ski?"☑":"☐"} 滑雪</button></div>
+   <label>换住处时的交通</label><div class="aprow wrap"><button class="fchip${AP.scenic!==false?" on":""}" data-apck="scenic" aria-pressed="${AP.scenic!==false}">${AP.scenic!==false?"☑":"☐"} 有观景列车时坐观景列车</button><span class="scnote" style="margin:0">冰川快车、黄金山口快车等，算进路上时间，不算游玩项目</span></div>
+   <label>换宿</label><div class="aprow wrap">""")
+a = rep(a, '  if(q("[data-apfew]")){AP.few=AP.few===false;apSave();render(cur,false);return}', '  if(q("[data-apfew]")){AP.few=AP.few===false;apSave();render(cur,false);return}\n  if(b=q("[data-apck]")){const k=b.dataset.apck;if(k==="scenic")AP.scenic=AP.scenic===false;else AP[k]=!AP[k];apSave();render(cur,false);return}\n  if(b=q("[data-aphd]")){const k=b.dataset.aphd;AP.hikeDur=AP.hikeDur.includes(k)?AP.hikeDur.filter(x=>x!==k):[...AP.hikeDur,k];apSave();render(cur,false);return}')
+a = rep(a, "const REGS=AUTO?AD.regs:(AP.regions||{});", "const REGS=AUTO?AD.regs:{...(AP.regions||{})};")
+a = rep(a, "  const KY=new Set();const regSet", """  if(!AUTO&&Object.keys(regDay).length){const tt=(p,q)=>apTravel(p,q,mode,false);days.forEach((d,i)=>{if(regDay[d]||fixed[d])return;const nb=days.slice(0,i).reverse().find(x=>regDay[x])||days.slice(i+1).find(x=>regDay[x]);let r=nb?regDay[nb]:null;
+    const end=i===0?(AP.arrP||"zrh"):i===days.length-1?(AP.depP||AP.arrP||"zrh"):null;if(end){const P=AP_PLACES[end]||AP_PLACES.zrh,er=AP_PLREG[end];if(er&&AP_HUB[er]&&(!r||!AP_HUB[r]||tt(P.g,AP_HUB[r])>100))r=er}
+    if(r){regDay[d]=r;REGS[r]=(REGS[r]||0)+1}})}
+  const KY=new Set();const regSet""")
+a = rep(a, "if(AP.few!==false&&!AUTO){", "if(false){")
+a = re.sub(r'   <label>换宿</label><div class="aprow wrap"><button class="fchip\$\{AP\.few.*?</div>\n', '', a, count=1, flags=re.S)
+a = rep(a, "    if(!list.length&&pace.max){let best=null;const P=pool();", """    if(!list.length&&pace.max&&AP.ski&&!cx.short){const sk=Object.values(S).filter(x=>!used.has(x.id)&&NODES[x.id].mk==="ski"&&apTravel(B,x.g,mode,x.remote)<=90).sort((p,q)=>apTravel(B,p.g,mode,p.remote)-apTravel(B,q.g,mode,q.remote))[0];if(sk){list.push({...sk,ev:"滑雪一整天"});used.add(sk.id)}}
+    if(!list.length&&pace.max){let best=null;const P=pool();""")
+a = rep(a, 'baseWhy:AD?"按区域分段住宿，每段住在中心城镇；换住处的日子已预留路上的时间":baseWhy,segs:AD?AD.segs:"",', 'baseWhy:AD||Object.keys(regDay).length?"按区域分段住宿，每段住在中心城镇；换住处的日子已预留路上的时间":baseWhy,segs:AD?AD.segs:(()=>{const nm=d=>AP_SUBLBL[regDay[d]]||AP_HUBN[regDay[d]]||AP_REGIONS[regDay[d]]||"";const o=[];let i=0;while(i<days.length){const n=nm(days[i]);let j=i;while(j+1<days.length&&nm(days[j+1])===n)j++;if(n)o.push(`第${i+1}${j>i?"–"+(j+1):""}天 ${n}`);i=j+1}return o.join(" → ")})(),')
+a = rep(a, 'days.forEach((d,i)=>{if(!(plan[d]||[]).length&&', 'days.forEach((d,i)=>{if(!(plan[d]||[]).length&&!(meta[d]&&meta[d].rows.some(r=>r.go))&&')
+# ---- 瑞士通票 / 半价卡 标注 ----
+a = rep(a, 'function rightPage(n){', """const PSTP={free:"免费",50:"5 折",25:"75 折",part:"部分路段",no:"不适用"},PHF={50:"5 折",part:"部分路段",no:"不适用"};
+const pcls=v=>v==="free"?"pf":v==="no"?"pn":"pd";
+function passMini(c){const p=c.pass;if(!p)return "";return `<span class="pmini"><i class="${pcls(p[0])}">通票 ${PSTP[p[0]]}</i><i class="${pcls(p[1])}">半价卡 ${PHF[p[1]]}</i></span>`}
+function passBadge(n){const p=n.pass;if(!p)return "";return `<div class="passb"><span class="${pcls(p[0])}"><small>瑞士通票</small>${PSTP[p[0]]}</span><span class="${pcls(p[1])}"><small>半价卡</small>${PHF[p[1]]}</span>${p[2]?`<em>${esc(p[2])}</em>`:""}</div>`}
+function passTable(){const G=[["观景列车与铁路",n=>n.t.includes("train")||n.t.includes("rail")],["湖船",n=>n.t.includes("boat")],["山地交通",n=>true]];const used=new Set();
+  const rows=G.map(([g,f])=>{const L=ORDER.filter(n=>n.pass&&!used.has(n.id)&&f(n));L.forEach(n=>used.add(n.id));return L.length?`<tr class="pg"><th colspan="3">${g}</th></tr>`+L.map(n=>`<tr><td><button class="mylink" data-go="${n.id}">${esc(n.n)}</button></td><td class="${pcls(n.pass[0])}">${PSTP[n.pass[0]]}</td><td class="${pcls(n.pass[1])}">${PHF[n.pass[1]]}</td></tr>`).join(""):""}).join("");
+  return `<div class="sec">瑞士通票与半价卡 · 一览</div><div class="mtab"><table class="ptab"><thead><tr><th>线路 / 景点</th><th>瑞士通票</th><th>半价卡</th></tr></thead><tbody>${rows}</tbody></table></div><p class="scnote">「免费」指持瑞士通票不用另外买票（观景列车的座位预订费另付）；「5 折」「75 折」指票价折扣。整理自 Swiss Travel System 和各线路官网，核对于 2026 年 11 月，每年可能调整，以官网为准。</p>`}
+function rightPage(n){""")
+a = rep(a, '  if(n.t.length)h+=`<div class="chips">${n.t.map(t=>chip(t)).join("")}</div>`;\n  if(n.depth>=1)h+=mineBlock(n);', '  if(n.t.length)h+=`<div class="chips">${n.t.map(t=>chip(t)).join("")}</div>`;\n  h+=passBadge(n);\n  if(n.depth>=1)h+=mineBlock(n);')
+a = rep(a, "h+=hotRef(n)+`<p class=\"intro\">${lk(n.d)}</p>`+passBlock(n)", "h+=hotRef(n)+`<p class=\"intro\">${lk(n.d)}</p>`+(n.id===\"transport\"?passTable():\"\")+passBlock(n)")
+a = rep(a, '${esc(c.n)}</b><small>${esc(c.d)}</small></span><em>P.${pg(c.page*2-1)}</em></button>`}).join("")}</div>`;', '${esc(c.n)}</b>${passMini(c)}<small>${esc(c.d)}</small></span><em>P.${pg(c.page*2-1)}</em></button>`}).join("")}</div>`;')
 a = rep(a, "const ks=Object.keys(cnt).sort(", "const ks=Object.keys(cnt).filter(k=>!SUBHIDE.has(k)).sort(")
 a = rep(a, 'const chip=(k,i)=>`<button class="fchip${FILTER===k?" on":""}${i>=LIM&&FILTER!==k?" extra":""}"', 'const chip=(k,i)=>`<button class="fchip${fBase()===k?" on":""}${i>=LIM&&fBase()!==k?" extra":""}"')
 a = rep(a, """${more?`<button class="fmore" data-fmore="1">${FBAR_OPEN?"收起 ▴":`更多 ${ks.length-LIM} ▾`}</button>`:""}</div>`;""", """${more?`<button class="fmore" data-fmore="1">${FBAR_OPEN?"收起 ▴":`更多 ${ks.length-LIM} ▾`}</button>`:""}</div>${subBar(pool)}`;""")
@@ -427,6 +494,13 @@ svg.map.zoomed g.mk,svg.map.zoomed text,svg.map.zoomed .tnm,svg.map.zoomed .pkm,
 .zc button{width:30px;height:30px;border-radius:7px;border:1px solid var(--line,#ccc);background:var(--paper,#fff);color:var(--ink,#222);font:600 17px/1 system-ui,sans-serif;cursor:pointer;opacity:.88;box-shadow:0 1px 3px rgba(0,0,0,.15);padding:0}
 .zc button:hover{opacity:1}
 .zc .bmb{font-size:15px}
+.passb{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 4px}
+.passb span{display:inline-flex;flex-direction:column;padding:4px 10px;border-radius:8px;font-weight:700;font-size:14px;line-height:1.2}
+.passb span small{font-weight:500;font-size:10.5px;opacity:.75}
+.passb em{font-style:normal;font-size:12px;color:var(--muted)}
+.pf{background:#E3F0DC;color:#2F6420}.pd{background:#FBEFD6;color:#8A5A0E}.pn{background:#EEE;color:#777}
+.pmini{display:inline-flex;gap:4px;margin-left:6px;vertical-align:1px}.pmini i{font-style:normal;font-size:10.5px;padding:1px 6px;border-radius:5px;font-weight:600}
+.ptab td.pf,.ptab td.pd,.ptab td.pn{font-weight:700;text-align:center;font-size:13px}.ptab tr.pg th{text-align:left;padding-top:12px;font-size:12px;color:var(--muted)}
 .fsub{display:flex;flex-wrap:wrap;gap:6px 14px;margin:-4px 0 10px;padding:7px 10px;border-radius:8px;background:rgba(0,0,0,.035)}
 .fsub .fsg{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
 .fsub .fsg b{font:600 11px var(--f-mono,monospace);color:var(--muted);margin-right:2px}

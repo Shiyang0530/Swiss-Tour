@@ -932,6 +932,11 @@ def _tagfix(n):
     for c in n.get("c", []): _tagfix(c)
 _tagfix(BOOK)
 print("durations", NDUR)
+import passinfo as _PI
+def _pass(n):
+    if n["id"] in _PI.P: n["pass"] = list(_PI.P[n["id"]])
+    for c in n.get("c", []): _pass(c)
+_pass(BOOK)
 TAGS.update(transport="交通", rail="瑞士铁路", bus="FlixBus 长途巴士", d4h="4 小时内", d1="单日", dmulti="多日")
 book = strip(BOOK)
 total = 0
