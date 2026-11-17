@@ -603,7 +603,7 @@ for R in BOOK["c"]:
 _left = set(SPOTS) - _used - set(_DS.LONG)
 assert not _left, _left
 LH = mk("longhike", "长线徒步", "Fernwanderwege", "",
-        "瑞士有好几条跨越多个地区的长线徒步路线，适合用一到三周慢慢走完，也可以只挑其中几段。这一章收录跨越多个大区的两条：横穿瑞士北阿尔卑斯的 Via Alpina，和从勃朗峰走到马特洪峰的瑞士高山之路；环勃朗峰（TMB）收在勃朗峰地区。各段途经的目的地页面也会列出相关路线。", ["hike"])
+        "瑞士有好几条跨越多个地区的长线徒步路线，适合用一到三周慢慢走完，也可以只挑其中几段。这一章收录三条：横穿瑞士北阿尔卑斯的 Via Alpina、从勃朗峰走到马特洪峰的瑞士高山之路，以及穿越法国、意大利和瑞士三国的环勃朗峰徒步（TMB）。各段途经的目的地页面也会列出相关路线。", ["hike"])
 LH["c"] = [SPOTS[i] for i in _DS.LONG]; LH["kd"] = "专题"
 BOOK["c"].insert([R["id"] for R in BOOK["c"]].index("transport"), LH)
 # kd / ty for every node
@@ -913,6 +913,26 @@ def ann_tree(n):
 ann_tree(BOOK)
 print("annotated names", ANN)
 
+# ---- 徒步时长 / 交通子类 / 体力标签只留给徒步 ----
+import dur as _DUR
+_RAIL = {"stp", "halffare", "berneroberlandpass", "tellpass"}
+_MTN = {"jungfraupass", "mbmultipass", "revision"}
+NDUR = {}
+def _tagfix(n):
+    t = n.setdefault("t", [])
+    if "hike" in t and n.get("kd") not in ("专题",):
+        d = _DUR.dur_tag(n) or ("d4h" if not n.get("c") else None)
+        if d and d not in t: t.append(d); NDUR[d] = NDUR.get(d, 0) + 1
+    elif n.get("kd") not in ("分段",):
+        for k in ("easy", "moderate", "hard"):
+            if k in t: t.remove(k)
+    if n["id"] in _RAIL and "rail" not in t: t.append("rail")
+    if n["id"] in _MTN and "mtn" not in t: t.append("mtn")
+    if n["id"] == "flixbus" and "bus" not in t: t.append("bus")
+    for c in n.get("c", []): _tagfix(c)
+_tagfix(BOOK)
+print("durations", NDUR)
+TAGS.update(transport="交通", rail="瑞士铁路", bus="FlixBus 长途巴士", d4h="4 小时内", d1="单日", dmulti="多日")
 book = strip(BOOK)
 total = 0
 def cnt(n):

@@ -25,7 +25,7 @@ DEST = {
   D("wallisski", "瓦莱滑雪胜地", "Verbier · Crans-Montana",
     "韦尔比耶和克兰-蒙塔纳是瓦莱州罗讷河谷两侧的两大滑雪胜地：韦尔比耶属于「四山谷」大雪场，以陡坡和野雪闻名；克兰-蒙塔纳建在朝南的阳光高台上，坡度平缓，正对瓦莱阿尔卑斯群峰。",
     spots=["verbier", "cransmontana"]),
-  D("chamonix", n="勃朗峰地区", ja="Massif du Mont-Blanc · Monte Bianco", base="chamonix", spots=["tmb"],
+  D("chamonix", n="勃朗峰地区", ja="Massif du Mont-Blanc · Monte Bianco", base="chamonix", spots=[],
     subs=[D("chamonixsub", "夏蒙尼", "Chamonix-Mont-Blanc",
             "夏蒙尼位于法国，是勃朗峰北麓的登山之都，1924 年举办了第一届冬季奥运会。山谷两侧分别是勃朗峰群和红针峰群，几条大型缆车和齿轨铁路把游客送到冰川与雪峰之间。这里使用欧元，瑞士通票基本不适用。",
             spots=["chamonixvillage", "aiguilledumidi", "montenvers", "lacblanc", "grandbalcon", "brevent", "valleeblanche", "chamonixski"]),
@@ -95,7 +95,7 @@ DEST = {
   D("bbrand", "西北部周边与沿途", "Nordwestschweiz · unterwegs", RAND_D, spots=["emmentalbruecke", "vitra"]),
  ],
 }
-LONG = ["viaalpina", "hauteroute"]   # 移到「长线徒步」专题
+LONG = ["viaalpina", "hauteroute", "tmb"]   # 移到「长线徒步」专题
 ALIAS = {"muerren": "lauterbrunnen", "martigny": "wallisrand", "lavaux": "montreux", "stgallen": "appenzell", "emmental": "bbrand",
          "diablerets": "lemanrand", "mendrisio": "mendrisio"}
 # 景点类型（地图图例）：town 小镇 / old 老城区 / out 户外 / cul 人文

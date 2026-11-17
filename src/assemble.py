@@ -42,7 +42,7 @@ function hotRef(n){const h=n.hotref;if(!h||!NODES[h[0]])return "";return `<div c
 function zoomify(svg){if(svg.__z||svg.closest(".cover-img"))return;svg.__z=1;const b=svg.viewBox.baseVal,W0=b.width,H0=b.height;let v={x:0,y:0,w:W0,h:H0};const w=document.createElement("div");w.className="zw";svg.parentNode.insertBefore(w,svg);w.appendChild(svg);const c=document.createElement("div");c.className="zc";c.innerHTML='<button type="button" data-z="in" aria-label="放大" title="放大">+</button><button type="button" data-z="out" aria-label="缩小" title="缩小">−</button><button type="button" data-z="reset" aria-label="还原" title="还原">⤢</button>'+(svg.querySelector("g.geoP")?'<button type="button" data-z="bm" aria-label="切换底图" title="切换底图：示意图 / 地形图 / 街道图" class="bmb">◩</button>':'');w.appendChild(c);
 const set=n=>{n.w=Math.max(W0/8,Math.min(W0,n.w));n.h=n.w*H0/W0;n.x=Math.max(0,Math.min(W0-n.w,n.x));n.y=Math.max(0,Math.min(H0-n.h,n.y));v=n;svg.setAttribute("viewBox",`${n.x.toFixed(2)} ${n.y.toFixed(2)} ${n.w.toFixed(2)} ${n.h.toFixed(2)}`);const z=n.w<W0-.5;svg.classList.toggle("zoomed",z);w.classList.toggle("zoomed",z);cs(n.w/W0);svg.__v=n;tilesSoon(svg)};
 let ZL=null;const ctr=e=>{if(e.tagName==="circle")return[+e.getAttribute("cx"),+e.getAttribute("cy")];try{const b=e.getBBox();return[b.x+b.width/2,b.y+b.height/2]}catch(_){return null}};
-const MKS=".tnm,.pkm,.psm";const GRP="g.mk,g.tst,g.twp,g.lfn,g.ill,g.pmk,g.lmk";
+const MKS=".tnm,.pkm,.psm,.stn";const GRP="g.mk,g.tst,g.twp,g.lfn,g.ill,g.pmk,g.lmk";
 const cs=k=>{if(!ZL){ZL=[];svg.querySelectorAll(GRP).forEach(g=>{const s=g.querySelector("circle,rect,path");const a=g.dataset.cx?[+g.dataset.cx,+g.dataset.cy]:s&&ctr(s);if(a)ZL.push([g,a])});svg.querySelectorAll(MKS).forEach(e=>{if(e.closest(GRP))return;const a=ctr(e);if(a)ZL.push([e,a])});svg.querySelectorAll("text").forEach(t=>{if(t.closest(GRP+",.sbar"))return;const p=t.previousElementSibling;let a=p&&p.matches(MKS)?ctr(p):null;if(!a){const x=parseFloat(t.getAttribute("x")),y=parseFloat(t.getAttribute("y"));if(isNaN(x)||isNaN(y))return;a=[x,y]}ZL.push([t,a])})}
 ZL.forEach(([e,[x,y]])=>{if(k>.999)e.removeAttribute("data-zt"),e.style.transform="";else e.style.transform=`translate(${x}px,${y}px) scale(${k.toFixed(4)}) translate(${-x}px,${-y}px)`})};
 const pt=(cx,cy)=>{const r=svg.getBoundingClientRect();return[v.x+(cx-r.left)/r.width*v.w,v.y+(cy-r.top)/r.height*v.h]};
@@ -123,13 +123,13 @@ a = rep(a, 'n.kind=depth===0?"总览":depth===1?"地区":(uk?["","","区域","�
 a = rep(a, 'indexedDB.open("kyoto-book",1)', 'indexedDB.open("swiss-book",1)')
 a = a.replace('"kyoto-', '"swiss-')
 a = rep(a, 'const TAG_PARENT={sengoku:"history",meiji:"history",myth:"history",literature:"history",unesco:"history",genji:"literature"};',
-  'const TAG_PARENT={cog:"mtn",funi:"mtn",cable:"mtn",myth:"history",literature:"history",cheese:"food",chocolate:"food"};')
+  'const TAG_PARENT={cog:"mtn",funi:"mtn",cable:"mtn",mtn:"transport",train:"transport",boat:"transport",rail:"transport",bus:"transport",myth:"history",literature:"history",cheese:"food",chocolate:"food"};')
 a = rep(a, 'yahoojp:["Yahoo! JAPAN","https://search.yahoo.co.jp/search?p="],', '')
 a = re.sub(r'const PREFJA=\{kyoto:.*?\};\n', 'const PREFJA={},PREFZH={};\n', a, count=1, flags=re.S)
 # planner
 a = re.sub(r'const AP_BASES=\{auto:\{n:"帮我推荐"\},kyotost:.*?\};\n', lambda m: 'const AP_BASES={auto:{n:"帮我推荐"},zurich:{n:"苏黎世",g:[47.3779,8.5402]},luzern:{n:"琉森",g:[47.0502,8.3093]},interlaken:{n:"因特拉肯",g:[46.6905,7.8690]},grindelwald:{n:"格林德瓦",g:[46.6243,8.0414]},zermatt:{n:"采尔马特",g:[46.0242,7.7486]},bern:{n:"伯尔尼",g:[46.9490,7.4392]},basel:{n:"巴塞尔",g:[47.5476,7.5897]},montreux:{n:"蒙特勒",g:[46.4350,6.9100]},lausanne:{n:"洛桑",g:[46.5167,6.6290]},geneve:{n:"日内瓦",g:[46.2102,6.1424]},lugano:{n:"卢加诺",g:[46.0050,8.9470]},stmoritz:{n:"圣莫里茨",g:[46.4980,9.8460]},chur:{n:"库尔",g:[46.8530,9.5290]},chamonix:{n:"夏蒙尼（法国）",g:[45.9237,6.8694]}};\n', a, count=1, flags=re.S)
 assert '"夏蒙尼（法国）"' in a
-a = re.sub(r'const AP_TAG_G=\[\["时令".*?\]\];\n', lambda m: 'const AP_TAG_G=[["时令","ski autumn xmas matsuri"],["徒步与体力","hike easy moderate hard"],["适合人群","elderly couple family"],["山地交通","mtn cog funi cable train boat"],["自然风景","alps rhine view glacier lake waterfall nature spa"],["历史文化","history unesco arch castle church museum art"],["吃喝玩乐","hot food cheese chocolate town shopping"],["实用","free crossborder"]];\n', a, count=1, flags=re.S)
+a = re.sub(r'const AP_TAG_G=\[\["时令".*?\]\];\n', lambda m: 'const AP_TAG_G=[["时令","ski autumn xmas matsuri"],["徒步","hike d4h d1 dmulti"],["适合人群","elderly couple family"],["交通","transport mtn train boat rail"],["自然风景","alps rhine view glacier lake waterfall nature spa"],["历史文化","history unesco arch castle church museum art"],["吃喝玩乐","hot food cheese chocolate town shopping"],["实用","free crossborder"]];\n', a, count=1, flags=re.S)
 a = rep(a, 'const AP_SEASON=["sakura","momiji","snow","matsuri","newyear"];', 'const AP_SEASON=["ski","hike","autumn","xmas","matsuri"];')
 a = re.sub(r'const AP_REG_TOP=\{kyoto:"京都".*?\};\nconst AP_REG_SUB=\{.*?\};\n', lambda m: '''const AP_REG_TOP=Object.fromEntries(Object.entries(AP_TOPDATA).map(([k,v])=>[k,v[0]]));
 const AP_SUBPICK=["grindelwald","lauterbrunnen","muerren","zermatt","saasfee","aletsch","chamonix","luzerncity","titlis","stmoritz","bernina","davos","lugano","locarno","geneve","montreux","gruyeres","zurichcity","appenzell","liechtenstein","basel","berncity"];
@@ -185,15 +185,19 @@ a = rep(a, 'if(q("[data-apre]")){AP_SEED++;AP_RES=apGenerate();', 'if(q("[data-a
 a = rep(a, 'if(q("[data-apsave]")&&AP_RES&&!AP_RES.err){const nm=($("#ap-name").value||"自动行程").trim();PLAN=JSON.parse(JSON.stringify(AP_RES.plan));pvNew(nm,PLAN,AP_RES.meta,Object.assign({},AP_RES.opt,{baseRes:AP_RES.base}));savePlan();go("plan");return}', 'if(q("[data-apsave]")&&AP_RES&&!AP_RES.err){const nm=($("#ap-name").value||"自动行程").trim();apAuto();const id=Object.keys(PV.v).find(k=>PV.v[k].auto);if(id){PV.v[id].name=nm;delete PV.v[id].auto;pvSave()}go("plan");return}')
 a = rep(a, '<button class="btn pri" data-apsave="1">保存为新版本并设为当前行程</button>', '<button class="btn pri" data-apsave="1">命名并打开旅行计划</button></div><p class="scnote">生成的行程已经自动放进「旅行计划」，作为当前版本「自动行程（草稿）」；再点「换一种排法」会覆盖这个草稿。想保留，就在这里起个名字。</p><div>')
 a = rep(a, 'const cntIn=(c,k)=>subtree(c).filter(x=>matchTag(x,k)).length+(matchTag(c,k)?1:0);', 'const cntIn=(c,k)=>[c,...subtree(c)].filter(x=>(x.kind==="多日路线"||x.kind==="老城区"||!x.c.length)&&matchTag(x,k)).length;')
-a = rep(a, 'function badge(n,c){return FILTER&&UPPER(n)?cntIn(c,FILTER):0}', 'function badge(n,c){return FILTER&&UPPER(n)&&!c.c.length?cntIn(c,FILTER):0}')
+a = rep(a, 'function badge(n,c){return FILTER&&UPPER(n)?cntIn(c,FILTER):0}', 'function badge(n,c){return 0}')
 a = rep(a, 'h+=localFood(n);', 'h+=localFood(n);h+=localWild(n);')
 a = rep(a, '${t.k==="美食"?"时令 · 产地 · 餐厅搜索":"在书中出现的位置"}</span></div><h1>${esc(t.n)}</h1>${foodInfo(t)}', '${t.k==="美食"?"时令 · 产地 · 餐厅搜索":t.k==="地质与地貌"?"地貌 · 在哪里能看到":WILDK(t)?"季节 · 常见地区":"在书中出现的位置"}</span></div><h1>${esc(t.n)}</h1>${WILDK(t)?wildInfo(t):foodInfo(t)}')
 a = rep(a, ':t.k==="美食"?"":`<p class="intro" style="margin-top:14px">目前书中还没有页面提到这个词条。</p>`', ':t.k==="美食"||WILDK(t)?"":`<p class="intro" style="margin-top:14px">目前书中还没有页面提到这个词条。</p>`')
 a = rep(a, '  if(n.cards&&n.cards.length)h+=', '  if(n.archtx)h+=`<div class="sec">建筑看点</div><p class="archp">${lk(n.archtx)}</p>`;\n  if(n.cards&&n.cards.length)h+=')
 a = rep(a, 'n.kind=depth===0?"总览":depth===1?', 'n.kind=depth===0?"总览":n.kd?n.kd:depth===1?')
 a = rep(a, 'const UPPER=n=>n.depth<=1&&n.c.some(c=>c.c.length);', 'const UPPER=n=>n.c.some(c=>["大区","目的地","子地点"].includes(c.kind));')
-a = rep(a, '${c.num||(c.c.length&&UPPER(n)?(FILTER?cntIn(c,FILTER):nSpots(c)):i+1)}', '${c.num||(["大区","目的地","子地点"].includes(c.kind)?(FILTER?cntIn(c,FILTER):nSpots(c)):i+1)}')
+a = rep(a, '${c.num||(c.c.length&&UPPER(n)?(FILTER?cntIn(c,FILTER):nSpots(c)):i+1)}', '${c.num||(n.kind==="多日路线"?i+1:(FILTER?cntIn(c,FILTER):nSpots(c)))}')
 a = rep(a, 'function syncTab(){const tp=$("#tbPrev")', 'function syncTab(){syncBack();const tp=$("#tbPrev")')
+a = rep(a, '$("#prevBtn").onclick=()=>{const p=parseRoute(cur);', '$("#prevBtn").onclick=()=>{const p=parseRoute(cur);if(p.terms||p.term){const L=TSEQ(),i=p.term?L.indexOf(p.term):-1;if(i>0)go("term-"+L[i-1],-1);else if(i===0)go("terms",-1);return}')
+a = rep(a, '$("#nextBtn").onclick=()=>{const p=parseRoute(cur);', '$("#nextBtn").onclick=()=>{const p=parseRoute(cur);if(p.terms||p.term){const L=TSEQ(),i=p.term?L.indexOf(p.term):-1;if(i<L.length-1)go("term-"+L[i+1],1);return}')
+a = rep(a, '  const i=p.node?p.node.page-1:-1;\n  $("#prevBtn").disabled=i<0;', '  if(p.terms||p.term){const L=TSEQ(),j=p.term?L.indexOf(p.term):-1;$("#prevBtn").disabled=!p.term;$("#nextBtn").disabled=j>=L.length-1;syncTab();$("#prevBtn").title=j>0?"上一页："+TERMS_[L[j-1]].n:j===0?"上一页：词典索引":"";$("#nextBtn").title=j<L.length-1?"下一页："+TERMS_[L[j+1]].n:"";return}\n  const i=p.node?p.node.page-1:-1;\n  $("#prevBtn").disabled=i<0;')
+a = rep(a, 'function termIndex(){', 'const TSEQ=()=>TCATS.flatMap(c=>Object.keys(TERMS_).filter(id=>TERMS_[id].k===c));\nfunction termIndex(){')
 a = rep(a, '$("#tbNext").onclick=()=>$("#nextBtn").click();', '$("#tbNext").onclick=()=>$("#nextBtn").click();$("#backBtn").onclick=()=>$("#tbPrev").click();')
 a = rep(a, 'function termPages(id){', PASSJS + 'function termPages(id){')
 a = rep(a, '<p class="intro" style="margin-top:14px">${esc(t.d)}</p>${foodBlock(t)}', '<p class="intro" style="margin-top:14px">${esc(t.d)}</p>${passBlock(t)}${foodBlock(t)}')
@@ -234,8 +238,8 @@ assert "按瑞士一般情况估计" in a
 a = rep(a, 'x>=12.5&&t!=="momiji"?x-12:x', 'x>=12.5&&t!=="autumn"?x-12:x')
 # toc
 a = rep(a, 'const open=new Set(["root","kyoto"]);', 'const open=new Set(["root"]);')
-a = re.sub(r'const G=\[\["时令","sakura momiji snow matsuri newyear"\].*?\];\n', lambda m: 'const G=[["时令","ski hike autumn xmas matsuri"],["体力","easy moderate hard"],["山地交通","mtn train boat"],["自然风景","alps rhine view glacier lake waterfall nature spa"],["历史文化","history unesco arch castle church museum art"],["适合人群","elderly couple family"],["吃喝玩乐","hot food town shopping"],["实用信息","free crossborder"]];\n', a, count=1, flags=re.S)
-assert '["体力","easy moderate hard"],["山地交通"' in a
+a = re.sub(r'const G=\[\["时令","sakura momiji snow matsuri newyear"\].*?\];\n', lambda m: 'const G=[["时令","ski hike autumn xmas matsuri"],["徒步时长","d4h d1 dmulti"],["交通","transport mtn train boat rail bus"],["自然风景","alps rhine view glacier lake waterfall nature spa"],["历史文化","history unesco arch castle church museum art"],["适合人群","elderly couple family"],["吃喝玩乐","hot food town shopping"],["实用信息","free crossborder"]];\n', a, count=1, flags=re.S)
+assert '["徒步时长","d4h d1 dmulti"],["交通"' in a
 
 # ---- multi-base auto planner ----
 AUTOFN = r"""function apAutoDays(S,days,mode,pace){
@@ -301,6 +305,29 @@ GUIDE = r'''function guidePages(){
 '''
 i0 = a.index("function guidePages(){"); i1 = a.index("let CLEAR_ARMED=false;")
 a = a[:i0] + GUIDE + a[i1:]
+# ---- compound tag filters: 交通 / 徒步 sub-filters ----
+a = rep(a, 'const matchTag=(n,k)=>', 'const matchTag=(n,k)=>k&&k.includes("&")?k.split("&").every(p=>matchTag(n,p)):')
+a = rep(a, 'const tagLabel=k=>', 'const tagLabel=k=>k&&k.includes("&")?k.split("&").map(p=>TAGS[p]).join(" · "):')
+a = rep(a, 'function filterBar(n){', """const SUBF={transport:[["",["mtn","train","boat","rail","bus"]]],hike:[["难度",["easy","moderate","hard"]],["时长",["d4h","d1","dmulti"]]]};
+const SUBHIDE=new Set(["mtn","cog","funi","cable","train","boat","rail","bus","easy","moderate","hard","d4h","d1","dmulti"]);
+const fBase=()=>FILTER&&!isMy(FILTER)&&!isPlan(FILTER)?FILTER.split("&")[0]:null;
+function subBar(pool,F=FILTER,attr="data-filter"){const b=F&&!isMy(F)&&!isPlan(F)?F.split("&")[0]:null;if(!b||!SUBF[b])return "";const cur=F.split("&").slice(1);
+  return `<div class="fsub" role="toolbar" aria-label="${esc(TAGS[b])}细分">${SUBF[b].map(([lab,ks])=>{const other=cur.filter(x=>!ks.includes(x));
+    const cs=ks.map(k=>{const on=cur.includes(k);const key=[b,...other,...(on?[]:[k])].join("&");const c=pool.filter(x=>matchTag(x,[b,...other,k].join("&"))).length;if(!c&&!on)return "";return `<button class="fchip sub${on?" on":""}" ${attr}="${esc(key)}">${esc(TAGS[k])}<small>${c}</small></button>`}).join("");
+    return cs?`<span class="fsg">${lab?`<b>${lab}</b>`:""}${cs}</span>`:""}).join("")}</div>`}
+function filterBar(n){""")
+a = rep(a, 'function tagPages(t){\n  const list=ORDER.filter(n=>hasTag(n,t));', 'function tagPages(T){\n  const t=T.split("&")[0],list=ORDER.filter(n=>matchTag(n,T));')
+a = rep(a, '</button>`).join(" ")}</p>`:""}<p style="color:var(--ink-2)">共 ${list.length} 处，分布在', '</button>`).join(" ")}</p>`:""}${subBar(ORDER.filter(n=>hasTag(n,t)),T,"data-tag")}<p style="color:var(--ink-2)">共 ${list.length} 处，分布在')
+a = rep(a, '${Object.keys(TAGS).filter(k=>TAGCOUNT[k]).map(k=>`<button class="tag${k===t?" cur":""}"', '${Object.keys(TAGS).filter(k=>TAGCOUNT[k]&&(!SUBHIDE.has(k)||k===t)).map(k=>`<button class="tag${k===t?" cur":""}"')
+a = rep(a, '<h1>${esc(TAGS[t])}</h1><div class="kids" style="margin-top:14px">', '<h1>${esc(tagLabel(T))}</h1><div class="kids" style="margin-top:14px">')
+a = rep(a, 'if(r.startsWith("tag-")&&TAGS[r.slice(4)])return{tag:r.slice(4)};', 'if(r.startsWith("tag-")&&TAGS[r.slice(4).split("&")[0]])return{tag:r.slice(4)};')
+a = rep(a, 'if(SC_TAGS.includes(t))return seasonTagPages(t,list);', 'if(SC_TAGS.includes(t))return seasonTagPages(t,list,T);')
+a = rep(a, 'function seasonTagPages(t,list){', 'function seasonTagPages(t,list,T=t){')
+a = rep(a, 'const L=`<span class="eyebrow">时令</span><div class="tagtitle">${esc(TAGS[t])}</div><p style="color:var(--ink-2)">', 'const L=`<span class="eyebrow">时令</span><div class="tagtitle">${esc(tagLabel(T))}</div>${subBar(ORDER.filter(n=>hasTag(n,t)),T,"data-tag")}<p style="color:var(--ink-2)">')
+a = a.replace('<span class="cur">标签 · ${esc(TAGS[p.tag])}</span>', '<span class="cur">标签 · ${esc(tagLabel(p.tag))}</span>')
+a = rep(a, "const ks=Object.keys(cnt).sort(", "const ks=Object.keys(cnt).filter(k=>!SUBHIDE.has(k)).sort(")
+a = rep(a, 'const chip=(k,i)=>`<button class="fchip${FILTER===k?" on":""}${i>=LIM&&FILTER!==k?" extra":""}"', 'const chip=(k,i)=>`<button class="fchip${fBase()===k?" on":""}${i>=LIM&&fBase()!==k?" extra":""}"')
+a = rep(a, """${more?`<button class="fmore" data-fmore="1">${FBAR_OPEN?"收起 ▴":`更多 ${ks.length-LIM} ▾`}</button>`:""}</div>`;""", """${more?`<button class="fmore" data-fmore="1">${FBAR_OPEN?"收起 ▴":`更多 ${ks.length-LIM} ▾`}</button>`:""}</div>${subBar(pool)}`;""")
 for bad in ["京都", "关西", "kyoto-", "食べログ"]:
     if bad in a: print("WARN app still contains", bad, [m.start() for m in re.finditer(bad, a)][:5])
 
@@ -384,6 +411,10 @@ svg.map.zoomed g.mk,svg.map.zoomed text,svg.map.zoomed .tnm,svg.map.zoomed .pkm,
 .zc button{width:30px;height:30px;border-radius:7px;border:1px solid var(--line,#ccc);background:var(--paper,#fff);color:var(--ink,#222);font:600 17px/1 system-ui,sans-serif;cursor:pointer;opacity:.88;box-shadow:0 1px 3px rgba(0,0,0,.15);padding:0}
 .zc button:hover{opacity:1}
 .zc .bmb{font-size:15px}
+.fsub{display:flex;flex-wrap:wrap;gap:6px 14px;margin:-4px 0 10px;padding:7px 10px;border-radius:8px;background:rgba(0,0,0,.035)}
+.fsub .fsg{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.fsub .fsg b{font:600 11px var(--f-mono,monospace);color:var(--muted);margin-right:2px}
+.fchip.sub{font-size:12px;padding:3px 9px}
 .zw .bmtip{position:absolute;right:46px;top:8px;background:rgba(30,30,30,.82);color:#fff;font:12px/1.4 system-ui,sans-serif;padding:5px 9px;border-radius:6px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:3}
 .zw .bmtip.on{opacity:1}
 svg.map .bmattr{fill:#333;text-anchor:start;paint-order:stroke;stroke:#fff;stroke-width:3px;font-family:system-ui,sans-serif}

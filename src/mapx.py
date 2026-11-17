@@ -159,7 +159,7 @@ def overlay(P, path_of, HIKE, SKI):
                 d = "M" + " L".join(f"{x:.1f} {y:.1f}" for x, y in xy)
                 s.append(f'<path d="{d}" fill="none" style="stroke:var(--ink)" stroke-width="1.5" opacity=".7"/>')
                 for x, y in (xy[0], xy[-1]):
-                    s.append(f'<rect x="{x-2.5:.1f}" y="{y-2.5:.1f}" width="5" height="5" style="fill:var(--page);stroke:var(--ink)" stroke-width="1.2" opacity=".85"/>')
+                    s.append(f'<rect class="stn" x="{x-2.5:.1f}" y="{y-2.5:.1f}" width="5" height="5" style="fill:var(--page);stroke:var(--ink)" stroke-width="1.2" opacity=".85"/>')
                 if "lift" not in keys: keys.append("lift")
     return "".join(s), keys
 
@@ -321,7 +321,7 @@ def topic_ski(spec, Proj, bg_svg, path_of):
         else:
             s.append(f'<path d="{d}" fill="none" style="stroke:var(--ink)" stroke-width="2.2"/>')
         for x, y in xy:
-            s.append(f'<rect x="{x-3.2:.1f}" y="{y-3.2:.1f}" width="6.4" height="6.4" style="fill:var(--page);stroke:var(--ink)" stroke-width="1.6"/>')
+            s.append(f'<rect class="stn" x="{x-3.2:.1f}" y="{y-3.2:.1f}" width="6.4" height="6.4" style="fill:var(--page);stroke:var(--ink)" stroke-width="1.6"/>')
             placer.add((x - 4, y - 4, x + 4, y + 4))
         for (x0, y0), (x1, y1) in zip(xy, xy[1:]):
             for t in (0.25, 0.5, 0.75): placer.add(((x0 + (x1 - x0) * t) - 2, (y0 + (y1 - y0) * t) - 2, (x0 + (x1 - x0) * t) + 2, (y0 + (y1 - y0) * t) + 2))
