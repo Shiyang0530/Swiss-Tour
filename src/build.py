@@ -329,6 +329,11 @@ def bg_svg(P, routes=None, labels=True):
     s.append(f'<g class="geoP" data-p="{P.cx:.6f} {P.cy:.6f} {P.cl:.6f} {P.k:.3f}"></g>')
     if routes:
         for r in routes:
+            if isinstance(r, dict):
+                pts = [P.xy(a, b) for a, b in r["r"]]; d = "M" + " L".join(f"{x:.1f} {y:.1f}" for x, y in pts)
+                s.append(f'<path d="{d}" fill="none" style="stroke:var(--page)" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>'
+                         f'<path class="rt" data-rt="{r["id"]}" d="{d}" fill="none" style="stroke:{r["col"]}" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>')
+                continue
             pts = [P.xy(a, b) for a, b in r]
             s.append(f'<path d="M{" L".join(f"{x:.1f} {y:.1f}" for x, y in pts)}" fill="none" style="stroke:var(--shu)" stroke-width="3" stroke-dasharray="7 5" stroke-linecap="round" opacity=".75"/>')
     lbl = []
@@ -369,7 +374,7 @@ def layout(node, minspan, extra=None, routes=None, only=None):
     if not kids: return
     pts = [centroid(c) for c in kids] + (extra or [])
     if routes:
-        for r in routes: pts += r
+        for r in routes: pts += r["r"] if isinstance(r, dict) else r
     P = Proj(pts, minspan)
     pos = {c["id"]: list(P.xy(*centroid(c))) for c in kids}
     # repel overlapping markers (label-aware: labels sit to the right of pins)
@@ -645,7 +650,10 @@ _ROOTP = layout(BOOK, 1.0, extra=[[45.75, 6.85], [47.75, 9.6]], only=lambda c: "
 for R in BOOK["c"]:
     if R["id"] in ("food", "wild", "geology"): continue
     if R["id"] == "transport":
-        layout(R, 1.0, routes=[c["route"] for c in R["c"] if c.get("route")]); continue
+        import trainstops as _TS
+        for c in R["c"]:
+            if c["id"] in _TS.COL: c["col"] = _TS.COL[c["id"]]
+        layout(R, 1.0, routes=[dict(r=c["route"], id=c["id"], col=c.get("col", "#C4432B")) for c in R["c"] if c.get("route")]); continue
     if R["id"] == "longhike":
         layout(R, 0.4); continue
     if R["id"] == "trains":
@@ -755,13 +763,30 @@ def train_map(n):
     d = "M" + " L".join(f"{x:.1f} {y:.1f}" for x, y in xy)
     placer = Placer()
     for x, y in xy: placer.add((x - 4, y - 4, x + 4, y + 4))
+    import trainstops as _TS
+    col = _TS.COL.get(n["id"], "#C4432B")
     line = (f'<path d="{d}" fill="none" style="stroke:var(--page)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/>'
-            f'<path d="{d}" fill="none" stroke="#C4432B" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>')
-    ends = "".join(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="7" fill="#C4432B" stroke="#fff" stroke-width="2.5"/>' for x, y in (xy[0], xy[-1]))
-    for x, y in (xy[0], xy[-1]): placer.add((x - 9, y - 9, x + 9, y + 9))
+            f'<path d="{d}" fill="none" stroke="{col}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>')
+    stops = _TS.STOPS.get(n["id"]) or [("", rt[0][0], rt[0][1], True), ("", rt[-1][0], rt[-1][1], True)]
+    sp = []
+    for nm, la, lo, big in stops:
+        x, y = P.xy(la, lo); r = 7 if big else 4.6
+        placer.add((x - r - 2, y - r - 2, x + r + 2, y + r + 2)); sp.append((nm, x, y, big, r))
+    ends = ""
+    for nm, x, y, big, r in sp:
+        ends += (f'<circle class="stn" cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{col if big else "#fff"}" stroke="{"#fff" if big else col}" stroke-width="{2.5 if big else 2.2}"/>')
+    labs = ""
+    for nm, x, y, big, r in sorted(sp, key=lambda t: not t[3]):
+        if not nm: continue
+        w = sum(14.5 if ord(ch) > 255 else 7.5 for ch in nm) * (1.08 if big else 0.92)
+        pos = placer.place(x, y, w, 15 if big else 13, gap=r + 6)
+        if not pos:
+            print("NOPLACE", n["id"], nm); continue
+        tx, ty = pos
+        labs += (f'<text class="tstop{" big" if big else ""}" x="{tx:.1f}" y="{ty + (11.5 if big else 10):.1f}">{esc(nm)}</text>')
     poi, keys = poi_layers(P, placer, avoid_pts=xy)
-    lg = ["trainroute"] + [k for k in ("peak", "pass", "town") if k in keys] + ["rail", "water", "border"]
-    return dict(svg=bg + line + ends + poi + scalebar(P), lg=lg)
+    lg = ["trainroute", "stn"] + [k for k in ("peak", "pass", "town") if k in keys] + ["rail", "water", "border"]
+    return dict(svg=bg + line + ends + poi + labs + scalebar(P), lg=lg)
 NTR = 0
 for R in BOOK["c"]:
     if R["id"] == "transport":
