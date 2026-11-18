@@ -114,3 +114,24 @@ def ingest():
         jdump(os.path.join(BOOKS, "swiss", "tree.json"), tree)
         D["card"] = card
     return done
+
+def early(BOOK, LEAVES=()):
+    """在 build.py 画地图之前调用：名称和经纬度先用资料库的，地图上的文字和位置就会跟着资料库变。"""
+    D = _db()
+    if D is None: return 0
+    E, k2i = D["E"], D["k2i"]; n_ = 0
+    def walk(n):
+        nonlocal n_
+        i = k2i.get(n["id"])
+        if i:
+            e = E[i]
+            if e["name"].get("zh") and n.get("n") != e["name"]["zh"]: n["n"] = e["name"]["zh"]; n_ += 1
+            g = e.get("geo") or {}
+            if "g" in n and "lat" in g and not g.get("approx") and [g["lat"], g["lon"]] != list(n["g"])[:2]:
+                n["g"] = [g["lat"], g["lon"]] + list(n["g"])[2:]; n_ += 1
+        for c in n.get("c", []): walk(c)
+    walk(BOOK)
+    for s in LEAVES:                      # build.py 的叶子表另有一份经纬度
+        i = k2i.get(s.get("id")); g = (E[i].get("geo") or {}) if i else {}
+        if "g" in s and "lat" in g and not g.get("approx"): s["g"] = [g["lat"], g["lon"]] + list(s["g"])[2:]
+    return n_

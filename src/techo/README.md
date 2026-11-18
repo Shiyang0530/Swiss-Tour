@@ -15,7 +15,9 @@
 | `books/{书}/layout.json` | 只跟这本书版面有关的数据（插画地图坐标、标签位置、航空照片标注等） |
 | `assets/img/` | 全部图片（按新文件名），不进 Git；可从各书仓库的 `img/` 还原 |
 | `legacy/` | 迁移前的原始数据，供往返测试使用 |
+| `engine/` | 通用引擎：两本书共用的页面程序和模板，见下 |
 | `tools/` | 脚本，见下 |
+| `tests/` | 逐页快照比较：`snap.py` 存下每一页渲染结果，`cmp.py` 比较两份快照 |
 
 ## 编号
 
@@ -44,13 +46,42 @@
 
 文件名 `{编号}_cover`、`_cover_sakura` / `_autumn` / `_snow` / `_matsuri`、`_map`、`_02`、`_03`… 京都的总图为 `kyoto_map.webp`。每条记录有 kind（photo / illustration）、source、author、license、commercial、attribution、season、quality、url、title、owner（所属条目）、role（用途），以及 `legacy`（旧键和旧文件名，引擎按旧键查图）。
 
+## 通用引擎
+
+两本书用同一套页面程序 `engine/app.js` 和同一套模板（`head.html`、`body.html`、`tail.html`、`base.css`、`sw.js`）。书和书之间的差别都写在 `books/{书}/engine.json`（页面里叫 `CFG`）：
+
+- 书名、文件夹名、分享网址、标签父子关系、时令（`SC_TAGS`、`SC_DEF`）、实用信息栏目、美食搜索网站、维基百科语言、目录分组、筛选细项、使用说明、搜索框提示、Logo；
+- 自动行程的方式：`ap.planner` 为 `single`（住一个城市，京都）或 `multi`（按大区轮换住宿，瑞士），分别在 `engine/planner/` 里；住宿点、机场车站、偏好标签等也在 `ap` 里；
+- 功能开关 `feat`：瑞士新加、京都暂未打开的功能。目前京都全部关闭，以保持京都的页面与合并前逐页一致：
+
+| 开关 | 作用 |
+| --- | --- |
+| `disp` | 路径、列表小字用条目名称（关闭时用文件夹名） |
+| `og` | 正文括号里的外文原名用浅色斜体 |
+| `countMarkers` | 地图圆点里的数字是景点数（关闭时是列表编号，筛选时在名称后显示数量） |
+| `smartLabels` | 地图文字放不下时自动换到另一侧 |
+| `smTags` | 时令月历也读取条目自带的时令月份 |
+| `planRowData` | 只有能排进行程的景点显示“加入行程” |
+| `relatedLeaves` | “相关景点”只列具体景点 |
+| `photoNoMap` | 子项没有坐标时左页显示照片而不是空地图 |
+| `termPaging` | 词典可以用 ‹ › 翻页 |
+| `planMap` | 旅行计划页显示行程地图 |
+| `autoDraft` | 自动行程生成后自动存成草稿版本 |
+| `zoom` | 地图缩放按钮和在线底图切换 |
+| `back` | 顶部“‹ 返回”按钮 |
+
+生成一本书：`python3 tools/build_book.py kyoto` 或 `swiss`（瑞士先运行 `swiss/make.sh` 里的 `build.py`）。`tools/make_engine.py` 是第一次合并时的记录，不用再运行。
+
+合并的检查方法：用 `tests/snap.py` 把合并前后两个版本的每一页（全部景点、词条、标签、使用说明、计划页和两组自动行程）渲染出来逐页比较，京都 483 页、瑞士 495 页全部一致。
+
 ## 脚本
 
 | 脚本 | 作用 |
 | --- | --- |
 | `tools/migrate.py` | 一次性迁移（已完成）。资料库存在时拒绝运行，避免覆盖修改 |
 | `tools/export.py` | 从资料库导出各书引擎所需的数据 |
-| `tools/build_kyoto.py` | 用资料库重新生成京都 `index.html` 的数据部分、图片改名、重建 `sw.js` |
+| `tools/build_book.py` | 用通用引擎和资料库生成一本书（index.html、sw.js、manifest） |
+| `tools/build_kyoto.py` | 第一次迁移时给京都图片改名用；页面生成已改由 `build_book.py` 负责 |
 | `tools/overlay_swiss.py` | 瑞士 `build.py` 末尾调用：用资料库内容覆盖节点、改用新图片文件名；开头调用 `ingest()` 把旧工具新下载的照片登记进资料库 |
 | `tools/test_roundtrip.py` | 往返测试：导出结果必须与迁移前的原书一致；改资料库字段后导出必须随之变化 |
 | `tools/schema.py` | 旧字段 ↔ 资料库字段对照表 |
@@ -58,6 +89,6 @@
 ## 现状与限制
 
 - **京都**：数据完全由资料库生成，改 `db/entries.json` 后运行 `build_kyoto.py` 即可。
-- **瑞士**：地图、图例、编号、交通方块等仍由 `build.py` 根据 `content/*.py` 计算，资料库在最后覆盖内容。正文、标签、实用信息、通票、经纬度、分段、图片署名改资料库就生效；名称和经纬度如果改了，地图上的文字和位置要等 `content/*.py` 同步后才会变。在 `content/*.py` 里新增的景点暂时不会自动进资料库（构建时会列出）。
+- **瑞士**：地图、图例、编号、交通方块等仍由 `build.py` 计算。名称和经纬度在画地图之前就从资料库读取，其余内容在最后覆盖，所以改资料库后地图和正文都会跟着变。在 `content/*.py` 里新增的景点暂时不会自动进资料库（构建时会列出）。
 - 中文热度等评分、核实日期还是空的，等滚动核实任务来填。
 - 资料库暂存在 Swiss-Tour 仓库的 `src/techo/`，正式位置应是私有仓库 `techo-assets`。

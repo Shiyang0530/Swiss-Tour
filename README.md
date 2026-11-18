@@ -22,7 +22,8 @@
 | `index.html`、`sw.js`、`manifest.webmanifest`、`icon-*.png` | 电子书本体（单个 HTML 文件，可离线使用） |
 | `img/` | 景点照片（维基共享资源，CC BY / CC BY-SA / CC0，页面上标注作者和许可）与作者提供的 AI 插画 |
 | `src/build.py` | 读取 `src/content/` 生成数据（地图、标签、结构） |
-| `src/assemble.py` | 把数据和 `src/base/` 里的页面模板组装成 `index.html` |
+| `src/make.sh` | 构建：先运行 `build.py`，再用通用引擎 `src/techo/tools/build_book.py swiss` 生成页面 |
+| `src/techo/engine/` | 京都与瑞士共用的通用引擎（页面程序与模板），书的差别写在 `src/techo/books/swiss/engine.json` |
 | `src/content/` | 全部文字内容：各大区景点（`r01`–`r08.py`）、专题（`r09.py`、`wild.py`、`geo.py`）、目的地结构（`dest.py`）、徒步路线坐标（`topo.py`、`multi.py`）等 |
 | `src/tests/` | Playwright 截图与功能检查脚本 |
 | `src/data/folder_map.json` | 本地「瑞士旅游」文件夹新旧结构对照 |

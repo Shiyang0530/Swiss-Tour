@@ -1,4 +1,5 @@
-"""京都：用资料库重新生成 index.html 的数据部分，并把图片改成 编号_用途 文件名。
+"""（已由 build_book.py 取代，只在第一次迁移时用来给图片改名。）
+京都：用资料库重新生成 index.html 的数据部分，并把图片改成 编号_用途 文件名。
 
   python3 build_kyoto.py [仓库路径]
 1. index.html 中数据 <script>（从 const TAGS= 到该段结束）的数据常量整体替换为资料库导出的结果；TAG_PARENT 同步替换。

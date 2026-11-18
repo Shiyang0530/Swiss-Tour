@@ -643,6 +643,9 @@ def _np(n, p):
 _np(BOOK, [])
 json.dump({"old": {k: "/".join(v) for k, v in OLDPATH.items()}, "new": {k: "/".join(v) for k, v in NEWPATH.items()}},
           open(OUT + "/folder_map.json", "w"), ensure_ascii=False, indent=0)
+sys.path.insert(0, "/home/claude/techo/tools")
+import overlay_swiss as _OV0
+print("db early (名称/经纬度)", _OV0.early(BOOK, LEAVES))
 import illus as IL
 GEO = {n["id"]: n["g"] for n in LEAVES}
 # root: regions placed at centroid, extend to cover Chamonix/Aosta
