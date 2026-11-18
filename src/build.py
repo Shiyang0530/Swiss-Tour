@@ -848,11 +848,16 @@ for R in BOOK["c"]:
     if "hub" in R: _aps(R)
 
 IMGDB = json.load(open("/home/claude/swiss/imgdb.json")) if os.path.exists("/home/claude/swiss/imgdb.json") else {}
+# 共享资料库（/home/claude/techo）：内容与图片以资料库为准，见 techo/tools/overlay_swiss.py
+sys.path.insert(0, "/home/claude/techo/tools")
+import overlay_swiss as _OV
+_ING = _OV.ingest()
+if _ING: print("新照片已登记进资料库", _ING[:5], len(_ING))
 CARDIMG = {}
 import urllib.parse
 def attach(n):
     e = IMGDB.get(n["id"])
-    if e and os.path.exists(f"/home/claude/swiss/site/img/{n['id']}.webp"):
+    if e and _OV.has_img(n["id"]):
         n["ph"] = n["id"]
         CARDIMG[n["id"]] = dict(src="img/" + urllib.parse.quote(n["id"]) + ".webp", by=e["by"], lic=e["lic"], u=e["page"], t=e["title"])
     for c in n.get("c", []): attach(c)
@@ -860,7 +865,7 @@ attach(BOOK)
 # 用户提供的 AI 插画（Microsoft Copilot 生成）
 USERIMG = {"oeschinensee": "厄希嫩湖", "grindelwald": "格林德瓦", "luzerncity": "琉森", "stmoritz": "圣莫里茨", "chamonix": "勃朗峰区域"}
 def _setu(n):
-    if n["id"] in USERIMG and os.path.exists(f"/home/claude/swiss/site/img/{n['id']}.webp"):
+    if n["id"] in USERIMG and _OV.has_img(n["id"]):
         n["ph"] = n["id"]
         CARDIMG[n["id"]] = dict(src="img/" + n["id"] + ".webp", by="Microsoft Copilot 生成（作者提供）", lic="AI 插画", ai=1)
     for c in n.get("c", []): _setu(c)
@@ -1005,6 +1010,8 @@ def _pass(n):
     for c in n.get("c", []): _pass(c)
 _pass(BOOK)
 TAGS.update(transport="交通", rail="瑞士铁路", bus="FlixBus 长途巴士", d4h="4 小时内", d1="单日", dmulti="多日")
+_ovs = _OV.apply(BOOK, TERMS, PLANDATA, MULTIM.MULTI, CARDIMG, TAGS)
+print("db overlay", {k: (v if not isinstance(v, list) else (len(v), v[:5])) for k, v in _ovs.items()})
 book = strip(BOOK)
 total = 0
 def cnt(n):
