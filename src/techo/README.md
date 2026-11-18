@@ -52,7 +52,7 @@
 
 - 书名、文件夹名、分享网址、标签父子关系、时令（`SC_TAGS`、`SC_DEF`）、实用信息栏目、美食搜索网站、维基百科语言、目录分组、筛选细项、使用说明、搜索框提示、Logo；
 - 自动行程的方式：`ap.planner` 为 `single`（住一个城市，京都）或 `multi`（按大区轮换住宿，瑞士），分别在 `engine/planner/` 里；住宿点、机场车站、偏好标签等也在 `ap` 里；
-- 功能开关 `feat`：瑞士新加、京都暂未打开的功能。目前京都全部关闭，以保持京都的页面与合并前逐页一致：
+- 功能开关 `feat`：两本书目前全部打开（京都在 v72 打开）；新书可以按需要关掉某一项：
 
 | 开关 | 作用 |
 | --- | --- |
@@ -67,7 +67,7 @@
 | `termPaging` | 词典可以用 ‹ › 翻页 |
 | `planMap` | 旅行计划页显示行程地图 |
 | `autoDraft` | 自动行程生成后自动存成草稿版本 |
-| `zoom` | 地图缩放按钮和在线底图切换 |
+| `zoom` | 地图缩放按钮和在线底图切换（底图种类见 `basemaps`：瑞士 swisstopo 与 OpenStreetMap，京都 OpenStreetMap） |
 | `back` | 顶部“‹ 返回”按钮 |
 
 生成一本书：`python3 tools/build_book.py kyoto` 或 `swiss`（瑞士先运行 `swiss/make.sh` 里的 `build.py`）。`tools/make_engine.py` 是第一次合并时的记录，不用再运行。
