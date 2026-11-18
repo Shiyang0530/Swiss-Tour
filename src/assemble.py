@@ -397,6 +397,11 @@ a = rep(a, '${mkShape(c,r)}<text class="num"', '${c.col?mkShape(c,r).replace(/cl
 a = rep(a, '${P?planSVG(P):n.bg?n.bg.replace("__HY__",HYPSO)+geo:hills+water+rivers+geo}', '${P?planSVG(P):n.bg?rtFocus(n.bg.replace("__HY__",HYPSO),focus)+geo:hills+water+rivers+geo}')
 a = rep(a, 'function mkShape(c,r){', 'function rtFocus(b,f){if(!f||!b.includes(`data-rt="${f}"`))return b;const m=b.match(new RegExp(`<path class="rt" data-rt="${f}"[^>]*/>`));return m?b+`<path d="${/ d="([^"]+)"/.exec(m[0])[1]}" fill="none" style="stroke:var(--page)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>`+m[0].replace(`class="rt"`,`class="rt on"`):b}\nfunction mkShape(c,r){')
 a = rep(a, 'return `<svg class="map${P?" plan":""}" viewBox="0 0 600 440"', 'return `<svg class="map${P?" plan":""}${focus&&n.bg&&n.bg.includes(`data-rt="${focus}"`)?" rtf":""}" viewBox="0 0 600 440"')
+a = rep(a, '+passBlock(n)+multiBlock(n)', '+passBlock(n)+trainSights(n)+trainsHere(n)+multiBlock(n)')
+a = rep(a, 'function rightPage(n){', """const mtx=m=>m>=60?`约 ${Math.floor(m/60)} 小时${m%60?` ${m%60} 分`:""}`:`约 ${m} 分钟`;
+function trainSights(n){if(!n.sights||!n.sights.length)return "";return `<div class="sec">沿途看点</div><ol class="tsights" style="--tc:${n.col||"var(--shu)"}">${n.sights.map(([nm,d,id])=>`<li><b>${id&&NODES[id]?`<button class="mylink" data-go="${id}">${esc(nm)} →</button>`:esc(nm)}</b><span>${esc(d)}</span></li>`).join("")}</ol>`}
+function trainsHere(n){if(!n.trn||!n.trn.length)return "";return `<div class="sec">可以乘坐的观景列车</div><ul class="trhere">${n.trn.map(t=>`<li style="--tc:${t.col}"><button class="mylink" data-go="${t.id}">${esc(t.n)}</button><span class="trst">${esc(t.st)}站</span><span class="trgo">${t.go.map(([d,m])=>`→ ${esc(d)}，${mtx(m)}`).join("<br>")}</span></li>`).join("")}</ul><p class="scnote">时间按全程时长和距离估算，实际以时刻表为准；多数观景列车需要预订座位。</p>`}
+function rightPage(n){""")
 a = rep(a, "const ks=Object.keys(cnt).sort(", "const ks=Object.keys(cnt).filter(k=>!SUBHIDE.has(k)).sort(")
 a = rep(a, 'const chip=(k,i)=>`<button class="fchip${FILTER===k?" on":""}${i>=LIM&&FILTER!==k?" extra":""}"', 'const chip=(k,i)=>`<button class="fchip${fBase()===k?" on":""}${i>=LIM&&fBase()!==k?" extra":""}"')
 a = rep(a, """${more?`<button class="fmore" data-fmore="1">${FBAR_OPEN?"收起 ▴":`更多 ${ks.length-LIM} ▾`}</button>`:""}</div>`;""", """${more?`<button class="fmore" data-fmore="1">${FBAR_OPEN?"收起 ▴":`更多 ${ks.length-LIM} ▾`}</button>`:""}</div>${subBar(pool)}`;""")
@@ -507,6 +512,13 @@ svg.map.zoomed g.mk,svg.map.zoomed text,svg.map.zoomed .tnm,svg.map.zoomed .pkm,
 .pf{background:#E3F0DC;color:#2F6420}.pd{background:#FBEFD6;color:#8A5A0E}.pn{background:#EEE;color:#777}
 .pmini{display:inline-flex;gap:4px;margin-left:6px;vertical-align:1px}.pmini i{font-style:normal;font-size:10.5px;padding:1px 6px;border-radius:5px;font-weight:600}
 .ptab td.pf,.ptab td.pd,.ptab td.pn{font-weight:700;text-align:center;font-size:13px}.ptab tr.pg th{text-align:left;padding-top:12px;font-size:12px;color:var(--muted)}
+.tsights{list-style:none;counter-reset:ts;padding:0;margin:8px 0 14px;border-left:3px solid var(--tc);padding-left:16px}
+.tsights li{counter-increment:ts;position:relative;margin:0 0 12px;line-height:1.6}
+.tsights li::before{content:"";position:absolute;left:-23px;top:7px;width:11px;height:11px;border-radius:50%;background:var(--page);border:2.5px solid var(--tc)}
+.tsights li:first-child::before,.tsights li:last-child::before{background:var(--tc);border-color:var(--page);box-shadow:0 0 0 1.5px var(--tc)}
+.tsights b{display:block;font-size:15px}.tsights span{color:var(--ink-2);font-size:14px}
+.trhere{list-style:none;padding:0;margin:8px 0}.trhere li{display:grid;grid-template-columns:auto 1fr;column-gap:10px;row-gap:2px;padding:9px 0 9px 12px;border-left:4px solid var(--tc);margin-bottom:8px;background:rgba(0,0,0,.02);border-radius:0 6px 6px 0}
+.trhere .mylink{font-weight:700;font-size:15px}.trhere .trst{color:var(--muted);font-size:13px;align-self:center}.trhere .trgo{grid-column:1 / -1;font-size:14px;color:var(--ink-2)}
 .mtab table.ptab{min-width:0;width:100%;table-layout:fixed}.ptab th:first-child,.ptab td:first-child{width:46%;text-align:left;white-space:normal}.ptab td .mylink{white-space:normal;text-align:left;line-height:1.35}
 @media(max-width:760px){.crumbs{flex-wrap:wrap!important;overflow-x:visible!important;white-space:normal!important;row-gap:0}
 .mtab table:not(.ptab){min-width:0}.mtab table:not(.ptab) thead{display:none}

@@ -787,6 +787,48 @@ def train_map(n):
     poi, keys = poi_layers(P, placer, avoid_pts=xy)
     lg = ["trainroute", "stn"] + [k for k in ("peak", "pass", "town") if k in keys] + ["rail", "water", "border"]
     return dict(svg=bg + line + ends + poi + labs + scalebar(P), lg=lg)
+# ---- 观景列车：只保留 8 条线路；登山铁路归入山地交通；沿途看点与车站对应 ----
+import trainstops as _TS, trainsights as _TG, re as _re2
+_ALLN = {}
+def _all(n):
+    _ALLN[n["id"]] = n
+    for c in n.get("c", []): _all(c)
+_all(BOOK)
+for _n in _ALLN.values():
+    t = _n.get("t", [])
+    if "train" in t and _n["id"] not in _TS.COL:
+        t.remove("train")
+        if any(k in t for k in ("cog", "funi", "cable")) or _n["id"] in ("jungfraubahn", "rothorn", "gornergrat", "montenvers", "rigibahn", "pilatusbahn", "generoso", "rochersdenaye"):
+            if "mtn" not in t: t.append("mtn")
+            if "cog" not in t and _n["id"] in ("jungfraubahn", "rothorn", "gornergrat", "montenvers", "rigibahn", "pilatusbahn", "generoso", "rochersdenaye"): t.append("cog")
+def _mins(txt):
+    m = _re2.search(r"约\s*(\d+(?:\.\d+)?)\s*小时(?:\s*(\d+)\s*分钟)?", txt) or _re2.search(r"约\s*(\d+)\s*分钟", txt)
+    if not m: return 0
+    return float(m.group(1)) * 60 + int(m.group(2) or 0) if "小时" in m.group(0) else int(m.group(1))
+def _km(a, b):
+    import math
+    return math.hypot((a[0] - b[0]) * 111.2, (a[1] - b[1]) * 111.2 * math.cos(math.radians(a[0])))
+NTH = 0
+for tid, col in _TS.COL.items():
+    T = _ALLN.get(tid)
+    if not T: continue
+    T["sights"] = [[nm, d, (lid if lid in _ALLN else None)] for nm, d, lid in _TG.SIGHTS.get(tid, [])]
+    rt = T["route"]; cum = [0]
+    for i in range(1, len(rt)): cum.append(cum[-1] + _km(rt[i - 1], rt[i]))
+    L = cum[-1]; tot = _mins((T.get("i") or {}).get("l", "").split("；")[0])
+    st = _TS.STOPS[tid]; a0, aZ = st[0][0], st[-1][0]
+    for nm, la, lo, big in st:
+        did = _TG.STATION_DEST.get(nm)
+        if not did or did not in _ALLN: continue
+        j = min(range(len(rt)), key=lambda k: _km(rt[k], (la, lo)))
+        f = cum[j] / L if L else 0
+        go = []
+        if f > 0.02: go.append([a0.replace("（乘船）", ""), int(round(tot * f / 5) * 5)])
+        if f < 0.98: go.append([aZ.replace("（乘船）", ""), int(round(tot * (1 - f) / 5) * 5)])
+        D = _ALLN[did].setdefault("trn", [])
+        if not any(x["id"] == tid for x in D):
+            D.append(dict(id=tid, n=T["n"], col=col, st=nm.replace("（乘船）", ""), go=go)); NTH += 1
+print("train-at-destination", NTH)
 NTR = 0
 for R in BOOK["c"]:
     if R["id"] == "transport":
