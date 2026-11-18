@@ -1,10 +1,10 @@
-"""用通用引擎生成一本书：  python3 build_book.py kyoto|swiss [输出目录]
+"""用通用引擎生成一本书：  python3 build_book.py kyoto|swiss [输出目录] [--skip-render]
 
 页面 = engine/head.html + 字体子集 + engine/base.css + engine/body.html
      + <script> CFG（books/{书}/engine.json）+ 书的数据 </script>
      + <script> engine/app.js（插入 engine/planner/{single|multi}.js）</script> + engine/tail.html
 另外生成 sw.js（离线缓存表）和 manifest.webmanifest。
-书的数据：京都从资料库导出（export.kyoto_consts）；瑞士用 swiss/build.py 的输出 out/data.js（已叠加资料库）。
+书的数据：京都从资料库导出（export.kyoto_consts）；瑞士先运行 books/swiss/src/build.py（结构与地图，叠加资料库），输出在 build/swiss/。
 """
 import base64, hashlib, json, os, re, subprocess, sys, urllib.parse
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -25,8 +25,11 @@ def book_data(book):
         txt = "/* 以下数据由共享资料库生成（techo/tools/build_book.py），请改资料库，不要直接改这里 */\n" + "".join(f"const {k}={js(C[k])};\n" for k in KY_ORDER)
         return txt + plan_proj(C["PLANDATA"])
     if book == "swiss":
-        d = rd("/home/claude/swiss/out/data.js")
-        hy = base64.b64encode(open("/home/claude/swiss/out/hypso.webp", "rb").read()).decode()
+        # 瑞士的结构和地图由引擎的地理制图模块生成（engine/geo + books/swiss/src），再叠加资料库
+        if "--skip-render" not in sys.argv:
+            subprocess.run([sys.executable, os.path.join(BOOKS, "swiss", "src", "build.py")], check=True)
+        d = rd(os.path.join(ROOT, "build", "swiss", "data.js"))
+        hy = base64.b64encode(open(os.path.join(ROOT, "build", "swiss", "hypso.webp"), "rb").read()).decode()
         return d + f'const HYPSO_DATA="data:image/webp;base64,{hy}";\n'
     raise SystemExit("未知的书：" + book)
 
@@ -53,9 +56,11 @@ def main(book, out=None):
     head = rd(os.path.join(ENG, "head.html")).replace("{{DESC}}", page["desc"]).replace("{{SHORT}}", cfg["short"]).replace("{{TITLE}}", cfg["title"])
     back = '<button class="btn back" id="backBtn" disabled aria-label="回到刚才浏览的页面">‹ 返回</button>' if cfg["feat"].get("back") else ""
     body = (rd(os.path.join(ENG, "body.html")).replace("{{SEAL}}", page["seal"]).replace("{{BACK}}", back)
-            .replace("{{TITLE}}", cfg["title"]).replace("{{FOLDER}}", cfg["folder"]).replace("{{SEARCH_PH}}", page["search_ph"]))
+            .replace("{{TITLE}}", cfg["title"]).replace("{{SUB}}", page.get("sub", "")).replace("{{FOLDER}}", cfg["folder"]).replace("{{SEARCH_PH}}", page["search_ph"]))
     ecfg = {k: v for k, v in cfg.items() if k != "page"}
-    data = "const CFG=" + js(ecfg) + ";\n" + book_data(book)
+    E = jload(os.path.join(ROOT, "db", "entries.json"))
+    nid = {e["books"][book]["key"]: int(i) for i, e in E.items() if book in e["books"]}
+    data = "const CFG=" + js(ecfg) + ";\n" + book_data(book) + "const NID=" + js(nid) + ";\n"
     # 离线文件表
     imgs = sorted("img/" + urllib.parse.quote(f) for f in os.listdir(os.path.join(out, "img")) if f.endswith(".webp"))
     FILES = ["./", "index.html", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"] + imgs
@@ -88,4 +93,5 @@ def main(book, out=None):
     print(f"{book}: index.html {len(html)} 字符 · 离线文件 {len(FILES)} · CACHE {cfg['id']}-techo-{ver}")
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else None)
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    main(args[0], args[1] if len(args) > 1 else None)

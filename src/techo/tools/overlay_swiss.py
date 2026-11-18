@@ -86,7 +86,7 @@ def ingest():
     if D is None or not os.path.isdir(SITE_IMG): return []
     news = [f[:-5] for f in os.listdir(SITE_IMG) if f.endswith(".webp") and not re.match(r"^\d{7}_", f)]
     if not news: return []
-    IMGDB = jload("/home/claude/swiss/imgdb.json", {})
+    IMGDB = jload("/home/claude/techo/books/swiss/src/imgdb.json", {})
     E, I, tree = D["E"], D["I"], D["tree"]
     card = dict(tree["cardimg"]); done = []
     for key in news:

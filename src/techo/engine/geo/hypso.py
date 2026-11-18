@@ -1,6 +1,9 @@
 """示意海拔分层：用书中已知海拔的点（山峰、城镇、湖面、山口、站点）插值，生成一张覆盖全区的半透明分层图。"""
 import sys, json, numpy as np
-sys.path.insert(0, "/home/claude/swiss/content")
+import os as _os
+_SRC = _os.environ.get("TECHO_BOOK_SRC", "/home/claude/techo/books/swiss/src")
+_GEO = _os.environ.get("TECHO_GEO", "/home/claude/geo")
+sys.path.insert(0, _SRC + "/content")
 from scipy.interpolate import griddata
 from scipy.ndimage import gaussian_filter
 from PIL import Image
@@ -30,7 +33,7 @@ def points():
              "Brienzersee": "布里恩茨湖", "Thunersee": "图恩湖", "Lac d' Annecy": "安纳西湖", None: "马焦雷湖"}
     REG = box(LON0, LAT0, LON1, LAT1)
     for f in ("ne_10m_lakes.geojson", "ne_10m_lakes_europe.geojson"):
-        for ft in json.load(open("/home/claude/geo/" + f))["features"]:
+        for ft in json.load(open(_GEO + "/" + f))["features"]:
             g = shape(ft["geometry"])
             if not g.intersects(REG): continue
             zh = names.get(ft["properties"].get("name"))
@@ -42,7 +45,7 @@ def points():
                 for x, y in cs[::max(1, len(cs) // 40)]: pts.append((y, x, e))
     return pts, lakes
 
-def build(out="/home/claude/swiss/out/hypso.webp"):
+def build(out="/home/claude/techo/build/swiss/hypso.webp"):
     pts, lakes = points()
     P = np.array([(p[1], p[0]) for p in pts]); V = np.array([p[2] for p in pts], float)
     nx, ny = int((LON1 - LON0) * RES), int((LAT1 - LAT0) * RES)

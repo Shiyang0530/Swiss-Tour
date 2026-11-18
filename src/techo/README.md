@@ -15,8 +15,10 @@
 | `books/{书}/layout.json` | 只跟这本书版面有关的数据（插画地图坐标、标签位置、航空照片标注等） |
 | `assets/img/` | 全部图片（按新文件名），不进 Git；可从各书仓库的 `img/` 还原 |
 | `legacy/` | 迁移前的原始数据，供往返测试使用 |
-| `engine/` | 通用引擎：两本书共用的页面程序和模板，见下 |
+| `engine/` | 通用引擎：两本书共用的页面程序和模板，见下；`engine/geo/` 是地理制图模块（Natural Earth 底图、海拔分层、标注避让） |
 | `tools/` | 脚本，见下 |
+| `books/swiss/src/` | 瑞士的结构与地理数据（`build.py`、`content/`、`tree/`、照片记录 `imgdb.json`、下载照片的 `fetch_img.py`）；由 `build_book.py swiss` 自动调用 |
+| `reports/` | 检查报告和每周核实清单 |
 | `tests/` | 逐页快照比较：`snap.py` 存下每一页渲染结果，`cmp.py` 比较两份快照 |
 
 ## 编号
@@ -70,7 +72,9 @@
 | `zoom` | 地图缩放按钮和在线底图切换（底图种类见 `basemaps`：瑞士 swisstopo 与 OpenStreetMap，京都 OpenStreetMap） |
 | `back` | 顶部“‹ 返回”按钮 |
 
-生成一本书：`python3 tools/build_book.py kyoto` 或 `swiss`（瑞士先运行 `swiss/make.sh` 里的 `build.py`）。`tools/make_engine.py` 是第一次合并时的记录，不用再运行。
+生成一本书：`python3 tools/build_book.py kyoto` 或 `swiss`。瑞士会先运行 `books/swiss/src/build.py` 画结构和地图（名称、经纬度等先从资料库读取），输出在 `build/swiss/`；加 `--skip-render` 可以跳过这一步。海拔分层图用 `engine/geo/hypso.py` 重新生成。
+
+界面按规范第十四到十七部分：海军蓝品牌色和纸张米色；页头书名带英文小字和双细线；条目页的「＋ 加入我的行程」大按钮和两步底部弹层（选行程 → 书内日历选日期）；「♡ 收藏 / ✓ 已去过 / + 标签」次要操作栏和带日期的「已去过」印章；筛选栏吸顶、数量为 0 的细项变灰；分享行程的二维码（只含条目编号和日期，页面里的 `NID` 是旧键到编号的对照）和行程长图导出。`tools/make_engine.py` 是第一次合并时的记录，不用再运行。
 
 合并的检查方法：用 `tests/snap.py` 把合并前后两个版本的每一页（全部景点、词条、标签、使用说明、计划页和两组自动行程）渲染出来逐页比较，京都 483 页、瑞士 495 页全部一致。
 
@@ -85,10 +89,12 @@
 | `tools/overlay_swiss.py` | 瑞士 `build.py` 末尾调用：用资料库内容覆盖节点、改用新图片文件名；开头调用 `ingest()` 把旧工具新下载的照片登记进资料库 |
 | `tools/test_roundtrip.py` | 往返测试：导出结果必须与迁移前的原书一致；改资料库字段后导出必须随之变化 |
 | `tools/schema.py` | 旧字段 ↔ 资料库字段对照表 |
+| `tools/check.py` | 资料库检查：编号、必填字段、引用、标签、图片许可与署名；加 `--links` 检查官网和参考资料链接（需要能上网） |
+| `tools/verify_queue.py` | 滚动核实：列出本周要核对的条目（从没核实过的、一级必去优先）；核对后用 `--mark` 写入核实日期 |
 
 ## 现状与限制
 
 - **京都**：数据完全由资料库生成，改 `db/entries.json` 后运行 `build_kyoto.py` 即可。
-- **瑞士**：地图、图例、编号、交通方块等仍由 `build.py` 计算。名称和经纬度在画地图之前就从资料库读取，其余内容在最后覆盖，所以改资料库后地图和正文都会跟着变。在 `content/*.py` 里新增的景点暂时不会自动进资料库（构建时会列出）。
+- **瑞士**：结构和地图由 `books/swiss/src/build.py` 计算，名称和经纬度在画地图之前就从资料库读取，其余内容在最后覆盖，所以改资料库后地图和正文都会跟着变。景点的层级关系、徒步路线和列车站点的坐标仍在 `books/swiss/src/content/`；在那里新增的景点暂时不会自动进资料库（构建时会列出）。
 - 中文热度等评分、核实日期还是空的，等滚动核实任务来填。
 - 资料库暂存在 Swiss-Tour 仓库的 `src/techo/`，正式位置应是私有仓库 `techo-assets`。

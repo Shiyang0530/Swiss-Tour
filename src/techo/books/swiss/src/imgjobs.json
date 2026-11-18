@@ -1,0 +1,3637 @@
+[
+{
+"id": "höheweg",
+"q": [
+"Höheweg & Höhematte Interlaken",
+"Höheweg & Höhematte",
+"Höheweg",
+"Höhematte"
+],
+"tok": [
+"Höheweg",
+"Höhematte"
+],
+"season": null,
+"area": "Interlaken"
+},
+{
+"id": "harder",
+"q": [
+"Harder Kulm Interlaken",
+"Harder Kulm"
+],
+"tok": [
+"Harder",
+"Kulm"
+],
+"season": null,
+"area": "Interlaken"
+},
+{
+"id": "schynige",
+"q": [
+"Schynige Platte Interlaken",
+"Schynige Platte"
+],
+"tok": [
+"Schynige",
+"Platte"
+],
+"season": null,
+"area": "Interlaken"
+},
+{
+"id": "beatus",
+"q": [
+"St. Beatus-Höhlen Interlaken",
+"St. Beatus-Höhlen"
+],
+"tok": [
+"Beatus",
+"Höhlen"
+],
+"season": null,
+"area": "Interlaken"
+},
+{
+"id": "lakeboat",
+"q": [
+"Thunersee & Brienzersee Schifffahrt Interlaken",
+"Thunersee & Brienzersee Schifffahrt",
+"Thunersee",
+"Brienzersee Schifffahrt"
+],
+"tok": [
+"Thunersee",
+"Brienzersee",
+"Schifffahrt"
+],
+"season": null,
+"area": "Interlaken"
+},
+{
+"id": "first",
+"q": [
+"Grindelwald First",
+"Grindelwald First"
+],
+"tok": [
+"Grindelwald",
+"First"
+],
+"season": null,
+"area": "Grindelwald"
+},
+{
+"id": "bachalpsee",
+"q": [
+"Bachalpsee Grindelwald",
+"Bachalpsee"
+],
+"tok": [
+"Bachalpsee"
+],
+"season": null,
+"area": "Grindelwald"
+},
+{
+"id": "eigerexpress",
+"q": [
+"Eiger Express Grindelwald",
+"Eiger Express"
+],
+"tok": [
+"Eiger",
+"Express"
+],
+"season": null,
+"area": "Grindelwald"
+},
+{
+"id": "maennlichen",
+"q": [
+"Männlichen Grindelwald",
+"Männlichen"
+],
+"tok": [
+"Männlichen"
+],
+"season": null,
+"area": "Grindelwald"
+},
+{
+"id": "royalwalk",
+"q": [
+"Männlichen – Kleine Scheidegg Panoramaweg Grindelwald",
+"Männlichen – Kleine Scheidegg Panoramaweg",
+"Männlichen",
+"Kleine Scheidegg Panoramaweg"
+],
+"tok": [
+"Männlichen",
+"Kleine",
+"Scheidegg"
+],
+"season": null,
+"area": "Grindelwald"
+},
+{
+"id": "gletscherschlucht",
+"q": [
+"Gletscherschlucht Grindelwald",
+"Gletscherschlucht Grindelwald"
+],
+"tok": [
+"Gletscherschlucht",
+"Grindelwald"
+],
+"season": null,
+"area": "Grindelwald"
+},
+{
+"id": "grindelski",
+"q": [
+"Skigebiet Grindelwald ski",
+"Skigebiet Grindelwald ski",
+"Skigebiet Grindelwald"
+],
+"tok": [
+"Skigebiet",
+"Grindelwald"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "Grindelwald"
+},
+{
+"id": "jungfraubahn",
+"q": [
+"Jungfraubahn",
+"Jungfraubahn"
+],
+"tok": [
+"Jungfraubahn"
+],
+"season": null,
+"area": "Jungfrau"
+},
+{
+"id": "sphinx",
+"q": [
+"Jungfraujoch Sphinx & Eispalast",
+"Jungfraujoch Sphinx & Eispalast",
+"Jungfraujoch Sphinx",
+"Eispalast"
+],
+"tok": [
+"Jungfraujoch",
+"Sphinx",
+"Eispalast"
+],
+"season": null,
+"area": "Jungfrau"
+},
+{
+"id": "kleinescheidegg",
+"q": [
+"Kleine Scheidegg Jungfrau",
+"Kleine Scheidegg"
+],
+"tok": [
+"Kleine",
+"Scheidegg"
+],
+"season": null,
+"area": "Jungfrau"
+},
+{
+"id": "eigertrail",
+"q": [
+"Eiger Trail Jungfrau",
+"Eiger Trail"
+],
+"tok": [
+"Eiger",
+"Trail"
+],
+"season": null,
+"area": "Jungfrau"
+},
+{
+"id": "staubbach",
+"q": [
+"Staubbachfall Lauterbrunnen",
+"Staubbachfall"
+],
+"tok": [
+"Staubbachfall"
+],
+"season": null,
+"area": "Lauterbrunnen"
+},
+{
+"id": "truemmelbach",
+"q": [
+"Trümmelbachfälle Lauterbrunnen",
+"Trümmelbachfälle"
+],
+"tok": [
+"Trümmelbachfälle"
+],
+"season": null,
+"area": "Lauterbrunnen"
+},
+{
+"id": "wengen",
+"q": [
+"Wengen Lauterbrunnen",
+"Wengen"
+],
+"tok": [
+"Wengen"
+],
+"season": null,
+"area": "Lauterbrunnen"
+},
+{
+"id": "wab",
+"q": [
+"Wengernalpbahn Lauterbrunnen",
+"Wengernalpbahn"
+],
+"tok": [
+"Wengernalpbahn"
+],
+"season": null,
+"area": "Lauterbrunnen"
+},
+{
+"id": "wengenski",
+"q": [
+"Skigebiet Wengen ski Lauterbrunnen",
+"Skigebiet Wengen ski",
+"Skigebiet Wengen"
+],
+"tok": [
+"Skigebiet",
+"Wengen"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "Lauterbrunnen"
+},
+{
+"id": "muerrenvillage",
+"q": [
+"Mürren",
+"Mürren"
+],
+"tok": [
+"Mürren"
+],
+"season": null,
+"area": "Mürren"
+},
+{
+"id": "schilthorn",
+"q": [
+"Schilthorn Piz Gloria Mürren",
+"Schilthorn Piz Gloria"
+],
+"tok": [
+"Schilthorn",
+"Gloria"
+],
+"season": null,
+"area": "Mürren"
+},
+{
+"id": "birg",
+"q": [
+"Birg Thrill Walk Mürren",
+"Birg Thrill Walk"
+],
+"tok": [
+"Birg",
+"Thrill",
+"Walk"
+],
+"season": null,
+"area": "Mürren"
+},
+{
+"id": "allmendhubel",
+"q": [
+"Allmendhubel Mürren",
+"Allmendhubel"
+],
+"tok": [
+"Allmendhubel"
+],
+"season": null,
+"area": "Mürren"
+},
+{
+"id": "gimmelwald",
+"q": [
+"Gimmelwald Mürren",
+"Gimmelwald"
+],
+"tok": [
+"Gimmelwald"
+],
+"season": null,
+"area": "Mürren"
+},
+{
+"id": "muerrenski",
+"q": [
+"Skigebiet Mürren-Schilthorn ski",
+"Skigebiet Mürren-Schilthorn ski",
+"Skigebiet Mürren-Schilthorn"
+],
+"tok": [
+"Skigebiet",
+"Mürren",
+"Schilthorn"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "Mürren"
+},
+{
+"id": "thuncastle",
+"q": [
+"Schloss Thun Thunersee",
+"Schloss Thun"
+],
+"tok": [
+"Schloss",
+"Thun"
+],
+"season": null,
+"area": "Thunersee"
+},
+{
+"id": "oberhofen",
+"q": [
+"Schloss Oberhofen Thunersee",
+"Schloss Oberhofen"
+],
+"tok": [
+"Schloss",
+"Oberhofen"
+],
+"season": null,
+"area": "Thunersee"
+},
+{
+"id": "spiez",
+"q": [
+"Spiez Thunersee",
+"Spiez"
+],
+"tok": [
+"Spiez"
+],
+"season": null,
+"area": "Thunersee"
+},
+{
+"id": "niesen",
+"q": [
+"Niesen Thunersee",
+"Niesen"
+],
+"tok": [
+"Niesen"
+],
+"season": null,
+"area": "Thunersee"
+},
+{
+"id": "iseltwald",
+"q": [
+"Iseltwald Thunersee",
+"Iseltwald"
+],
+"tok": [
+"Iseltwald"
+],
+"season": null,
+"area": "Thunersee"
+},
+{
+"id": "brienz",
+"q": [
+"Brienz Thunersee",
+"Brienz"
+],
+"tok": [
+"Brienz"
+],
+"season": null,
+"area": "Thunersee"
+},
+{
+"id": "rothorn",
+"q": [
+"Brienz Rothorn Bahn Thunersee",
+"Brienz Rothorn Bahn"
+],
+"tok": [
+"Brienz",
+"Rothorn",
+"Bahn"
+],
+"season": null,
+"area": "Thunersee"
+},
+{
+"id": "giessbach",
+"q": [
+"Giessbachfälle Thunersee",
+"Giessbachfälle"
+],
+"tok": [
+"Giessbachfälle"
+],
+"season": null,
+"area": "Thunersee"
+},
+{
+"id": "ballenberg",
+"q": [
+"Freilichtmuseum Ballenberg Thunersee",
+"Freilichtmuseum Ballenberg"
+],
+"tok": [
+"Freilichtmuseum",
+"Ballenberg"
+],
+"season": null,
+"area": "Thunersee"
+},
+{
+"id": "meiringen",
+"q": [
+"Aareschlucht & Reichenbachfall Thunersee",
+"Aareschlucht & Reichenbachfall",
+"Aareschlucht",
+"Reichenbachfall"
+],
+"tok": [
+"Aareschlucht",
+"Reichenbachfall"
+],
+"season": null,
+"area": "Thunersee"
+},
+{
+"id": "oeschinensee",
+"q": [
+"Oeschinensee Kandersteg",
+"Oeschinensee"
+],
+"tok": [
+"Oeschinensee"
+],
+"season": null,
+"area": "Kandersteg"
+},
+{
+"id": "blausee",
+"q": [
+"Blausee Kandersteg",
+"Blausee"
+],
+"tok": [
+"Blausee"
+],
+"season": null,
+"area": "Kandersteg"
+},
+{
+"id": "adelbodenski",
+"q": [
+"Skigebiet Adelboden-Lenk ski Kandersteg",
+"Skigebiet Adelboden-Lenk ski",
+"Skigebiet Adelboden-Lenk"
+],
+"tok": [
+"Skigebiet",
+"Adelboden",
+"Lenk"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "Kandersteg"
+},
+{
+"id": "engstligen",
+"q": [
+"Engstligenfälle Kandersteg",
+"Engstligenfälle"
+],
+"tok": [
+"Engstligenfälle"
+],
+"season": null,
+"area": "Kandersteg"
+},
+{
+"id": "gstaadvillage",
+"q": [
+"Gstaad",
+"Gstaad"
+],
+"tok": [
+"Gstaad"
+],
+"season": null,
+"area": "Gstaad"
+},
+{
+"id": "lauenensee",
+"q": [
+"Lauenensee Gstaad",
+"Lauenensee"
+],
+"tok": [
+"Lauenensee"
+],
+"season": null,
+"area": "Gstaad"
+},
+{
+"id": "gstaadski",
+"q": [
+"Skigebiet Gstaad ski",
+"Skigebiet Gstaad ski",
+"Skigebiet Gstaad"
+],
+"tok": [
+"Skigebiet",
+"Gstaad"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "Gstaad"
+},
+{
+"id": "zermattvillage",
+"q": [
+"Zermatt",
+"Zermatt"
+],
+"tok": [
+"Zermatt"
+],
+"season": null,
+"area": "Zermatt"
+},
+{
+"id": "matterhorn",
+"q": [
+"Matterhorn Zermatt",
+"Matterhorn"
+],
+"tok": [
+"Matterhorn"
+],
+"season": null,
+"area": "Zermatt"
+},
+{
+"id": "gornergrat",
+"q": [
+"Gornergratbahn Zermatt",
+"Gornergratbahn"
+],
+"tok": [
+"Gornergratbahn"
+],
+"season": null,
+"area": "Zermatt"
+},
+{
+"id": "glacierparadise",
+"q": [
+"Matterhorn Glacier Paradise Zermatt",
+"Matterhorn Glacier Paradise"
+],
+"tok": [
+"Matterhorn",
+"Glacier",
+"Paradise"
+],
+"season": null,
+"area": "Zermatt"
+},
+{
+"id": "sunnegga",
+"q": [
+"Sunnegga & 5-Seenweg Zermatt",
+"Sunnegga & 5-Seenweg",
+"Sunnegga",
+"5-Seenweg"
+],
+"tok": [
+"Sunnegga",
+"Seenweg"
+],
+"season": null,
+"area": "Zermatt"
+},
+{
+"id": "rothornzermatt",
+"q": [
+"Rothorn Zermatt",
+"Rothorn"
+],
+"tok": [
+"Rothorn"
+],
+"season": null,
+"area": "Zermatt"
+},
+{
+"id": "riffelsee",
+"q": [
+"Riffelsee Zermatt",
+"Riffelsee"
+],
+"tok": [
+"Riffelsee"
+],
+"season": null,
+"area": "Zermatt"
+},
+{
+"id": "schwarzsee",
+"q": [
+"Schwarzsee Zermatt",
+"Schwarzsee"
+],
+"tok": [
+"Schwarzsee"
+],
+"season": null,
+"area": "Zermatt"
+},
+{
+"id": "hoehbalmen",
+"q": [
+"Höhbalmen Zermatt",
+"Höhbalmen"
+],
+"tok": [
+"Höhbalmen"
+],
+"season": null,
+"area": "Zermatt"
+},
+{
+"id": "zermattski",
+"q": [
+"Skigebiet Zermatt-Cervinia ski",
+"Skigebiet Zermatt-Cervinia ski",
+"Skigebiet Zermatt-Cervinia"
+],
+"tok": [
+"Skigebiet",
+"Zermatt",
+"Cervinia"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "Zermatt"
+},
+{
+"id": "saasfeevillage",
+"q": [
+"Saas-Fee",
+"Saas-Fee"
+],
+"tok": [
+"Saas"
+],
+"season": null,
+"area": "Saas-Fee"
+},
+{
+"id": "allalin",
+"q": [
+"Metro Alpin & Allalin Saas-Fee",
+"Metro Alpin & Allalin",
+"Metro Alpin",
+"Allalin"
+],
+"tok": [
+"Metro",
+"Alpin",
+"Allalin"
+],
+"season": null,
+"area": "Saas-Fee"
+},
+{
+"id": "kapellenweg",
+"q": [
+"Kapellenweg Saas-Fee",
+"Kapellenweg Saas-Fee"
+],
+"tok": [
+"Kapellenweg",
+"Saas"
+],
+"season": null,
+"area": "Saas-Fee"
+},
+{
+"id": "saasfeeski",
+"q": [
+"Skigebiet Saas-Fee ski",
+"Skigebiet Saas-Fee ski",
+"Skigebiet Saas-Fee"
+],
+"tok": [
+"Skigebiet",
+"Saas"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "Saas-Fee"
+},
+{
+"id": "riederalp",
+"q": [
+"Riederalp Aletsch",
+"Riederalp"
+],
+"tok": [
+"Riederalp"
+],
+"season": null,
+"area": "Aletsch"
+},
+{
+"id": "bettmeralp",
+"q": [
+"Bettmeralp Aletsch",
+"Bettmeralp"
+],
+"tok": [
+"Bettmeralp"
+],
+"season": null,
+"area": "Aletsch"
+},
+{
+"id": "eggishorn",
+"q": [
+"Eggishorn Aletsch",
+"Eggishorn"
+],
+"tok": [
+"Eggishorn"
+],
+"season": null,
+"area": "Aletsch"
+},
+{
+"id": "aletschglacier",
+"q": [
+"Grosser Aletschgletscher",
+"Grosser Aletschgletscher"
+],
+"tok": [
+"Grosser",
+"Aletschgletscher"
+],
+"season": null,
+"area": "Aletsch"
+},
+{
+"id": "aletschwald",
+"q": [
+"Aletschwald",
+"Aletschwald"
+],
+"tok": [
+"Aletschwald"
+],
+"season": null,
+"area": "Aletsch"
+},
+{
+"id": "maerjelensee",
+"q": [
+"Märjelensee Aletsch",
+"Märjelensee"
+],
+"tok": [
+"Märjelensee"
+],
+"season": null,
+"area": "Aletsch"
+},
+{
+"id": "haengebruecke",
+"q": [
+"Hängebrücke Belalp–Riederalp Aletsch",
+"Hängebrücke Belalp–Riederalp"
+],
+"tok": [
+"Hängebrücke",
+"Belalp",
+"Riederalp"
+],
+"season": null,
+"area": "Aletsch"
+},
+{
+"id": "aletschski",
+"q": [
+"Skigebiet Aletsch Arena ski",
+"Skigebiet Aletsch Arena ski",
+"Skigebiet Aletsch Arena"
+],
+"tok": [
+"Skigebiet",
+"Aletsch",
+"Arena"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "Aletsch"
+},
+{
+"id": "valere",
+"q": [
+"Valère & Tourbillon Sion",
+"Valère & Tourbillon",
+"Valère",
+"Tourbillon"
+],
+"tok": [
+"Valère",
+"Tourbillon"
+],
+"season": null,
+"area": "Sion"
+},
+{
+"id": "wine",
+"q": [
+"Walliser Wein Sion",
+"Walliser Wein"
+],
+"tok": [
+"Walliser",
+"Wein"
+],
+"season": null,
+"area": "Sion"
+},
+{
+"id": "leukerbad",
+"q": [
+"Leukerbad Therme Sion",
+"Leukerbad Therme"
+],
+"tok": [
+"Leukerbad",
+"Therme"
+],
+"season": null,
+"area": "Sion"
+},
+{
+"id": "gemmi",
+"q": [
+"Gemmipass Sion",
+"Gemmipass"
+],
+"tok": [
+"Gemmipass"
+],
+"season": null,
+"area": "Sion"
+},
+{
+"id": "cransmontana",
+"q": [
+"Skigebiet Crans-Montana Sion",
+"Skigebiet Crans-Montana"
+],
+"tok": [
+"Skigebiet",
+"Crans",
+"Montana"
+],
+"season": null,
+"area": "Sion"
+},
+{
+"id": "gianadda",
+"q": [
+"Fondation Pierre Gianadda Martigny",
+"Fondation Pierre Gianadda"
+],
+"tok": [
+"Fondation",
+"Pierre",
+"Gianadda"
+],
+"season": null,
+"area": "Martigny"
+},
+{
+"id": "grandstbernard",
+"q": [
+"Col du Grand-Saint-Bernard Martigny",
+"Col du Grand-Saint-Bernard"
+],
+"tok": [
+"Grand",
+"Saint",
+"Bernard"
+],
+"season": null,
+"area": "Martigny"
+},
+{
+"id": "champex",
+"q": [
+"Champex-Lac Martigny",
+"Champex-Lac"
+],
+"tok": [
+"Champex"
+],
+"season": null,
+"area": "Martigny"
+},
+{
+"id": "valferretch",
+"q": [
+"Val Ferret (Suisse) Martigny",
+"Val Ferret (Suisse)"
+],
+"tok": [
+"Ferret"
+],
+"season": "autumn|herbst|fall|automne|larch|lärche|october|oktober",
+"area": "Martigny"
+},
+{
+"id": "trient",
+"q": [
+"Glacier du Trient Martigny",
+"Glacier du Trient"
+],
+"tok": [
+"Glacier",
+"Trient"
+],
+"season": null,
+"area": "Martigny"
+},
+{
+"id": "verbier",
+"q": [
+"Skigebiet Verbier · 4 Vallées Martigny",
+"Skigebiet Verbier · 4 Vallées",
+"Skigebiet Verbier",
+"4 Vallées"
+],
+"tok": [
+"Skigebiet",
+"Verbier",
+"Vallées"
+],
+"season": null,
+"area": "Martigny"
+},
+{
+"id": "chamonixvillage",
+"q": [
+"Chamonix Chamonix-Mont-Blanc",
+"Chamonix"
+],
+"tok": [
+"Chamonix"
+],
+"season": null,
+"area": "Chamonix-Mont-Blanc"
+},
+{
+"id": "aiguilledumidi",
+"q": [
+"Aiguille du Midi Chamonix-Mont-Blanc",
+"Aiguille du Midi"
+],
+"tok": [
+"Aiguille",
+"Midi"
+],
+"season": null,
+"area": "Chamonix-Mont-Blanc"
+},
+{
+"id": "panoramic",
+"q": [
+"Panoramic Mont-Blanc Chamonix-Mont-Blanc",
+"Panoramic Mont-Blanc"
+],
+"tok": [
+"Panoramic",
+"Mont",
+"Blanc"
+],
+"season": null,
+"area": "Chamonix-Mont-Blanc"
+},
+{
+"id": "montenvers",
+"q": [
+"Montenvers – Mer de Glace Chamonix-Mont-Blanc",
+"Montenvers – Mer de Glace",
+"Montenvers",
+"Mer de Glace"
+],
+"tok": [
+"Montenvers",
+"Glace"
+],
+"season": null,
+"area": "Chamonix-Mont-Blanc"
+},
+{
+"id": "tmb_tram",
+"q": [
+"Tramway du Mont-Blanc Chamonix-Mont-Blanc",
+"Tramway du Mont-Blanc"
+],
+"tok": [
+"Tramway",
+"Mont",
+"Blanc"
+],
+"season": null,
+"area": "Chamonix-Mont-Blanc"
+},
+{
+"id": "lacblanc",
+"q": [
+"Lac Blanc Chamonix-Mont-Blanc",
+"Lac Blanc"
+],
+"tok": [
+"Blanc"
+],
+"season": null,
+"area": "Chamonix-Mont-Blanc"
+},
+{
+"id": "grandbalcon",
+"q": [
+"Grand Balcon Nord Chamonix-Mont-Blanc",
+"Grand Balcon Nord"
+],
+"tok": [
+"Grand",
+"Balcon",
+"Nord"
+],
+"season": null,
+"area": "Chamonix-Mont-Blanc"
+},
+{
+"id": "brevent",
+"q": [
+"Le Brévent Chamonix-Mont-Blanc",
+"Le Brévent"
+],
+"tok": [
+"Brévent"
+],
+"season": null,
+"area": "Chamonix-Mont-Blanc"
+},
+{
+"id": "valleeblanche",
+"q": [
+"Vallée Blanche ski Chamonix-Mont-Blanc",
+"Vallée Blanche ski",
+"Vallée Blanche"
+],
+"tok": [
+"Vallée",
+"Blanche"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "Chamonix-Mont-Blanc"
+},
+{
+"id": "chamonixski",
+"q": [
+"Domaines skiables de Chamonix ski Chamonix-Mont-Blanc",
+"Domaines skiables de Chamonix ski",
+"Domaines skiables de Chamonix"
+],
+"tok": [
+"Domaines",
+"skiables",
+"Chamonix"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "Chamonix-Mont-Blanc"
+},
+{
+"id": "tmb",
+"q": [
+"Tour du Mont-Blanc Chamonix-Mont-Blanc",
+"Tour du Mont-Blanc"
+],
+"tok": [
+"Tour",
+"Mont",
+"Blanc"
+],
+"season": null,
+"area": "Chamonix-Mont-Blanc"
+},
+{
+"id": "courmayeurvillage",
+"q": [
+"Courmayeur",
+"Courmayeur"
+],
+"tok": [
+"Courmayeur"
+],
+"season": null,
+"area": "Courmayeur"
+},
+{
+"id": "skyway",
+"q": [
+"Skyway Monte Bianco Courmayeur",
+"Skyway Monte Bianco"
+],
+"tok": [
+"Skyway",
+"Monte",
+"Bianco"
+],
+"season": null,
+"area": "Courmayeur"
+},
+{
+"id": "valferretit",
+"q": [
+"Val Ferret (Italia) Courmayeur",
+"Val Ferret (Italia)"
+],
+"tok": [
+"Ferret",
+"Italia"
+],
+"season": "autumn|herbst|fall|automne|larch|lärche|october|oktober",
+"area": "Courmayeur"
+},
+{
+"id": "aosta",
+"q": [
+"Aosta Courmayeur",
+"Aosta"
+],
+"tok": [
+"Aosta"
+],
+"season": null,
+"area": "Courmayeur"
+},
+{
+"id": "fenis",
+"q": [
+"Castello di Fénis Courmayeur",
+"Castello di Fénis"
+],
+"tok": [
+"Castello",
+"Fénis"
+],
+"season": null,
+"area": "Courmayeur"
+},
+{
+"id": "courmayeurski",
+"q": [
+"Courmayeur Mont Blanc ski ski",
+"Courmayeur Mont Blanc ski ski",
+"Courmayeur Mont Blanc ski"
+],
+"tok": [
+"Courmayeur",
+"Mont",
+"Blanc"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "Courmayeur"
+},
+{
+"id": "kapellbruecke",
+"q": [
+"Kapellbrücke Luzern",
+"Kapellbrücke"
+],
+"tok": [
+"Kapellbrücke"
+],
+"season": null,
+"area": "Luzern"
+},
+{
+"id": "altstadt",
+"q": [
+"Altstadt Luzern",
+"Altstadt Luzern"
+],
+"tok": [
+"Altstadt",
+"Luzern"
+],
+"season": null,
+"area": "Luzern"
+},
+{
+"id": "loewendenkmal",
+"q": [
+"Löwendenkmal Luzern",
+"Löwendenkmal"
+],
+"tok": [
+"Löwendenkmal"
+],
+"season": null,
+"area": "Luzern"
+},
+{
+"id": "musegg",
+"q": [
+"Museggmauer Luzern",
+"Museggmauer"
+],
+"tok": [
+"Museggmauer"
+],
+"season": null,
+"area": "Luzern"
+},
+{
+"id": "verkehrshaus",
+"q": [
+"Verkehrshaus der Schweiz Luzern",
+"Verkehrshaus der Schweiz"
+],
+"tok": [
+"Verkehrshaus"
+],
+"season": null,
+"area": "Luzern"
+},
+{
+"id": "seeboat",
+"q": [
+"Schifffahrt Vierwaldstättersee Luzern",
+"Schifffahrt Vierwaldstättersee"
+],
+"tok": [
+"Schifffahrt",
+"Vierwaldstättersee"
+],
+"season": null,
+"area": "Luzern"
+},
+{
+"id": "rigibahn",
+"q": [
+"Rigi Bahnen",
+"Rigi Bahnen"
+],
+"tok": [
+"Rigi",
+"Bahnen"
+],
+"season": null,
+"area": "Rigi"
+},
+{
+"id": "weggis",
+"q": [
+"Luftseilbahn Weggis–Rigi Kaltbad",
+"Luftseilbahn Weggis–Rigi Kaltbad"
+],
+"tok": [
+"Luftseilbahn",
+"Weggis",
+"Rigi"
+],
+"season": null,
+"area": "Rigi"
+},
+{
+"id": "rigikulm",
+"q": [
+"Rigi Kulm Sonnenaufgang",
+"Rigi Kulm Sonnenaufgang"
+],
+"tok": [
+"Rigi",
+"Kulm",
+"Sonnenaufgang"
+],
+"season": null,
+"area": "Rigi"
+},
+{
+"id": "mineralbad",
+"q": [
+"Mineralbad & Spa Rigi Kaltbad",
+"Mineralbad & Spa Rigi Kaltbad",
+"Mineralbad",
+"Spa Rigi Kaltbad"
+],
+"tok": [
+"Mineralbad",
+"Rigi",
+"Kaltbad"
+],
+"season": null,
+"area": "Rigi"
+},
+{
+"id": "rigipanorama",
+"q": [
+"Rigi Panoramaweg",
+"Rigi Panoramaweg"
+],
+"tok": [
+"Rigi",
+"Panoramaweg"
+],
+"season": null,
+"area": "Rigi"
+},
+{
+"id": "rigisled",
+"q": [
+"Rigi Schlittelwege ski",
+"Rigi Schlittelwege ski",
+"Rigi Schlittelwege"
+],
+"tok": [
+"Rigi",
+"Schlittelwege"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "Rigi"
+},
+{
+"id": "pilatusbahn",
+"q": [
+"Pilatusbahn",
+"Pilatusbahn"
+],
+"tok": [
+"Pilatusbahn"
+],
+"season": null,
+"area": "Pilatus"
+},
+{
+"id": "dragonride",
+"q": [
+"Kriens Gondel & Dragon Ride Pilatus",
+"Kriens Gondel & Dragon Ride",
+"Kriens Gondel",
+"Dragon Ride"
+],
+"tok": [
+"Kriens",
+"Gondel",
+"Dragon"
+],
+"season": null,
+"area": "Pilatus"
+},
+{
+"id": "drachenweg",
+"q": [
+"Drachenweg Pilatus",
+"Drachenweg Pilatus"
+],
+"tok": [
+"Drachenweg",
+"Pilatus"
+],
+"season": null,
+"area": "Pilatus"
+},
+{
+"id": "fraekmuentegg",
+"q": [
+"Fräkmüntegg Rodelbahn & Seilpark Pilatus",
+"Fräkmüntegg Rodelbahn & Seilpark",
+"Fräkmüntegg Rodelbahn",
+"Seilpark"
+],
+"tok": [
+"Fräkmüntegg",
+"Rodelbahn",
+"Seilpark"
+],
+"season": null,
+"area": "Pilatus"
+},
+{
+"id": "klosterengelberg",
+"q": [
+"Kloster Engelberg Titlis",
+"Kloster Engelberg"
+],
+"tok": [
+"Kloster",
+"Engelberg"
+],
+"season": null,
+"area": "Titlis"
+},
+{
+"id": "rotair",
+"q": [
+"Titlis Rotair",
+"Titlis Rotair"
+],
+"tok": [
+"Titlis",
+"Rotair"
+],
+"season": null,
+"area": "Titlis"
+},
+{
+"id": "cliffwalk",
+"q": [
+"Titlis Cliff Walk",
+"Titlis Cliff Walk"
+],
+"tok": [
+"Titlis",
+"Cliff",
+"Walk"
+],
+"season": null,
+"area": "Titlis"
+},
+{
+"id": "glaciercave",
+"q": [
+"Titlis Gletschergrotte",
+"Titlis Gletschergrotte"
+],
+"tok": [
+"Titlis",
+"Gletschergrotte"
+],
+"season": null,
+"area": "Titlis"
+},
+{
+"id": "truebsee",
+"q": [
+"Trübsee Titlis",
+"Trübsee"
+],
+"tok": [
+"Trübsee"
+],
+"season": null,
+"area": "Titlis"
+},
+{
+"id": "engelbergski",
+"q": [
+"Skigebiet Engelberg-Titlis ski",
+"Skigebiet Engelberg-Titlis ski",
+"Skigebiet Engelberg-Titlis"
+],
+"tok": [
+"Skigebiet",
+"Engelberg",
+"Titlis"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "Titlis"
+},
+{
+"id": "cabrio",
+"q": [
+"Stanserhorn CabriO",
+"Stanserhorn CabriO"
+],
+"tok": [
+"Stanserhorn",
+"CabriO"
+],
+"season": null,
+"area": "Stanserhorn"
+},
+{
+"id": "buergenstock",
+"q": [
+"Bürgenstock Felsenweg & Hammetschwand-Lift Stanserhorn",
+"Bürgenstock Felsenweg & Hammetschwand-Lift",
+"Bürgenstock Felsenweg",
+"Hammetschwand-Lift"
+],
+"tok": [
+"Bürgenstock",
+"Felsenweg",
+"Hammetschwand"
+],
+"season": null,
+"area": "Stanserhorn"
+},
+{
+"id": "stoosbahn",
+"q": [
+"Stoosbahn",
+"Stoosbahn"
+],
+"tok": [
+"Stoosbahn"
+],
+"season": null,
+"area": "Stoos"
+},
+{
+"id": "stoosridge",
+"q": [
+"Gratwanderung Klingenstock–Fronalpstock Stoos",
+"Gratwanderung Klingenstock–Fronalpstock"
+],
+"tok": [
+"Gratwanderung",
+"Klingenstock",
+"Fronalpstock"
+],
+"season": null,
+"area": "Stoos"
+},
+{
+"id": "stoosski",
+"q": [
+"Skigebiet Stoos ski",
+"Skigebiet Stoos ski",
+"Skigebiet Stoos"
+],
+"tok": [
+"Skigebiet",
+"Stoos"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "Stoos"
+},
+{
+"id": "bundesbrief",
+"q": [
+"Bundesbriefmuseum Schwyz Stoos",
+"Bundesbriefmuseum Schwyz"
+],
+"tok": [
+"Bundesbriefmuseum",
+"Schwyz"
+],
+"season": null,
+"area": "Stoos"
+},
+{
+"id": "ruetli",
+"q": [
+"Rütliwiese Stoos",
+"Rütliwiese"
+],
+"tok": [
+"Rütliwiese"
+],
+"season": null,
+"area": "Stoos"
+},
+{
+"id": "telldenkmal",
+"q": [
+"Telldenkmal Altdorf Stoos",
+"Telldenkmal Altdorf"
+],
+"tok": [
+"Telldenkmal",
+"Altdorf"
+],
+"season": null,
+"area": "Stoos"
+},
+{
+"id": "stmoritzvillage",
+"q": [
+"St. Moritz",
+"St. Moritz"
+],
+"tok": [
+"Moritz"
+],
+"season": null,
+"area": "St."
+},
+{
+"id": "corvatsch",
+"q": [
+"Corvatsch St.",
+"Corvatsch"
+],
+"tok": [
+"Corvatsch"
+],
+"season": null,
+"area": "St."
+},
+{
+"id": "muottasmuragl",
+"q": [
+"Muottas Muragl St.",
+"Muottas Muragl"
+],
+"tok": [
+"Muottas",
+"Muragl"
+],
+"season": null,
+"area": "St."
+},
+{
+"id": "piznair",
+"q": [
+"Piz Nair St.",
+"Piz Nair"
+],
+"tok": [
+"Nair"
+],
+"season": null,
+"area": "St."
+},
+{
+"id": "silsfex",
+"q": [
+"Sils & Val Fex St.",
+"Sils & Val Fex",
+"Sils",
+"Val Fex"
+],
+"tok": [
+"Sils"
+],
+"season": "autumn|herbst|fall|automne|larch|lärche|october|oktober",
+"area": "St."
+},
+{
+"id": "stmoritzski",
+"q": [
+"Skigebiet St. Moritz ski",
+"Skigebiet St. Moritz ski",
+"Skigebiet St. Moritz"
+],
+"tok": [
+"Skigebiet",
+"Moritz"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "St."
+},
+{
+"id": "larch",
+"q": [
+"Engadiner Lärchen St.",
+"Engadiner Lärchen"
+],
+"tok": [
+"Engadiner",
+"Lärchen"
+],
+"season": "autumn|herbst|fall|automne|larch|lärche|october|oktober",
+"area": "St."
+},
+{
+"id": "diavolezza",
+"q": [
+"Diavolezza Bernina",
+"Diavolezza"
+],
+"tok": [
+"Diavolezza"
+],
+"season": null,
+"area": "Bernina"
+},
+{
+"id": "morteratsch",
+"q": [
+"Gletscherweg Morteratsch Bernina",
+"Gletscherweg Morteratsch"
+],
+"tok": [
+"Gletscherweg",
+"Morteratsch"
+],
+"season": null,
+"area": "Bernina"
+},
+{
+"id": "alpgruem",
+"q": [
+"Alp Grüm Bernina",
+"Alp Grüm"
+],
+"tok": [
+"Grüm"
+],
+"season": null,
+"area": "Bernina"
+},
+{
+"id": "lagobianco",
+"q": [
+"Lago Bianco Bernina",
+"Lago Bianco"
+],
+"tok": [
+"Lago",
+"Bianco"
+],
+"season": null,
+"area": "Bernina"
+},
+{
+"id": "brusio",
+"q": [
+"Kreisviadukt Brusio Bernina",
+"Kreisviadukt Brusio"
+],
+"tok": [
+"Kreisviadukt",
+"Brusio"
+],
+"season": null,
+"area": "Bernina"
+},
+{
+"id": "poschiavo",
+"q": [
+"Poschiavo Bernina",
+"Poschiavo"
+],
+"tok": [
+"Poschiavo"
+],
+"season": null,
+"area": "Bernina"
+},
+{
+"id": "scuol",
+"q": [
+"Bogn Engiadina Scuol Unterengadin",
+"Bogn Engiadina Scuol"
+],
+"tok": [
+"Bogn",
+"Engiadina",
+"Scuol"
+],
+"season": null,
+"area": "Unterengadin"
+},
+{
+"id": "guarda",
+"q": [
+"Guarda Unterengadin",
+"Guarda"
+],
+"tok": [
+"Guarda"
+],
+"season": null,
+"area": "Unterengadin"
+},
+{
+"id": "tarasp",
+"q": [
+"Schloss Tarasp Unterengadin",
+"Schloss Tarasp"
+],
+"tok": [
+"Schloss",
+"Tarasp"
+],
+"season": null,
+"area": "Unterengadin"
+},
+{
+"id": "nationalpark",
+"q": [
+"Schweizerischer Nationalpark Unterengadin",
+"Schweizerischer Nationalpark"
+],
+"tok": [
+"Schweizerischer",
+"Nationalpark"
+],
+"season": null,
+"area": "Unterengadin"
+},
+{
+"id": "davostown",
+"q": [
+"Davos",
+"Davos"
+],
+"tok": [
+"Davos"
+],
+"season": null,
+"area": "Davos"
+},
+{
+"id": "parsenn",
+"q": [
+"Parsenn & Weissfluhjoch Davos",
+"Parsenn & Weissfluhjoch",
+"Parsenn",
+"Weissfluhjoch"
+],
+"tok": [
+"Parsenn",
+"Weissfluhjoch"
+],
+"season": null,
+"area": "Davos"
+},
+{
+"id": "jakobshorn",
+"q": [
+"Jakobshorn Davos",
+"Jakobshorn"
+],
+"tok": [
+"Jakobshorn"
+],
+"season": null,
+"area": "Davos"
+},
+{
+"id": "schatzalp",
+"q": [
+"Schatzalp Davos",
+"Schatzalp"
+],
+"tok": [
+"Schatzalp"
+],
+"season": null,
+"area": "Davos"
+},
+{
+"id": "davosski",
+"q": [
+"Skigebiet Davos Klosters ski",
+"Skigebiet Davos Klosters ski",
+"Skigebiet Davos Klosters"
+],
+"tok": [
+"Skigebiet",
+"Davos",
+"Klosters"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "Davos"
+},
+{
+"id": "churaltstadt",
+"q": [
+"Altstadt Chur",
+"Altstadt Chur"
+],
+"tok": [
+"Altstadt",
+"Chur"
+],
+"season": null,
+"area": "Chur"
+},
+{
+"id": "weisshorn",
+"q": [
+"Weisshorn Arosa Chur",
+"Weisshorn Arosa"
+],
+"tok": [
+"Weisshorn",
+"Arosa"
+],
+"season": null,
+"area": "Chur"
+},
+{
+"id": "baerenland",
+"q": [
+"Arosa Bärenland Chur",
+"Arosa Bärenland"
+],
+"tok": [
+"Arosa",
+"Bärenland"
+],
+"season": null,
+"area": "Chur"
+},
+{
+"id": "arosaski",
+"q": [
+"Skigebiet Arosa Lenzerheide ski Chur",
+"Skigebiet Arosa Lenzerheide ski",
+"Skigebiet Arosa Lenzerheide"
+],
+"tok": [
+"Skigebiet",
+"Arosa",
+"Lenzerheide"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "Chur"
+},
+{
+"id": "heididorf",
+"q": [
+"Heidi Dorf Maienfeld Chur",
+"Heidi Dorf Maienfeld"
+],
+"tok": [
+"Heidi",
+"Dorf",
+"Maienfeld"
+],
+"season": null,
+"area": "Chur"
+},
+{
+"id": "landwasser",
+"q": [
+"Landwasserviadukt Albula",
+"Landwasserviadukt"
+],
+"tok": [
+"Landwasserviadukt"
+],
+"season": null,
+"area": "Albula"
+},
+{
+"id": "berguen",
+"q": [
+"Bahnmuseum Albula & Schlittelbahn Preda–Bergün",
+"Bahnmuseum Albula & Schlittelbahn Preda–Bergün",
+"Bahnmuseum Albula",
+"Schlittelbahn Preda–Bergün"
+],
+"tok": [
+"Bahnmuseum",
+"Albula",
+"Schlittelbahn"
+],
+"season": null,
+"area": "Albula"
+},
+{
+"id": "viamala",
+"q": [
+"Viamala-Schlucht Albula",
+"Viamala-Schlucht"
+],
+"tok": [
+"Viamala",
+"Schlucht"
+],
+"season": null,
+"area": "Albula"
+},
+{
+"id": "caumasee",
+"q": [
+"Caumasee Flims-Laax",
+"Caumasee"
+],
+"tok": [
+"Caumasee"
+],
+"season": null,
+"area": "Flims-Laax"
+},
+{
+"id": "ruinaulta",
+"q": [
+"Ruinaulta Flims-Laax",
+"Ruinaulta"
+],
+"tok": [
+"Ruinaulta"
+],
+"season": null,
+"area": "Flims-Laax"
+},
+{
+"id": "laaxski",
+"q": [
+"Skigebiet Flims Laax Falera ski Flims-Laax",
+"Skigebiet Flims Laax Falera ski",
+"Skigebiet Flims Laax Falera"
+],
+"tok": [
+"Skigebiet",
+"Flims",
+"Laax"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "Flims-Laax"
+},
+{
+"id": "lagolugano",
+"q": [
+"Lago di Lugano",
+"Lago di Lugano"
+],
+"tok": [
+"Lago",
+"Lugano"
+],
+"season": null,
+"area": "Lugano"
+},
+{
+"id": "riforma",
+"q": [
+"Piazza della Riforma Lugano",
+"Piazza della Riforma"
+],
+"tok": [
+"Piazza",
+"della",
+"Riforma"
+],
+"season": null,
+"area": "Lugano"
+},
+{
+"id": "sansalvatore",
+"q": [
+"Monte San Salvatore Lugano",
+"Monte San Salvatore"
+],
+"tok": [
+"Monte",
+"Salvatore"
+],
+"season": null,
+"area": "Lugano"
+},
+{
+"id": "montebre",
+"q": [
+"Monte Brè Lugano",
+"Monte Brè"
+],
+"tok": [
+"Monte"
+],
+"season": null,
+"area": "Lugano"
+},
+{
+"id": "gandria",
+"q": [
+"Sentiero di Gandria Lugano",
+"Sentiero di Gandria"
+],
+"tok": [
+"Sentiero",
+"Gandria"
+],
+"season": null,
+"area": "Lugano"
+},
+{
+"id": "morcote",
+"q": [
+"Morcote Lugano",
+"Morcote"
+],
+"tok": [
+"Morcote"
+],
+"season": null,
+"area": "Lugano"
+},
+{
+"id": "generoso",
+"q": [
+"Monte Generoso & Fiore di pietra Mendrisiotto",
+"Monte Generoso & Fiore di pietra",
+"Monte Generoso",
+"Fiore di pietra"
+],
+"tok": [
+"Monte",
+"Generoso",
+"Fiore"
+],
+"season": null,
+"area": "Mendrisiotto"
+},
+{
+"id": "foxtown",
+"q": [
+"FoxTown Mendrisio Mendrisiotto",
+"FoxTown Mendrisio"
+],
+"tok": [
+"FoxTown",
+"Mendrisio"
+],
+"season": null,
+"area": "Mendrisiotto"
+},
+{
+"id": "swissminiatur",
+"q": [
+"Swissminiatur Melide Mendrisiotto",
+"Swissminiatur Melide"
+],
+"tok": [
+"Swissminiatur",
+"Melide"
+],
+"season": null,
+"area": "Mendrisiotto"
+},
+{
+"id": "piazzagrande",
+"q": [
+"Piazza Grande Locarno",
+"Piazza Grande Locarno"
+],
+"tok": [
+"Piazza",
+"Grande",
+"Locarno"
+],
+"season": null,
+"area": "Locarno"
+},
+{
+"id": "madonnadelsasso",
+"q": [
+"Madonna del Sasso Locarno",
+"Madonna del Sasso"
+],
+"tok": [
+"Madonna",
+"Sasso"
+],
+"season": null,
+"area": "Locarno"
+},
+{
+"id": "cardada",
+"q": [
+"Cardada & Cimetta Locarno",
+"Cardada & Cimetta",
+"Cardada",
+"Cimetta"
+],
+"tok": [
+"Cardada",
+"Cimetta"
+],
+"season": null,
+"area": "Locarno"
+},
+{
+"id": "ascona",
+"q": [
+"Ascona Locarno",
+"Ascona"
+],
+"tok": [
+"Ascona"
+],
+"season": null,
+"area": "Locarno"
+},
+{
+"id": "brissago",
+"q": [
+"Isole di Brissago Locarno",
+"Isole di Brissago"
+],
+"tok": [
+"Isole",
+"Brissago"
+],
+"season": null,
+"area": "Locarno"
+},
+{
+"id": "castagne",
+"q": [
+"Castagne Ticino Locarno",
+"Castagne Ticino"
+],
+"tok": [
+"Castagne",
+"Ticino"
+],
+"season": null,
+"area": "Locarno"
+},
+{
+"id": "pontedeisalti",
+"q": [
+"Ponte dei Salti Verzasca",
+"Ponte dei Salti"
+],
+"tok": [
+"Ponte",
+"Salti"
+],
+"season": null,
+"area": "Verzasca"
+},
+{
+"id": "verzascadam",
+"q": [
+"Diga della Verzasca",
+"Diga della Verzasca"
+],
+"tok": [
+"Diga",
+"della",
+"Verzasca"
+],
+"season": null,
+"area": "Verzasca"
+},
+{
+"id": "valmaggia",
+"q": [
+"Valle Maggia & Foroglio Verzasca",
+"Valle Maggia & Foroglio",
+"Valle Maggia",
+"Foroglio"
+],
+"tok": [
+"Valle",
+"Maggia",
+"Foroglio"
+],
+"season": null,
+"area": "Verzasca"
+},
+{
+"id": "castelli",
+"q": [
+"Castelli di Bellinzona",
+"Castelli di Bellinzona"
+],
+"tok": [
+"Castelli",
+"Bellinzona"
+],
+"season": null,
+"area": "Bellinzona"
+},
+{
+"id": "tamaro",
+"q": [
+"Monte Tamaro & Santa Maria degli Angeli Bellinzona",
+"Monte Tamaro & Santa Maria degli Angeli",
+"Monte Tamaro",
+"Santa Maria degli Angeli"
+],
+"tok": [
+"Monte",
+"Tamaro",
+"Santa"
+],
+"season": null,
+"area": "Bellinzona"
+},
+{
+"id": "gottardo",
+"q": [
+"Passo del San Gottardo Bellinzona",
+"Passo del San Gottardo"
+],
+"tok": [
+"Passo",
+"Gottardo"
+],
+"season": null,
+"area": "Bellinzona"
+},
+{
+"id": "jetdeau",
+"q": [
+"Jet d'eau Genève",
+"Jet d'eau"
+],
+"tok": [
+"d'eau"
+],
+"season": null,
+"area": "Genève"
+},
+{
+"id": "vieilleville",
+"q": [
+"Vieille Ville & Cathédrale Saint-Pierre Genève",
+"Vieille Ville & Cathédrale Saint-Pierre",
+"Vieille Ville",
+"Cathédrale Saint-Pierre"
+],
+"tok": [
+"Vieille",
+"Ville",
+"Cathédrale"
+],
+"season": null,
+"area": "Genève"
+},
+{
+"id": "nations",
+"q": [
+"Palais des Nations Genève",
+"Palais des Nations"
+],
+"tok": [
+"Palais",
+"Nations"
+],
+"season": null,
+"area": "Genève"
+},
+{
+"id": "reformation",
+"q": [
+"Mur des Réformateurs Genève",
+"Mur des Réformateurs"
+],
+"tok": [
+"Réformateurs"
+],
+"season": null,
+"area": "Genève"
+},
+{
+"id": "horlogefleurie",
+"q": [
+"L'Horloge fleurie Genève",
+"L'Horloge fleurie"
+],
+"tok": [
+"L'Horloge",
+"fleurie"
+],
+"season": null,
+"area": "Genève"
+},
+{
+"id": "cern",
+"q": [
+"CERN Science Gateway Genève",
+"CERN Science Gateway"
+],
+"tok": [
+"CERN",
+"Science",
+"Gateway"
+],
+"season": null,
+"area": "Genève"
+},
+{
+"id": "cathedrallausanne",
+"q": [
+"Cathédrale de Lausanne",
+"Cathédrale de Lausanne"
+],
+"tok": [
+"Cathédrale",
+"Lausanne"
+],
+"season": null,
+"area": "Lausanne"
+},
+{
+"id": "olympicmuseum",
+"q": [
+"Musée Olympique Lausanne",
+"Musée Olympique"
+],
+"tok": [
+"Musée",
+"Olympique"
+],
+"season": null,
+"area": "Lausanne"
+},
+{
+"id": "ouchy",
+"q": [
+"Ouchy Lausanne",
+"Ouchy"
+],
+"tok": [
+"Ouchy"
+],
+"season": null,
+"area": "Lausanne"
+},
+{
+"id": "lavauxwalk",
+"q": [
+"Terrasses de Lavaux",
+"Terrasses de Lavaux"
+],
+"tok": [
+"Terrasses",
+"Lavaux"
+],
+"season": null,
+"area": "Lavaux"
+},
+{
+"id": "lavauxexpress",
+"q": [
+"Lavaux Express",
+"Lavaux Express"
+],
+"tok": [
+"Lavaux",
+"Express"
+],
+"season": null,
+"area": "Lavaux"
+},
+{
+"id": "vinorama",
+"q": [
+"Lavaux Vinorama",
+"Lavaux Vinorama"
+],
+"tok": [
+"Lavaux",
+"Vinorama"
+],
+"season": null,
+"area": "Lavaux"
+},
+{
+"id": "chillon",
+"q": [
+"Château de Chillon Montreux",
+"Château de Chillon"
+],
+"tok": [
+"Château",
+"Chillon"
+],
+"season": null,
+"area": "Montreux"
+},
+{
+"id": "quaimontreux",
+"q": [
+"Quai de Montreux & Freddie Mercury",
+"Quai de Montreux & Freddie Mercury",
+"Quai de Montreux",
+"Freddie Mercury"
+],
+"tok": [
+"Quai",
+"Montreux",
+"Freddie"
+],
+"season": null,
+"area": "Montreux"
+},
+{
+"id": "montreuxnoel",
+"q": [
+"Montreux Noël",
+"Montreux Noël"
+],
+"tok": [
+"Montreux",
+"Noël"
+],
+"season": "christmas|weihnacht|noël|noel",
+"area": "Montreux"
+},
+{
+"id": "rochersdenaye",
+"q": [
+"Rochers-de-Naye Montreux",
+"Rochers-de-Naye"
+],
+"tok": [
+"Rochers",
+"Naye"
+],
+"season": null,
+"area": "Montreux"
+},
+{
+"id": "chaplin",
+"q": [
+"Chaplin's World Montreux",
+"Chaplin's World"
+],
+"tok": [
+"Chaplin's",
+"World"
+],
+"season": null,
+"area": "Montreux"
+},
+{
+"id": "fourchette",
+"q": [
+"La Fourchette de Vevey Montreux",
+"La Fourchette de Vevey"
+],
+"tok": [
+"Fourchette",
+"Vevey"
+],
+"season": null,
+"area": "Montreux"
+},
+{
+"id": "narcisses",
+"q": [
+"Narcisses de Montreux",
+"Narcisses de Montreux"
+],
+"tok": [
+"Narcisses",
+"Montreux"
+],
+"season": null,
+"area": "Montreux"
+},
+{
+"id": "gruyerestown",
+"q": [
+"Gruyères",
+"Gruyères"
+],
+"tok": [
+"Gruyères"
+],
+"season": null,
+"area": "Gruyères"
+},
+{
+"id": "maisongruyere",
+"q": [
+"La Maison du Gruyère Gruyères",
+"La Maison du Gruyère"
+],
+"tok": [
+"Maison",
+"Gruyère"
+],
+"season": null,
+"area": "Gruyères"
+},
+{
+"id": "cailler",
+"q": [
+"Maison Cailler Gruyères",
+"Maison Cailler"
+],
+"tok": [
+"Maison",
+"Cailler"
+],
+"season": null,
+"area": "Gruyères"
+},
+{
+"id": "desalpe",
+"q": [
+"Désalpe Gruyères",
+"Désalpe"
+],
+"tok": [
+"Désalpe"
+],
+"season": "autumn|herbst|fall|automne|october|oktober",
+"area": "Gruyères"
+},
+{
+"id": "glacier3000",
+"q": [
+"Glacier 3000 & Peak Walk Les",
+"Glacier 3000 & Peak Walk",
+"Glacier 3000",
+"Peak Walk"
+],
+"tok": [
+"Glacier",
+"3000",
+"Peak"
+],
+"season": null,
+"area": "Les"
+},
+{
+"id": "villarsski",
+"q": [
+"Skigebiet Villars-Gryon-Les Diablerets ski",
+"Skigebiet Villars-Gryon-Les Diablerets ski",
+"Skigebiet Villars-Gryon-Les Diablerets"
+],
+"tok": [
+"Skigebiet",
+"Villars",
+"Gryon"
+],
+"season": "winter|ski|snow|schnee|hiver",
+"area": "Les"
+},
+{
+"id": "bahnhofstrasse",
+"q": [
+"Altstadt & Bahnhofstrasse Zürich",
+"Altstadt & Bahnhofstrasse",
+"Altstadt",
+"Bahnhofstrasse"
+],
+"tok": [
+"Altstadt",
+"Bahnhofstrasse"
+],
+"season": null,
+"area": "Zürich"
+},
+{
+"id": "zuerichsee",
+"q": [
+"Zürichsee Schifffahrt",
+"Zürichsee Schifffahrt"
+],
+"tok": [
+"Zürichsee",
+"Schifffahrt"
+],
+"season": null,
+"area": "Zürich"
+},
+{
+"id": "grossmuenster",
+"q": [
+"Grossmünster Zürich",
+"Grossmünster"
+],
+"tok": [
+"Grossmünster"
+],
+"season": null,
+"area": "Zürich"
+},
+{
+"id": "fraumuenster",
+"q": [
+"Fraumünster Zürich",
+"Fraumünster"
+],
+"tok": [
+"Fraumünster"
+],
+"season": null,
+"area": "Zürich"
+},
+{
+"id": "lindenhof",
+"q": [
+"Lindenhof Zürich",
+"Lindenhof"
+],
+"tok": [
+"Lindenhof"
+],
+"season": null,
+"area": "Zürich"
+},
+{
+"id": "uetliberg",
+"q": [
+"Uetliberg Zürich",
+"Uetliberg"
+],
+"tok": [
+"Uetliberg"
+],
+"season": null,
+"area": "Zürich"
+},
+{
+"id": "landesmuseum",
+"q": [
+"Landesmuseum Zürich",
+"Landesmuseum Zürich"
+],
+"tok": [
+"Landesmuseum",
+"Zürich"
+],
+"season": null,
+"area": "Zürich"
+},
+{
+"id": "lindthome",
+"q": [
+"Lindt Home of Chocolate Zürich",
+"Lindt Home of Chocolate"
+],
+"tok": [
+"Lindt",
+"Home",
+"Chocolate"
+],
+"season": null,
+"area": "Zürich"
+},
+{
+"id": "rheinfall",
+"q": [
+"Rheinfall & Schloss Laufen Schaffhausen",
+"Rheinfall & Schloss Laufen",
+"Rheinfall",
+"Schloss Laufen"
+],
+"tok": [
+"Rheinfall",
+"Schloss",
+"Laufen"
+],
+"season": null,
+"area": "Schaffhausen"
+},
+{
+"id": "munot",
+"q": [
+"Munot Schaffhausen",
+"Munot Schaffhausen"
+],
+"tok": [
+"Munot",
+"Schaffhausen"
+],
+"season": null,
+"area": "Schaffhausen"
+},
+{
+"id": "steinamrhein",
+"q": [
+"Stein am Rhein Schaffhausen",
+"Stein am Rhein"
+],
+"tok": [
+"Stein",
+"Rhein"
+],
+"season": null,
+"area": "Schaffhausen"
+},
+{
+"id": "stiftsbibliothek",
+"q": [
+"Stiftsbibliothek St. Gallen",
+"Stiftsbibliothek St. Gallen"
+],
+"tok": [
+"Stiftsbibliothek",
+"Gallen"
+],
+"season": null,
+"area": "St."
+},
+{
+"id": "bodensee",
+"q": [
+"Bodensee St.",
+"Bodensee"
+],
+"tok": [
+"Bodensee"
+],
+"season": null,
+"area": "St."
+},
+{
+"id": "appenzelltown",
+"q": [
+"Appenzell",
+"Appenzell"
+],
+"tok": [
+"Appenzell"
+],
+"season": null,
+"area": "Appenzell"
+},
+{
+"id": "saentis",
+"q": [
+"Säntis Appenzell",
+"Säntis"
+],
+"tok": [
+"Säntis"
+],
+"season": null,
+"area": "Appenzell"
+},
+{
+"id": "aescher",
+"q": [
+"Ebenalp & Berggasthaus Äscher Appenzell",
+"Ebenalp & Berggasthaus Äscher",
+"Ebenalp",
+"Berggasthaus Äscher"
+],
+"tok": [
+"Ebenalp",
+"Berggasthaus",
+"Äscher"
+],
+"season": null,
+"area": "Appenzell"
+},
+{
+"id": "seealpsee",
+"q": [
+"Seealpsee Appenzell",
+"Seealpsee"
+],
+"tok": [
+"Seealpsee"
+],
+"season": null,
+"area": "Appenzell"
+},
+{
+"id": "appenzellerkaese",
+"q": [
+"Appenzeller Schaukäserei",
+"Appenzeller Schaukäserei"
+],
+"tok": [
+"Appenzeller",
+"Schaukäserei"
+],
+"season": null,
+"area": "Appenzell"
+},
+{
+"id": "alpabfahrt",
+"q": [
+"Alpabfahrt Appenzell",
+"Alpabfahrt Appenzell"
+],
+"tok": [
+"Alpabfahrt",
+"Appenzell"
+],
+"season": "autumn|herbst|fall|automne|october|oktober",
+"area": "Appenzell"
+},
+{
+"id": "walenseelake",
+"q": [
+"Walensee",
+"Walensee"
+],
+"tok": [
+"Walensee"
+],
+"season": null,
+"area": "Walensee"
+},
+{
+"id": "seerenbach",
+"q": [
+"Seerenbachfälle & Rinquelle Walensee",
+"Seerenbachfälle & Rinquelle",
+"Seerenbachfälle",
+"Rinquelle"
+],
+"tok": [
+"Seerenbachfälle",
+"Rinquelle"
+],
+"season": null,
+"area": "Walensee"
+},
+{
+"id": "chaeserrugg",
+"q": [
+"Chäserrugg Walensee",
+"Chäserrugg"
+],
+"tok": [
+"Chäserrugg"
+],
+"season": null,
+"area": "Walensee"
+},
+{
+"id": "flumserberg",
+"q": [
+"Skigebiet Flumserberg Walensee",
+"Skigebiet Flumserberg"
+],
+"tok": [
+"Skigebiet",
+"Flumserberg"
+],
+"season": null,
+"area": "Walensee"
+},
+{
+"id": "vaduzcastle",
+"q": [
+"Schloss Vaduz Liechtenstein",
+"Schloss Vaduz"
+],
+"tok": [
+"Schloss",
+"Vaduz"
+],
+"season": null,
+"area": "Liechtenstein"
+},
+{
+"id": "vaduztown",
+"q": [
+"Vaduz Städtle & Postmuseum Liechtenstein",
+"Vaduz Städtle & Postmuseum",
+"Vaduz Städtle",
+"Postmuseum"
+],
+"tok": [
+"Vaduz",
+"Städtle",
+"Postmuseum"
+],
+"season": null,
+"area": "Liechtenstein"
+},
+{
+"id": "kunstmuseum",
+"q": [
+"Kunstmuseum Liechtenstein",
+"Kunstmuseum Liechtenstein"
+],
+"tok": [
+"Kunstmuseum",
+"Liechtenstein"
+],
+"season": null,
+"area": "Liechtenstein"
+},
+{
+"id": "hofkellerei",
+"q": [
+"Hofkellerei des Fürsten von Liechtenstein",
+"Hofkellerei des Fürsten von Liechtenstein"
+],
+"tok": [
+"Hofkellerei",
+"Fürsten",
+"Liechtenstein"
+],
+"season": null,
+"area": "Liechtenstein"
+},
+{
+"id": "malbun",
+"q": [
+"Malbun Liechtenstein",
+"Malbun"
+],
+"tok": [
+"Malbun"
+],
+"season": null,
+"area": "Liechtenstein"
+},
+{
+"id": "fuerstensteig",
+"q": [
+"Fürstensteig Liechtenstein",
+"Fürstensteig"
+],
+"tok": [
+"Fürstensteig"
+],
+"season": null,
+"area": "Liechtenstein"
+},
+{
+"id": "bernaltstadt",
+"q": [
+"Berner Altstadt",
+"Berner Altstadt"
+],
+"tok": [
+"Berner",
+"Altstadt"
+],
+"season": null,
+"area": "Bern"
+},
+{
+"id": "zytglogge",
+"q": [
+"Zytglogge Bern",
+"Zytglogge"
+],
+"tok": [
+"Zytglogge"
+],
+"season": null,
+"area": "Bern"
+},
+{
+"id": "baerenpark",
+"q": [
+"BärenPark Bern",
+"BärenPark"
+],
+"tok": [
+"BärenPark"
+],
+"season": null,
+"area": "Bern"
+},
+{
+"id": "bundeshaus",
+"q": [
+"Bundeshaus Bern",
+"Bundeshaus"
+],
+"tok": [
+"Bundeshaus"
+],
+"season": null,
+"area": "Bern"
+},
+{
+"id": "einsteinhaus",
+"q": [
+"Einsteinhaus Bern",
+"Einsteinhaus"
+],
+"tok": [
+"Einsteinhaus"
+],
+"season": null,
+"area": "Bern"
+},
+{
+"id": "rosengarten",
+"q": [
+"Rosengarten Bern",
+"Rosengarten"
+],
+"tok": [
+"Rosengarten"
+],
+"season": null,
+"area": "Bern"
+},
+{
+"id": "gurten",
+"q": [
+"Gurten Bern",
+"Gurten"
+],
+"tok": [
+"Gurten"
+],
+"season": null,
+"area": "Bern"
+},
+{
+"id": "paulklee",
+"q": [
+"Zentrum Paul Klee Bern",
+"Zentrum Paul Klee"
+],
+"tok": [
+"Zentrum",
+"Paul",
+"Klee"
+],
+"season": null,
+"area": "Bern"
+},
+{
+"id": "emmentalerkaese",
+"q": [
+"Emmentaler Schaukäserei",
+"Emmentaler Schaukäserei"
+],
+"tok": [
+"Emmentaler",
+"Schaukäserei"
+],
+"season": null,
+"area": "Emmental"
+},
+{
+"id": "emmentalbruecke",
+"q": [
+"Holzbrücken & Bauernhöfe im Emmental",
+"Holzbrücken & Bauernhöfe im Emmental",
+"Holzbrücken",
+"Bauernhöfe im Emmental"
+],
+"tok": [
+"Holzbrücken",
+"Bauernhöfe",
+"Emmental"
+],
+"season": null,
+"area": "Emmental"
+},
+{
+"id": "baslermuenster",
+"q": [
+"Basler Münster & Pfalz Basel",
+"Basler Münster & Pfalz",
+"Basler Münster",
+"Pfalz"
+],
+"tok": [
+"Basler",
+"Münster",
+"Pfalz"
+],
+"season": null,
+"area": "Basel"
+},
+{
+"id": "rheinfaehre",
+"q": [
+"Rheinfähren & Rheinschwimmen Basel",
+"Rheinfähren & Rheinschwimmen",
+"Rheinfähren",
+"Rheinschwimmen"
+],
+"tok": [
+"Rheinfähren",
+"Rheinschwimmen"
+],
+"season": null,
+"area": "Basel"
+},
+{
+"id": "rathausbasel",
+"q": [
+"Rathaus Basel",
+"Rathaus Basel"
+],
+"tok": [
+"Rathaus",
+"Basel"
+],
+"season": null,
+"area": "Basel"
+},
+{
+"id": "beyeler",
+"q": [
+"Fondation Beyeler Basel",
+"Fondation Beyeler"
+],
+"tok": [
+"Fondation",
+"Beyeler"
+],
+"season": null,
+"area": "Basel"
+},
+{
+"id": "kunstmuseumbasel",
+"q": [
+"Kunstmuseum Basel",
+"Kunstmuseum Basel"
+],
+"tok": [
+"Kunstmuseum",
+"Basel"
+],
+"season": null,
+"area": "Basel"
+},
+{
+"id": "vitra",
+"q": [
+"Vitra Campus Basel",
+"Vitra Campus"
+],
+"tok": [
+"Vitra",
+"Campus"
+],
+"season": null,
+"area": "Basel"
+},
+{
+"id": "baslerweihnacht",
+"q": [
+"Basler Weihnachtsmarkt Basel",
+"Basler Weihnachtsmarkt"
+],
+"tok": [
+"Basler",
+"Weihnachtsmarkt"
+],
+"season": "christmas|weihnacht|noël|noel",
+"area": "Basel"
+},
+{
+"id": "fasnacht",
+"q": [
+"Basler Fasnacht Basel",
+"Basler Fasnacht"
+],
+"tok": [
+"Basler",
+"Fasnacht"
+],
+"season": null,
+"area": "Basel"
+},
+{
+"id": "creuxduvan",
+"q": [
+"Creux du Van Jura",
+"Creux du Van"
+],
+"tok": [
+"Creux"
+],
+"season": null,
+"area": "Jura"
+},
+{
+"id": "doubs",
+"q": [
+"Saut du Doubs Jura",
+"Saut du Doubs"
+],
+"tok": [
+"Saut",
+"Doubs"
+],
+"season": null,
+"area": "Jura"
+},
+{
+"id": "chauxdefonds",
+"q": [
+"La Chaux-de-Fonds & Le Locle Jura",
+"La Chaux-de-Fonds & Le Locle",
+"La Chaux-de-Fonds",
+"Le Locle"
+],
+"tok": [
+"Chaux",
+"Fonds",
+"Locle"
+],
+"season": null,
+"area": "Jura"
+},
+{
+"id": "stursanne",
+"q": [
+"Saint-Ursanne Jura",
+"Saint-Ursanne"
+],
+"tok": [
+"Saint",
+"Ursanne"
+],
+"season": null,
+"area": "Jura"
+},
+{
+"id": "murten",
+"q": [
+"Murten / Morat Jura",
+"Murten / Morat"
+],
+"tok": [
+"Murten",
+"Morat"
+],
+"season": null,
+"area": "Jura"
+},
+{
+"id": "glacierexpress",
+"q": [
+"Glacier Express"
+],
+"tok": [
+"Glacier",
+"Express"
+]
+},
+{
+"id": "berninaexpress",
+"q": [
+"Bernina Express"
+],
+"tok": [
+"Bernina",
+"Express"
+]
+},
+{
+"id": "goldenpass",
+"q": [
+"GoldenPass Express"
+],
+"tok": [
+"GoldenPass",
+"Express"
+]
+},
+{
+"id": "gotthardpanorama",
+"q": [
+"Gotthard Panorama Express"
+],
+"tok": [
+"Gotthard",
+"Panorama",
+"Express"
+]
+},
+{
+"id": "voralpen",
+"q": [
+"Voralpen-Express"
+],
+"tok": [
+"Voralpen",
+"Express"
+]
+},
+{
+"id": "montblancexpress",
+"q": [
+"Mont-Blanc Express"
+],
+"tok": [
+"Mont",
+"Blanc",
+"Express"
+]
+},
+{
+"id": "cograil",
+"q": [
+"Zahnradbahn"
+],
+"tok": [
+"Zahnradbahn"
+]
+},
+{
+"id": "funicular",
+"q": [
+"Standseilbahn"
+],
+"tok": [
+"Standseilbahn"
+]
+},
+{
+"id": "aerialcable",
+"q": [
+"Luftseilbahn"
+],
+"tok": [
+"Luftseilbahn"
+]
+},
+{
+"id": "gondola",
+"q": [
+"Gondelbahn"
+],
+"tok": [
+"Gondelbahn"
+]
+},
+{
+"id": "chairlift",
+"q": [
+"Sesselbahn"
+],
+"tok": [
+"Sesselbahn"
+]
+},
+{
+"id": "stp",
+"q": [
+"Swiss Travel Pass"
+],
+"tok": [
+"Swiss",
+"Travel",
+"Pass"
+]
+},
+{
+"id": "halffare",
+"q": [
+"Half Fare Card"
+],
+"tok": [
+"Half",
+"Fare",
+"Card"
+]
+},
+{
+"id": "jungfraupass",
+"q": [
+"Jungfrau Travel Pass"
+],
+"tok": [
+"Jungfrau",
+"Travel",
+"Pass"
+]
+},
+{
+"id": "berneroberlandpass",
+"q": [
+"Berner Oberland Pass"
+],
+"tok": [
+"Berner",
+"Oberland",
+"Pass"
+]
+},
+{
+"id": "tellpass",
+"q": [
+"Tell-Pass"
+],
+"tok": [
+"Tell",
+"Pass"
+]
+},
+{
+"id": "mbmultipass",
+"q": [
+"Mont-Blanc Multipass"
+],
+"tok": [
+"Mont",
+"Blanc",
+"Multipass"
+]
+},
+{
+"id": "revision",
+"q": [
+"Revisionszeiten"
+],
+"tok": [
+"Revisionszeiten"
+]
+},
+{
+"id": "fondue",
+"q": [
+"Fondue"
+],
+"tok": [
+"Fondue"
+]
+},
+{
+"id": "raclette",
+"q": [
+"Raclette"
+],
+"tok": [
+"Raclette"
+]
+},
+{
+"id": "geschnetzeltes",
+"q": [
+"Zürcher Geschnetzeltes"
+],
+"tok": [
+"Zürcher",
+"Geschnetzeltes"
+]
+},
+{
+"id": "roesti",
+"q": [
+"Rösti"
+],
+"tok": [
+"Rösti"
+]
+},
+{
+"id": "gerstensuppe",
+"q": [
+"Bündner Gerstensuppe"
+],
+"tok": [
+"Bündner",
+"Gerstensuppe"
+]
+},
+{
+"id": "nusstorte",
+"q": [
+"Engadiner Nusstorte"
+],
+"tok": [
+"Engadiner",
+"Nusstorte"
+]
+},
+{
+"id": "vermicelles",
+"q": [
+"Vermicelles"
+],
+"tok": [
+"Vermicelles"
+]
+},
+{
+"id": "chocolate",
+"q": [
+"Schweizer Schokolade"
+],
+"tok": [
+"Schweizer",
+"Schokolade"
+]
+},
+{
+"id": "swisswine",
+"q": [
+"Schweizer Wein"
+],
+"tok": [
+"Schweizer",
+"Wein"
+]
+}
+]

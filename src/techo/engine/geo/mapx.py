@@ -1,11 +1,14 @@
 """Extra map layers (railways, peaks, towns, scale bar) and topic maps (hiking routes, ski areas)."""
 import json, math, sys
-sys.path.insert(0, "/home/claude/swiss/content")
+import os as _os
+_SRC = _os.environ.get("TECHO_BOOK_SRC", "/home/claude/techo/books/swiss/src")
+_GEO = _os.environ.get("TECHO_GEO", "/home/claude/geo")
+sys.path.insert(0, _SRC + "/content")
 from shapely.geometry import shape, LineString, MultiPoint, Point
 from geo_extra import PEAKS, TOWNS, TOWN_ELEV, PASSES
 
 W, H = 600, 440
-RAILS = [shape(f["geometry"]) for f in json.load(open("/home/claude/geo/ne_10m_railroads_ch.geojson"))["features"]]
+RAILS = [shape(f["geometry"]) for f in json.load(open(_GEO + "/ne_10m_railroads_ch.geojson"))["features"]]
 HIKE_C = "#3f7a34"; SKI_C = "#2f6db5"
 
 def tw(s, size=12):

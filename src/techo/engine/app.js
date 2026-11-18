@@ -69,7 +69,7 @@ function seed(s){let h=2166136261;for(const c of s)h=Math.imul(h^c.charCodeAt(0)
 const ENGINES={google:["Google","https://www.google.com/search?q="],bing:["Bing","https://www.bing.com/search?q="],baidu:["百度","https://www.baidu.com/s?wd="],yahoojp:["Yahoo! JAPAN","https://search.yahoo.co.jp/search?p="],duck:["DuckDuckGo","https://duckduckgo.com/?q="]};(CFG.engines_off||[]).forEach(k=>delete ENGINES[k]);
 let ENGINE="google";try{const e=localStorage.getItem((CFG.id+"-engine"));if(e&&ENGINES[e])ENGINE=e}catch(err){}
 const searchURL=n=>ENGINES[ENGINE][1]+encodeURIComponent(ENGINE==="baidu"?n.n:(n.ja||n.n).split("（")[0]);
-const PRESET=["收藏","想去","已去过"];
+const PRESET=["收藏","已去过"];
 let PLAN={};try{PLAN=JSON.parse(localStorage.getItem((CFG.id+"-plan"))||"{}")||{}}catch(e){PLAN={}}
 const savePlan=()=>{Object.keys(PLAN).forEach(d=>{PLAN[d]=(PLAN[d]||[]).filter(id=>NODES[id]);if(!PLAN[d].length)delete PLAN[d]});try{localStorage.setItem((CFG.id+"-plan"),JSON.stringify(PLAN))}catch(e){};try{pvSync()}catch(e){}};
 const planDates=()=>Object.keys(PLAN).sort();
@@ -104,6 +104,48 @@ document.addEventListener("input",e=>{const el=e.target;if(el.dataset&&el.datase
   document.addEventListener("touchmove",e=>{if(!li)return;dx=e.touches[0].clientX-sx;const dy=e.touches[0].clientY-sy;if(Math.abs(dy)>Math.abs(dx)){return}if(dx<-10)li.style.transform=`translateX(${Math.max(dx,-84)}px)`;else if(dx>10&&li.classList.contains("open"))li.style.transform=`translateX(${Math.min(-84+dx,0)}px)`},{passive:true});
   document.addEventListener("touchend",()=>{if(!li)return;li.style.transform="";if(dx<-40)li.classList.add("open");else if(dx>30)li.classList.remove("open");li=null},{passive:true});})();
 /* ===== 分享行程 ===== */
+/* ===== 二维码（QR Code，字节模式，纠错等级 M），按 ISO/IEC 18004 编码；不依赖外部库，可离线使用 ===== */
+const QR=(()=>{
+  const ECC_M=[-1,10,16,26,18,24,16,18,22,22,26,30,22,22,24,24,28,28,26,26,26,26,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28];
+  const BLK_M=[-1,1,1,1,2,2,4,4,4,5,5,5,8,9,9,10,10,11,13,14,16,17,17,18,20,21,23,25,26,28,29,31,33,35,37,38,40,43,45,47,49];
+  const rawMods=v=>{let r=(16*v+128)*v+64;if(v>=2){const n=Math.floor(v/7)+2;r-=(25*n-10)*n-55;if(v>=7)r-=36}return r};
+  const dataCw=v=>Math.floor(rawMods(v)/8)-ECC_M[v]*BLK_M[v];
+  const gmul=(x,y)=>{let z=0;for(let i=7;i>=0;i--){z=(z<<1)^((z>>>7)*0x11D);z^=((y>>>i)&1)*x}return z&255};
+  const rsDiv=deg=>{const r=new Array(deg).fill(0);r[deg-1]=1;let root=1;for(let i=0;i<deg;i++){for(let j=0;j<r.length;j++){r[j]=gmul(r[j],root);if(j+1<r.length)r[j]^=r[j+1]}root=gmul(root,2)}return r};
+  const rsRem=(data,div)=>{const r=div.map(()=>0);for(const b of data){const f=b^r.shift();r.push(0);div.forEach((c,i)=>r[i]^=gmul(c,f))}return r};
+  const align=v=>{if(v===1)return[];const n=Math.floor(v/7)+2;const step=v===32?26:Math.ceil((v*4+4)/(n*2-2))*2;const r=[6];for(let p=v*4+10;r.length<n;p-=step)r.splice(1,0,p);return r};
+  function encode(text){const bytes=[...new TextEncoder().encode(text)];let v=1;for(;v<=40;v++){const cc=v<10?8:16;if(4+cc+bytes.length*8<=dataCw(v)*8)break}if(v>40)throw new Error("too long");
+    const bits=[];const put=(x,n)=>{for(let i=n-1;i>=0;i--)bits.push((x>>>i)&1)};put(4,4);put(bytes.length,v<10?8:16);bytes.forEach(b=>put(b,8));
+    const cap=dataCw(v)*8;put(0,Math.min(4,cap-bits.length));put(0,(8-bits.length%8)%8);for(let p=0xEC;bits.length<cap;p^=0xEC^0x11)put(p,8);
+    const data=[];for(let i=0;i<bits.length;i+=8){let b=0;for(let j=0;j<8;j++)b=(b<<1)|bits[i+j];data.push(b)}
+    const nb=BLK_M[v],ecl=ECC_M[v],raw=Math.floor(rawMods(v)/8),ns=nb-raw%nb,sl=Math.floor(raw/nb),div=rsDiv(ecl);const blocks=[];
+    for(let i=0,k=0;i<nb;i++){const d=data.slice(k,k+sl-ecl+(i<ns?0:1));k+=d.length;const e=rsRem(d,div);if(i<ns)d.push(0);blocks.push(d.concat(e))}
+    const cw=[];for(let i=0;i<blocks[0].length;i++)blocks.forEach((b,j)=>{if(i!==sl-ecl||j>=ns)cw.push(b[i])});
+    const N=v*4+17;const M=[...Array(N)].map(()=>new Array(N).fill(false)),F=[...Array(N)].map(()=>new Array(N).fill(false));
+    const set=(x,y,d)=>{M[y][x]=d;F[y][x]=true};
+    for(let i=0;i<N;i++){set(6,i,i%2===0);set(i,6,i%2===0)}
+    const finder=(x,y)=>{for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const d=Math.max(Math.abs(dx),Math.abs(dy)),xx=x+dx,yy=y+dy;if(xx>=0&&xx<N&&yy>=0&&yy<N)set(xx,yy,d!==2&&d!==4)}};
+    finder(3,3);finder(N-4,3);finder(3,N-4);
+    const ap=align(v);ap.forEach((a,i)=>ap.forEach((b,j)=>{if((i===0&&j===0)||(i===0&&j===ap.length-1)||(i===ap.length-1&&j===0))return;for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++)set(a+dx,b+dy,Math.max(Math.abs(dx),Math.abs(dy))!==1)}));
+    const fmt=mask=>{const d=(0<<3)|mask;let r=d;for(let i=0;i<10;i++)r=(r<<1)^((r>>>9)*0x537);const b=((d<<10)|r)^0x5412;
+      for(let i=0;i<=5;i++)set(8,i,((b>>>i)&1)!==0);set(8,7,((b>>>6)&1)!==0);set(8,8,((b>>>7)&1)!==0);set(7,8,((b>>>8)&1)!==0);for(let i=9;i<15;i++)set(14-i,8,((b>>>i)&1)!==0);
+      for(let i=0;i<8;i++)set(N-1-i,8,((b>>>i)&1)!==0);for(let i=8;i<15;i++)set(8,N-15+i,((b>>>i)&1)!==0);set(8,N-8,true)};
+    fmt(0);
+    if(v>=7){let r=v;for(let i=0;i<12;i++)r=(r<<1)^((r>>>11)*0x1F25);const b=(v<<12)|r;for(let i=0;i<18;i++){const bt=((b>>>i)&1)!==0,a=N-11+i%3,c=Math.floor(i/3);set(a,c,bt);set(c,a,bt)}}
+    let i=0;for(let right=N-1;right>=1;right-=2){if(right===6)right=5;for(let vert=0;vert<N;vert++)for(let j=0;j<2;j++){const x=right-j,up=((right+1)&2)===0,y=up?N-1-vert:vert;if(!F[y][x]&&i<cw.length*8){M[y][x]=((cw[i>>>3]>>>(7-(i&7)))&1)!==0;i++}}}
+    const mk=m=>{const fn=[(x,y)=>(x+y)%2===0,(x,y)=>y%2===0,(x,y)=>x%3===0,(x,y)=>(x+y)%3===0,(x,y)=>(Math.floor(x/3)+Math.floor(y/2))%2===0,(x,y)=>x*y%2+x*y%3===0,(x,y)=>(x*y%2+x*y%3)%2===0,(x,y)=>((x+y)%2+x*y%3)%2===0][m];
+      for(let y=0;y<N;y++)for(let x=0;x<N;x++)if(!F[y][x]&&fn(x,y))M[y][x]=!M[y][x]};
+    const pen=()=>{let p=0;for(let k=0;k<2;k++)for(let a=0;a<N;a++){let run=1;for(let b=1;b<N;b++){const c=k?M[b][a]:M[a][b],pc=k?M[b-1][a]:M[a][b-1];if(c===pc){run++;if(run===5)p+=3;else if(run>5)p++}else run=1}}
+      for(let y=0;y<N-1;y++)for(let x=0;x<N-1;x++){const c=M[y][x];if(c===M[y][x+1]&&c===M[y+1][x]&&c===M[y+1][x+1])p+=3}
+      const pat=[true,false,true,true,true,false,true];for(let k=0;k<2;k++)for(let a=0;a<N;a++)for(let b=0;b+7<=N;b++){let ok=true;for(let t=0;t<7&&ok;t++)ok=(k?M[b+t][a]:M[a][b+t])===pat[t];if(!ok)continue;
+        const w=t=>t<0||t>=N||!(k?M[t][a]:M[a][t]);let L=true,R=true;for(let t=1;t<=4;t++){L=L&&w(b-t);R=R&&w(b+6+t)}if(L||R)p+=40}
+      let dark=0;M.forEach(r=>r.forEach(c=>{if(c)dark++}));p+=Math.floor(Math.abs(dark*20-N*N*10)/(N*N))*10;return p};
+    let best=0,bp=1e9;for(let m=0;m<8;m++){mk(m);fmt(m);const p=pen();if(p<bp){bp=p;best=m}mk(m)}mk(best);fmt(best);
+    return M}
+  function canvas(text,scale){const M=encode(text),N=M.length,q=4,s=scale||4;const c=document.createElement("canvas");c.width=c.height=(N+q*2)*s;const g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);g.fillStyle="#1E3054";
+    for(let y=0;y<N;y++)for(let x=0;x<N;x++)if(M[y][x])g.fillRect((x+q)*s,(y+q)*s,s,s);return c}
+  return {encode,canvas}})();
+
 const SHARE_BASE=CFG.shareBase;
 let SH_OPEN=false,SH_URL="",SH_MSG="";const TRIP_C={};
 const shBase=()=>location.protocol==="https:"&&/github\.io$/.test(location.hostname)?location.origin+location.pathname:SHARE_BASE;
@@ -118,7 +160,7 @@ function tripObj(){const v=PV.v[PV.cur]||{},ds=planDates(),M=liveMeta();if(!ds.l
   return {v:1,n:v.name||"我的行程",s:ds[0],d,m}}
 async function tripEncode(){const o=tripObj();if(!o)return "";const u=new TextEncoder().encode(JSON.stringify(o));
   try{if(window.CompressionStream)return "z"+b64u(await zip(u))}catch(e){}return "j"+b64u(u)}
-async function tripDecode(c){const k=c[0],u=ub64(c.slice(1));const raw=k==="z"?await zip(u,true):u;const o=JSON.parse(new TextDecoder().decode(raw));
+async function tripDecode(c){const k=c[0],u=ub64(c.slice(1));const raw=(k==="z"||k==="q")?await zip(u,true):u;const o=JSON.parse(new TextDecoder().decode(raw));if(o.v===2)o.d=o.d.map(a=>a.map(x=>typeof x==="number"||/^\d{7}$/.test(x)?(KEY_OF[x]||x):x));
   const day0=new Date(o.s+"T00:00:00"),plan={},meta={};
   o.d.forEach((ids,i)=>{const ids2=ids.filter(id=>NODES[id]);if(!ids2.length)return;const t=new Date(day0.getTime()+i*864e5+12*36e5);const d=t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0");
     plan[d]=ids2;const mm=o.m&&o.m[i];if(mm)meta[d]={rows:mm[0].filter(r=>r[0]===0||r[0]===1||NODES[r[0]]).map(r=>r[0]===1?{mv:1,at:r[1],txt:r[2]}:r[0]===0?{lunch:1,at:r[1]}:{id:r[0],at:r[1],dur:r[2],tr:r[3],ev:r[4],eve:r[5]}),back:mm[1],food:(mm[2]||[]).filter(k=>TERMS_[k]),note:mm[3]||[]}});
@@ -129,14 +171,51 @@ function tripText(name,plan,meta,url){const ds=Object.keys(plan).sort();let s=`�
     if(M&&M.rows)M.rows.forEach(r=>{s+=r.mv?`${hm(r.at)} ${r.txt}\n`:r.lunch?`${hm(r.at)} 午餐\n`:`${hm(r.at)} ${NODES[r.id].n}${r.ev?"（"+r.ev+"）":""}\n`});else plan[d].forEach(id=>{s+=`· ${NODES[id].n}\n`});
     if(M&&M.food&&M.food.length)s+=`当地美食：${M.food.map(k=>TERMS_[k].n).join("、")}\n`;if(M&&M.note&&M.note.length)s+=`提示：${M.note.join("；")}\n`});
   if(url)s+=`\n在《${CFG.title}》里打开（可一键导入行程）：\n${url}\n`;return s}
+/* ===== 分享：短链接二维码（只含编号和日期）与行程长图 ===== */
+const KEY_OF=typeof NID!=="undefined"?Object.fromEntries(Object.entries(NID).map(([k,v])=>[v,k])):{};
+let SH_QR="",SH_IMG="";
+async function tripShort(){const o=tripObj();if(!o)return "";const q={v:2,n:o.n,s:o.s,d:o.d.map(a=>a.map(k=>typeof NID!=="undefined"&&NID[k]?NID[k]:k))};
+  const u=new TextEncoder().encode(JSON.stringify(q));try{if(window.CompressionStream)return "q"+b64u(await zip(u))}catch(e){}return "j"+b64u(u)}
+async function shQR(){try{const c=await tripShort();if(!c)return "";return QR.canvas(shBase()+"#trip-"+c,5).toDataURL("image/png")}catch(e){return ""}}
+function wrapTxt(g,t,w){const out=[];let line="";for(const ch of t){if(g.measureText(line+ch).width>w&&line){out.push(line);line=ch}else line+=ch}if(line)out.push(line);return out}
+async function shImage(){const ds=planDates();if(!ds.length)return "";const V=PV.v[PV.cur]||{};const M=liveMeta();
+  try{await Promise.all([document.fonts.load('900 40px "Noto Serif SC"'),document.fonts.load('400 30px "Ma Shan Zheng"')])}catch(e){}
+  const W=1080,P=64,serif='"Noto Serif SC",serif',sans='"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';
+  const c=document.createElement("canvas");const g=c.getContext("2d");
+  const rows=[];ds.forEach((d,i)=>{rows.push({h:1,d,i});const m=M[d];const list=m&&m.rows?m.rows:(PLAN[d]||[]).map(id=>({id}));list.forEach(r=>{if(r.lunch)rows.push({lunch:1,at:r.at});else if(r.mv)rows.push({mv:1,at:r.at,txt:r.txt});else if(NODES[r.id])rows.push({id:r.id,at:r.at,dur:r.dur})})});
+  const H=420+rows.reduce((s,r)=>s+(r.h?96:r.id?76:52),0)+360;c.width=W;c.height=H;
+  g.fillStyle="#F5F0E6";g.fillRect(0,0,W,H);g.strokeStyle="#1E3054";g.lineWidth=3;g.strokeRect(24,24,W-48,H-48);g.lineWidth=1;g.strokeRect(32,32,W-64,H-64);
+  g.fillStyle="#1E3054";g.font=`900 58px ${serif}`;g.fillText(CFG.title,P,140);const tw=g.measureText(CFG.title).width;g.fillRect(P,158,tw,3);g.fillRect(P,166,tw,1.5);
+  g.font=`600 20px ui-monospace,monospace`;g.fillStyle="#807A70";g.fillText((document.querySelector(".brand .bt small")||{}).textContent||"",P,206);
+  g.fillStyle="#3D3732";g.font=`700 40px ${serif}`;g.fillText(V.name||"我的行程",P,284);
+  g.font=`400 26px ${sans}`;g.fillStyle="#807A70";g.fillText(`${fmtD(ds[0],true)} – ${fmtD(ds[ds.length-1],true)} · 共 ${ds.length} 天`,P,330);
+  let y=400;rows.forEach(r=>{
+    if(r.h){g.fillStyle="#1E3054";g.fillRect(P,y,W-2*P,62);g.fillStyle="#fff";g.font=`700 30px ${serif}`;g.fillText(`第${r.i+1}天`,P+22,y+42);g.font=`400 24px ${sans}`;g.fillText(fmtD(r.d,true)+" · "+PLAN[r.d].length+" 处",P+150,y+41);y+=96;return}
+    if(r.lunch||r.mv){g.fillStyle="#807A70";g.font=`400 23px ${sans}`;g.fillText((r.at!=null?hm(r.at)+"   ":"")+(r.lunch?"午餐":wrapTxt(g,r.txt,W-2*P-140)[0]),P+20,y+30);y+=52;return}
+    const N=NODES[r.id];g.fillStyle="#B8553F";g.font=`600 24px ui-monospace,monospace`;if(r.at!=null)g.fillText(hm(r.at),P+20,y+34);
+    g.fillStyle="#1E3054";g.font=`700 32px ${serif}`;const nm=wrapTxt(g,N.n,W-2*P-330)[0];g.fillText(nm,P+130,y+36);const nw=g.measureText(nm).width;
+    g.fillStyle="#807A70";g.font=`400 20px ${sans}`;g.fillText(wrapTxt(g,[N.ja&&N.ja!==N.n?N.ja:"",r.dur?`游览约 ${r.dur} 分钟`:""].filter(Boolean).join(" · "),W-2*P-260)[0]||"",P+130,y+64);
+    if(isVisited(r.id)){const cx=W-P-56,cy=y+38;g.save();g.translate(cx,cy);g.rotate(-0.2);g.strokeStyle="#1E3054";g.lineWidth=3;g.beginPath();g.arc(0,0,34,0,7);g.stroke();g.lineWidth=1.4;g.beginPath();g.arc(0,0,28,0,7);g.stroke();
+      g.fillStyle="#1E3054";g.font=`700 15px ${serif}`;g.textAlign="center";g.fillText("已去过",0,0);g.font=`500 10px ui-monospace,monospace`;g.fillText((VIS[r.id]||"").replace(/-/g,"."),0,15);g.restore();g.textAlign="start"}
+    g.strokeStyle="#DCD4C4";g.lineWidth=1;g.beginPath();g.moveTo(P+20,y+76);g.lineTo(W-P-20,y+76);g.stroke();y+=76});
+  y+=40;const q=await shQR();if(q){const im=new Image();await new Promise(ok=>{im.onload=ok;im.onerror=ok;im.src=q});g.fillStyle="#fff";g.fillRect(P,y,232,232);g.drawImage(im,P+6,y+6,220,220)}
+  g.fillStyle="#1E3054";g.font=`700 28px ${serif}`;g.fillText(`扫码在《${CFG.title}》里打开`,P+(q?264:0),y+80);g.fillStyle="#807A70";g.font=`400 22px ${sans}`;
+  wrapTxt(g,"可以一键导入成自己的行程版本。时间为大致估算，开放时间与交通以官方信息为准。",W-2*P-(q?264:0)).forEach((t,i)=>g.fillText(t,P+(q?264:0),y+124+i*34));
+  return c.toDataURL("image/png")}
+document.addEventListener("click",async e=>{const b=e.target.closest("[data-shimg]");if(!b)return;e.stopPropagation();SH_MSG="正在生成长图…";render(cur,false);
+  SH_IMG=await shImage();SH_MSG=SH_IMG?"长图已生成：电脑上点「保存图片」，手机上长按图片保存到相册。":"当前版本还是空的，先排几个景点再生成长图。";render(cur,false)},true);
+
 function shareBox(){if(!SH_OPEN)return "";const canShare=!!navigator.share;
   return `<div class="shbox"><label>分享当前版本</label>
   ${SH_URL?`<input id="sh-url" readonly value="${esc(SH_URL)}" aria-label="分享链接">`:`<p class="scnote">正在生成链接…</p>`}
   <div class="aprow wrap">${canShare?`<button class="btn sm pri" data-shsys="1">发送给…</button>`:""}<button class="btn sm${canShare?"":" pri"}" data-shcopy="url">复制链接</button><button class="btn sm" data-shcopy="text">复制文字版</button><button class="btn sm" data-shprint="1">打印 / 存为 PDF</button></div>
+  ${SH_QR?`<div class="shqr"><img src="${SH_QR}" alt="分享行程的二维码"><p>二维码里只有景点编号和日期，用手机扫一下就能打开这本手帖并导入行程。</p></div>`:""}
+  <div class="aprow wrap"><button class="btn sm" data-shimg="1">导出行程长图</button>${SH_IMG?`<a class="btn sm pri" href="${SH_IMG}" download="${esc((PV.v[PV.cur]||{}).name||"行程")}.png">保存图片</a>`:""}</div>
+  ${SH_IMG?`<img class="longimg" src="${SH_IMG}" alt="行程长图">`:""}
   ${SH_MSG?`<p class="shmsg">${esc(SH_MSG)}</p>`:""}
   <p class="scnote">对方点开链接会打开这本手帖，并可以把行程一键导入成自己的新版本；没装的人直接在浏览器里看。文字版适合发微信；PDF 适合打印或发给不用手机看的人。</p></div>`}
-async function shOpen(){SH_OPEN=!SH_OPEN;SH_MSG="";SH_URL="";render(cur,false);if(!SH_OPEN)return;
-  const c=await tripEncode();SH_URL=c?shBase()+"#trip-"+c:"";if(!c)SH_MSG="当前版本还是空的，先排几个景点再分享。";render(cur,false)}
+async function shOpen(){SH_OPEN=!SH_OPEN;SH_MSG="";SH_URL="";SH_QR="";SH_IMG="";render(cur,false);if(!SH_OPEN)return;
+  const c=await tripEncode();SH_URL=c?shBase()+"#trip-"+c:"";SH_QR=c?await shQR():"";if(!c)SH_MSG="当前版本还是空的，先排几个景点再分享。";render(cur,false)}
 async function shCopy(txt,ok){try{await navigator.clipboard.writeText(txt);SH_MSG=ok}catch(e){const ta=document.createElement("textarea");ta.value=txt;ta.style.cssText="position:fixed;opacity:0";document.body.appendChild(ta);ta.select();let r=false;try{r=document.execCommand("copy")}catch(_){}ta.remove();SH_MSG=r?ok:"复制没有成功，请长按上面的链接手动复制。"}render(cur,false)}
 function shPrint(name,plan,meta){const ds=Object.keys(plan).sort();let el=document.getElementById("printsheet");if(!el){el=document.createElement("div");el.id="printsheet";document.body.appendChild(el)}
   el.innerHTML=`<header><div class="ps-brand">${CFG.title}</div><h1>${esc(name)}</h1><p>${fmtD(ds[0],true)} – ${fmtD(ds[ds.length-1],true)} · 共 ${ds.length} 天</p></header>`+
@@ -200,9 +279,77 @@ let MY={};try{MY=JSON.parse(localStorage.getItem((CFG.id+"-mytags"))||"{}")||{}}
 function saveMy(){Object.keys(MY).forEach(k=>{if(!MY[k]||!MY[k].length)delete MY[k]});try{localStorage.setItem((CFG.id+"-mytags"),JSON.stringify(MY))}catch(e){}}
 const myAll=()=>{const s=new Set(PRESET);Object.values(MY).forEach(a=>a.forEach(x=>s.add(x)));return [...s]};
 const myCount=()=>Object.keys(MY).filter(k=>NODES[k]).length;
-function mineBlock(n){const cur=MY[n.id]||[];
-  return `<div class="mine" id="mine"><span class="eyebrow">我的标签</span><div class="mrow">${myAll().map(x=>`<button class="mt${cur.includes(x)?" on":""}" data-mytoggle="${esc(x)}" aria-pressed="${cur.includes(x)}">${x==="收藏"?(cur.includes(x)?"♥ ":"♡ "):""}${esc(x)}</button>`).join("")}<span class="madd"><input id="mytag-input" maxlength="12" placeholder="新标签…" aria-label="添加自己的标签"><button class="mt plus" data-myadd="1">添加</button></span></div>${(CFG.feat.planRowData?PLANDATA[n.id]:n.depth>=2)?`<div class="mrow prow"><span class="eyebrow">旅行计划</span>${datesOf(n.id).map(d=>`<span class="mt on pd">第${dayNo(d)}天 · ${fmtD(d)}<button class="px" data-planrm="${d}" aria-label="从${fmtD(d)}移除">×</button></span>`).join("")}<span class="madd"><input type="date" id="plan-date" value="${esc(LASTDATE)}" aria-label="选择日期"><button class="mt plus" data-planadd="1">加入行程</button></span><button class="mt" data-route="plan">查看行程单 →</button></div>`:""}</div>`}
-function refreshMine(){const el=document.querySelector("#R .mine");const p=parseRoute(cur);if(el&&p.node)el.outerHTML=mineBlock(p.node);const c=document.getElementById("myCnt");if(c)c.textContent=myCount();try{syncTab()}catch(e){}}
+/* ===== 条目页：加入我的行程（规范 v2.0 第十五部分） ===== */
+let VIS={};try{VIS=JSON.parse(localStorage.getItem(CFG.id+"-visited")||"{}")||{}}catch(e){VIS={}}
+const saveVis=()=>{try{localStorage.setItem(CFG.id+"-visited",JSON.stringify(VIS))}catch(e){}};
+const isVisited=id=>(MY[id]||[]).includes("已去过");
+const todayISO=()=>{const t=new Date();return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0")};
+function stampSVG(id,sz){if(!isVisited(id))return "";const d=(VIS[id]||"").replace(/-/g,".");
+  return `<svg class="vstamp" viewBox="0 0 100 100" width="${sz||64}" height="${sz||64}" role="img" aria-label="已去过${d?" "+d:""}"><circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="3.2"/><circle cx="50" cy="50" r="39" fill="none" stroke="currentColor" stroke-width="1.6"/><text x="50" y="${d?47:56}" text-anchor="middle" font-size="19" font-weight="700" fill="currentColor" font-family="var(--f-display)">已去过</text>${d?`<text x="50" y="66" text-anchor="middle" font-size="11" fill="currentColor" font-family="var(--f-mono)">${d}</text>`:""}</svg>`}
+let MINE_ADD=false;
+const ISO=t=>t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0");
+const addDays=(d,k)=>{const t=new Date(d+"T12:00:00");t.setDate(t.getDate()+k);return ISO(t)};
+const dDiff=(a,b)=>Math.round((new Date(b+"T12:00:00")-new Date(a+"T12:00:00"))/864e5);
+function tripRange(v){const V=PV.v[v];if(!V)return null;const ds=Object.keys(V.plan||{}).filter(d=>(V.plan[d]||[]).length).sort();const o=V.opt||{};
+  const all=[...ds,o.start,o.end].filter(x=>/^\d{4}-\d\d-\d\d$/.test(x||"")).sort();return all.length?[all[0],all[all.length-1]]:null}
+function tripCount(v){const V=PV.v[v];const s=new Set();Object.values((V&&V.plan)||{}).forEach(a=>a.forEach(x=>s.add(x)));return s.size}
+function dayPlace(v,d){const V=PV.v[v];const ids=((V&&V.plan&&V.plan[d])||[]).filter(x=>NODES[x]);if(!ids.length)return "";let n=lca(ids);while(n&&n.depth>2&&ids.length>1)n=n.parent;return n&&n.depth>0?n.n:NODES[ids[0]].n}
+function dayMins(d){return (PLAN[d]||[]).reduce((s,id)=>s+((PLANDATA[id]||[])[2]||60),0)}
+function mineBlock(n){const cur=MY[n.id]||[];const ds=datesOf(n.id);const canPlan=CFG.feat.planRowData?PLANDATA[n.id]:n.depth>=2;
+  const V=PV.v[PV.cur]||{name:"我的行程"};let h=`<div class="mine" id="mine">`;
+  if(canPlan){if(ds.length){const d=ds[0],k=dayNo(d),m=dayMins(d);
+      h+=`<div class="tadded"><div class="tat">已加入「${esc(V.name||"我的行程")}」· 第 ${k} 天${ds.length>1?` 等 ${ds.length} 天`:""} · ${fmtD(d)}</div><div class="tas">当天 ${PLAN[d].length} 处${m?` · 约 ${m>=60?(Math.round(m/30)/2)+" 小时":m+" 分钟"}`:""}${ds.map(x=>`<button class="px" data-planrm="${x}" aria-label="从${fmtD(x)}移除" title="从${fmtD(x)}移除">${fmtD(x)} ×</button>`).join("")}</div><div class="tab"><button class="btn sm" data-tsopen="move">换一天</button><button class="btn sm" data-tsopen="add">再加一天</button><button class="btn sm" data-route="plan">查看行程单 →</button></div></div>`}
+    else h+=`<button class="addtrip" data-tsopen="add"><b>＋ 加入我的行程</b><small>选择行程和第几天 · 自动排进行程单</small></button>`}
+  const fav=cur.includes("收藏"),vis=cur.includes("已去过");const own=cur.filter(x=>x!=="收藏"&&x!=="已去过");
+  const others=myAll().filter(x=>x!=="收藏"&&x!=="已去过"&&x!=="想去"&&!own.includes(x));
+  h+=`<div class="mbar"><button class="mt fav${fav?" on":""}" data-mytoggle="收藏" aria-pressed="${fav}"><i>${fav?"♥":"♡"}</i> 收藏</button><button class="mt${vis?" on":""}" data-mytoggle="已去过" aria-pressed="${vis}">✓ 已去过</button><button class="mt plus${MINE_ADD?" on":""}" data-mineadd="1" aria-expanded="${MINE_ADD}">+ 标签</button>${own.map(x=>`<span class="utag"># ${esc(x)}<button class="px" data-myremove="${esc(n.id)}|${esc(x)}" aria-label="去掉标签 ${esc(x)}">×</button></span>`).join("")}</div>`;
+  if(MINE_ADD)h+=`<div class="madd2"><input id="mytag-input" maxlength="12" placeholder="新标签，例如：带爸妈" aria-label="添加自己的标签"><button class="btn sm pri" data-myadd="1">添加</button>${others.length?`<span class="msug">${others.map(x=>`<button class="utag sug" data-mytoggle="${esc(x)}"># ${esc(x)}</button>`).join("")}</span>`:""}</div>`;
+  return h+`</div>`}
+/* 筛选栏吸顶：往下浏览时收成一行 */
+document.addEventListener("scroll",e=>{const t=e.target===document?document.scrollingElement:e.target;if(!t||!t.querySelectorAll)return;const y=t.scrollTop||0;t.querySelectorAll(".fwrap").forEach(f=>f.classList.toggle("mini",y>90))},true);
+/* ----- 底部弹层：1 选行程 — 2 选日期 ----- */
+let TS=null;
+function tsOpen(mode){const p=parseRoute(cur);if(!p.node)return;const r=tripRange(PV.cur);const d0=datesOf(p.node.id)[0]||(LASTDATE&&/^\d{4}/.test(LASTDATE)?LASTDATE:"")||(r?r[0]:todayISO());
+  TS={step:1,v:PV.cur,id:p.node.id,move:mode==="move",d:null,m:d0.slice(0,7)};tsRender()}
+function tsClose(){TS=null;const el=document.getElementById("tsheet");if(el)el.remove();document.body.classList.remove("ts-on")}
+function tsCards(){return Object.entries(PV.v).filter(([k,v])=>!v.auto||k===PV.cur).map(([k,v])=>{const r=tripRange(k);const nd=r?dDiff(r[0],r[1])+1:0;
+  return `<button class="tcard${TS.v===k?" on":""}" data-tsv="${k}" aria-pressed="${TS.v===k}"><b>${esc(v.name||"我的行程")}</b><span>${r?fmtD(r[0])+" – "+fmtD(r[1]):"未定日期"}</span><small>${r?nd+" 天 · ":""}已排 ${tripCount(k)} 处</small></button>`}).join("")}
+function tsCal(){const [Y,M]=TS.m.split("-").map(Number);const first=new Date(Y,M-1,1),days=new Date(Y,M,0).getDate();const lead=(first.getDay()+6)%7;
+  const r=tripRange(TS.v);let s=r&&r[0],e=r&&r[1];if(TS.d){if(!s){s=e=TS.d}else{if(TS.d<s)s=TS.d;if(TS.d>e)e=TS.d}}
+  let cells="";for(let i=0;i<lead;i++)cells+=`<span class="cd pad"></span>`;
+  for(let k=1;k<=days;k++){const d=Y+"-"+String(M).padStart(2,"0")+"-"+String(k).padStart(2,"0");const inr=s&&d>=s&&d<=e;const sel=d===TS.d;
+    cells+=`<button class="cd${inr?" inr":""}${inr&&d===s?" rs":""}${inr&&d===e?" re":""}${sel?" sel":""}${d===todayISO()?" today":""}" data-tsd="${d}" aria-pressed="${sel}" aria-label="${fmtD(d,true)}"><b>${k}</b>${inr?`<small>第${dDiff(s,d)+1}天</small>`:""}</button>`}
+  return `<div class="calh"><button class="calnav" data-tsm="-1" aria-label="上个月">‹</button><div class="calt">${Y} 年 ${M} 月</div><button class="calnav" data-tsm="1" aria-label="下个月">›</button></div><div class="calw">${"一二三四五六日".split("").map(w=>`<span>${w}</span>`).join("")}</div><div class="calg">${cells}</div>`}
+function tsTip(){if(!TS.d)return `<div class="tstip mute">点日历上的日期${tripRange(TS.v)?"":"（这个行程还没有日期，所选日期就是第 1 天）"}</div>`;
+  const r=tripRange(TS.v);const s=r?(TS.d<r[0]?TS.d:r[0]):TS.d;const pl=dayPlace(TS.v,TS.d);
+  return `<div class="tstip">${fmtD(TS.d)} · 第 ${dDiff(s,TS.d)+1} 天 · ${pl?"当天在"+esc(pl):"当天还没有安排"}</div>`}
+function tsRender(){let el=document.getElementById("tsheet");if(!TS){if(el)el.remove();return}
+  if(!el){el=document.createElement("div");el.id="tsheet";el.className="tsheet";el.setAttribute("role","dialog");el.setAttribute("aria-modal","true");el.setAttribute("aria-label","加入我的行程");document.body.appendChild(el);document.body.classList.add("ts-on")}
+  const N=NODES[TS.id];const st=`<div class="tsstep"><span class="${TS.step===1?"on":"done"}">1 选行程</span><i></i><span class="${TS.step===2?"on":""}">2 选日期</span></div>`;
+  const body=TS.step===1?`<div class="tcards">${tsCards()}<button class="tcard new" data-tsnew="1"><b>＋ 新建行程</b><span>未定日期</span></button></div><div class="tsbtn"><button class="btn" data-tsclose="1">取消</button><button class="btn pri" data-tsnext="1">下一步：选日期</button></div>`
+    :`${tsCal()}${tsTip()}<div class="tsbtn"><button class="btn" data-tsback="1">上一步</button><button class="btn pri" data-tsok="1"${TS.d?"":" disabled"}>${TS.move?"确认换到这天":"确认加入"}</button></div>`;
+  el.innerHTML=`<div class="tsbg" data-tsclose="1"></div><div class="tspanel"><div class="tsgrip" data-tsgrip="1" aria-hidden="true"></div><div class="tshead"><b>${TS.move?"换一天":"加入我的行程"}</b><span>${esc(N?N.n:"")}</span></div>${st}${body}</div>`;
+  const pn=el.querySelector(".tspanel");let y0=null;pn.addEventListener("touchstart",e=>{if(e.target.closest("[data-tsgrip],.tshead"))y0=e.touches[0].clientY},{passive:true});
+  pn.addEventListener("touchmove",e=>{if(y0==null)return;const dy=e.touches[0].clientY-y0;if(dy>0)pn.style.transform=`translateY(${dy}px)`},{passive:true});
+  pn.addEventListener("touchend",e=>{if(y0==null)return;const dy=parseFloat((pn.style.transform.match(/[\d.]+/)||[0])[0]);y0=null;if(dy>90)tsClose();else pn.style.transform=""})}
+function tsConfirm(){if(!TS||!TS.d)return;const id=TS.id,d=TS.d,mv=TS.move;if(TS.v!==PV.cur)pvSwitch(TS.v);
+  if(mv)Object.keys(PLAN).forEach(x=>{PLAN[x]=PLAN[x].filter(y=>y!==id)});PLAN[d]=PLAN[d]||[];if(!PLAN[d].includes(id))PLAN[d].push(id);
+  LASTDATE=d;try{localStorage.setItem((CFG.id+"-plan-last"),d)}catch(e){}savePlan();tsClose();render(cur,false);refreshMine()}
+document.addEventListener("click",e=>{const t=e.target;
+  if(t.closest("[data-tsopen]")){e.stopPropagation();tsOpen(t.closest("[data-tsopen]").dataset.tsopen);return}
+  if(t.closest("[data-mineadd]")){e.stopPropagation();MINE_ADD=!MINE_ADD;refreshMine();if(MINE_ADD)setTimeout(()=>{const i=document.getElementById("mytag-input");i&&i.focus()},0);return}
+  if(!TS||!t.closest("#tsheet"))return;e.stopPropagation();let b;
+  if(t.closest("[data-tsclose]")){tsClose();return}
+  if(b=t.closest("[data-tsv]")){TS.v=b.dataset.tsv;TS.d=null;const r=tripRange(TS.v);if(r)TS.m=r[0].slice(0,7);tsRender();return}
+  if(t.closest("[data-tsnew]")){const id="v"+Date.now().toString(36);const nm="新行程 "+(Object.keys(PV.v).length+1);PV.v[id]={name:nm,ts:Date.now(),plan:{},meta:{},opt:null};pvSave();TS.v=id;TS.d=null;TS.step=2;tsRender();return}
+  if(t.closest("[data-tsnext]")){TS.step=2;tsRender();return}
+  if(t.closest("[data-tsback]")){TS.step=1;tsRender();return}
+  if(b=t.closest("[data-tsm]")){const [Y,M]=TS.m.split("-").map(Number);const x=new Date(Y,M-1+(+b.dataset.tsm),1);TS.m=x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0");tsRender();return}
+  if(b=t.closest("[data-tsd]")){TS.d=b.dataset.tsd;tsRender();return}
+  if(t.closest("[data-tsok]")){tsConfirm();return}
+},true);
+document.addEventListener("keydown",e=>{if(TS&&e.key==="Escape"){e.stopPropagation();tsClose()}},true);
+function refreshMine(){const el=document.querySelector("#R .mine");const p=parseRoute(cur);if(el&&p.node)el.outerHTML=mineBlock(p.node);const vs=document.getElementById("vst");if(vs&&p.node)vs.innerHTML=stampSVG(p.node.id);const c=document.getElementById("myCnt");if(c)c.textContent=myCount();try{syncTab()}catch(e){}}
 let FILTER=null,FBAR_OPEN=false;
 const UPPER=n=>CFG.upper.ids?CFG.upper.ids.includes(n.id):n.c.some(c=>CFG.upper.kinds.includes(c.kind));
 const tiered=n=>!UPPER(n)&&n.c.length>5;
@@ -219,7 +366,7 @@ const SUBHIDE=new Set(CFG.SUBHIDE||[]);
 const fBase=()=>FILTER&&!isMy(FILTER)&&!isPlan(FILTER)?FILTER.split("&")[0]:null;
 function subBar(pool,F=FILTER,attr="data-filter"){const b=F&&!isMy(F)&&!isPlan(F)?F.split("&")[0]:null;if(!b||!SUBF[b])return "";const cur=F.split("&").slice(1);
   return `<div class="fsub" role="toolbar" aria-label="${esc(TAGS[b])}细分">${SUBF[b].map(([lab,ks])=>{const other=cur.filter(x=>!ks.includes(x));
-    const cs=ks.map(k=>{const on=cur.includes(k);const key=[b,...other,...(on?[]:[k])].join("&");const c=pool.filter(x=>matchTag(x,[b,...other,k].join("&"))).length;if(!c&&!on)return "";return `<button class="fchip sub${on?" on":""}" ${attr}="${esc(key)}">${esc(TAGS[k])}<small>${c}</small></button>`}).join("");
+    const cs=ks.map(k=>{const on=cur.includes(k);const key=[b,...other,...(on?[]:[k])].join("&");const c=pool.filter(x=>matchTag(x,[b,...other,k].join("&"))).length;if(!c&&!on)return `<button class="fchip sub off" disabled aria-disabled="true">${esc(TAGS[k])}<small>0</small></button>`;return `<button class="fchip sub${on?" on":""}" ${attr}="${esc(key)}">${esc(TAGS[k])}<small>${c}</small></button>`}).join("");
     return cs?`<span class="fsg">${lab?`<b>${lab}</b>`:""}${cs}</span>`:""}).join("")}</div>`}
 function filterBar(n){
   const pool=UPPER(n)?subtree(n):n.c;
@@ -233,7 +380,7 @@ function filterBar(n){
   const LIM=8,more=ks.length>LIM;
   const chip=(k,i)=>`<button class="fchip${fBase()===k?" on":""}${i>=LIM&&fBase()!==k?" extra":""}" data-filter="${k}">${esc(TAGS[k])}<small>${cnt[k]}</small></button>`;
   const mchip=k=>`<button class="fchip my${FILTER===k?" on":""}" data-filter="${esc(k)}">${k==="my:*"?"♥ 我的标签":esc(k.slice(3))}<small>${myc[k]}</small></button>`;
-  return `<div class="fbar${FBAR_OPEN?" open":""}" role="toolbar" aria-label="按标签筛选"><button class="fchip${FILTER?"":" on"}" data-filter="">全部</button>${pks.map(pchip).join("")}${mks.map(mchip).join("")}${ks.map(chip).join("")}${more?`<button class="fmore" data-fmore="1">${FBAR_OPEN?"收起 ▴":`更多 ${ks.length-LIM} ▾`}</button>`:""}</div>${subBar(pool)}`;
+  return `<div class="fwrap"><div class="fbar${FBAR_OPEN?" open":""}" role="toolbar" aria-label="按标签筛选"><button class="fchip${FILTER?"":" on"}" data-filter="">全部</button>${pks.map(pchip).join("")}${mks.map(mchip).join("")}${ks.map(chip).join("")}${more?`<button class="fmore" data-fmore="1">${FBAR_OPEN?"收起 ▴":`更多 ${ks.length-LIM} ▾`}</button>`:""}</div>${subBar(pool)}</div>`;
 }
 function planSVG(P){
   const T=(P.terrain||[]).map(d=>`<path d="${d}" style="fill:var(--hill)" opacity=".75"/>`).join("");
@@ -388,7 +535,7 @@ function trainsHere(n){if(!n.trn||!n.trn.length)return "";return `<div class="se
 function rightPage(n){
   const kindLabel=n.kind;
   let h=`<div class="kicker"><span class="kind">${kindLabel}</span><span>${n.parent?esc(n.parent.n):CFG.eyebrow}</span></div>
-  <h1>${esc(n.n)}</h1><div class="ja">${esc(n.ja)}</div>`;
+  <h1 class="th1">${esc(n.n)}<span id="vst">${stampSVG(n.id)}</span></h1><div class="ja">${esc(n.ja)}</div>`;
   if(n.t.length)h+=`<div class="chips">${n.t.map(t=>chip(t)).join("")}</div>`;
   h+=passBadge(n);
   if(n.depth>=1)h+=mineBlock(n);
@@ -536,17 +683,17 @@ function lca(ids){const ch=id=>{const a=[];let n=NODES[id];while(n){a.unshift(n)
 function planPages(){
   const ds=planDates();
   const L=`<span class="eyebrow">个人</span><div class="tagtitle">旅行计划</div>${pvBar()}${CFG.feat.planMap&&planDates().length?planMapHtml(planDates()):""}
-  <p style="color:var(--ink-2)">在任意景点页标题下的「旅行计划」里选一个日期并点「加入行程」，景点就会按日期排进这张行程单；也可以在每天下方的输入框直接搜索添加。用 ↑↓ 调整顺序，手机上向左滑可以删除（电脑上鼠标移上去点「删除」），时间会按顺序自动重算；点「在地图上看」会打开能涵盖当天所有景点的地图，并只显示当天的景点。地图上方的筛选里也可以直接选「第 N 天」。</p>
+  <p style="color:var(--ink-2)">在任意景点页点「＋ 加入我的行程」，选好行程和日期，景点就会按日期排进这张行程单；也可以在每天下方的输入框直接搜索添加。用 ↑↓ 调整顺序，手机上向左滑可以删除（电脑上鼠标移上去点「删除」），时间会按顺序自动重算；点「在地图上看」会打开能涵盖当天所有景点的地图，并只显示当天的景点。地图上方的筛选里也可以直接选「第 N 天」。</p>
   ${ds.length?`<div class="plandays">${ds.map((d,i)=>`<div class="pday"><a href="#pd-${d}" data-pjump="${d}"><b>第${i+1}天</b><span>${fmtD(d,true)}</span><em>${PLAN[d].length} 处</em></a><button class="btn sm" data-planmap="${d}">在地图上看</button></div>`).join("")}</div>`:'<p style="color:var(--muted)">还没有安排任何日期。</p>'}
   <p style="margin-top:14px"><button class="btn" data-route="mytags">导出 / 导入（在「我的标签」页）</button> <button class="btn" data-planclear="1">${PLAN_CLEAR?"再点一次确认清空":"清空行程"}</button></p><span class="folio">PLAN</span>`;
-  const R=`<div class="kicker"><span class="kind">行程单</span><span>${ds.length?fmtD(ds[0])+" – "+fmtD(ds[ds.length-1])+" · 共 "+ds.length+" 天":"空"}</span></div><h1>旅行计划</h1>${ds.length?ds.map((d,i)=>`<div class="sec" id="pd-${d}">第${i+1}天 · ${fmtD(d,true)} · ${PLAN[d].length} 处</div>${planDayHtml(d)}`).join(""):`<p class="intro" style="margin-top:14px">这里还是空的。翻到任何一个景点，在标题下方的「旅行计划」里选好日期，点「加入行程」。</p>`}<span class="folio">PLAN</span>`;
+  const R=`<div class="kicker"><span class="kind">行程单</span><span>${ds.length?fmtD(ds[0])+" – "+fmtD(ds[ds.length-1])+" · 共 "+ds.length+" 天":"空"}</span></div><h1>旅行计划</h1>${ds.length?ds.map((d,i)=>`<div class="sec" id="pd-${d}">第${i+1}天 · ${fmtD(d,true)} · ${PLAN[d].length} 处</div>${planDayHtml(d)}`).join(""):`<p class="intro" style="margin-top:14px">这里还是空的。翻到任何一个景点，点标题下方的「＋ 加入我的行程」，选好日期就会排进来。</p>`}<span class="folio">PLAN</span>`;
   return [L,R];
 }
 let PLAN_CLEAR=false;
 function myPages(){
   const tags=myAll().filter(x=>Object.values(MY).some(a=>a.includes(x)));
   const L=`<span class="eyebrow">个人</span><div class="tagtitle">我的标签</div>
-  <p style="color:var(--ink-2)">在任意景点页点「♡ 收藏」「想去」「已去过」，或添加自己的标签，就会汇总到这里。标签只保存在这台设备的浏览器里，换设备时可以用下面的导出和导入。</p>
+  <p style="color:var(--ink-2)">在任意景点页点「♡ 收藏」「✓ 已去过」，或点「+ 标签」添加自己的标签，就会汇总到这里。标签只保存在这台设备的浏览器里，换设备时可以用下面的导出和导入。</p>
   <div class="cloud">${tags.length?tags.map(x=>`<a class="tag" href="#mt-${encodeURIComponent(x)}" data-jump="${esc(x)}">${esc(x)} <span class="mono" style="opacity:.6">${Object.values(MY).filter(a=>a.includes(x)).length}</span></a>`).join(""):'<span style="color:var(--muted)">还没有保存任何景点。</span>'}</div>
   <div class="myio"><button class="btn" data-myexport="1">导出我的标签</button><button class="btn" data-myimport="1">导入</button><button class="btn" data-myclear="1">${CLEAR_ARMED?"再点一次确认清空":"清空全部"}</button></div>
   <textarea id="myio-text" class="myio-text" rows="4" placeholder="导出的内容会出现在这里；导入时把之前导出的内容粘贴到这里，再点「导入」。"></textarea><p class="status" id="myio-status"></p><span class="folio">MY</span>`;
@@ -578,7 +725,7 @@ function seasonTagPages(t,list,T=t){
   const plans=Object.keys(PLAN||{}).filter(d=>(PLAN[d]||[]).length).map(d=>{const x=new Date(d);return x.getMonth()+1+(x.getDate()-1)/31});
   const axis=`<div class="scrow scm"><span class="scl"></span><div class="sctrack">${[1,2,3,4,5,6,7,8,9,10,11,12].map(m=>`<span style="left:${((m-0.5)/12*100).toFixed(2)}%">${m}</span>`).join("")}</div></div>`;
   const others=SC_TAGS.filter(k=>TAGCOUNT[k]);
-  const L=`<span class="eyebrow">时令</span><div class="tagtitle">${esc(tagLabel(T))}</div>${subBar(ORDER.filter(n=>hasTag(n,t)),T,"data-tag")}<p style="color:var(--ink-2)">共 ${list.length} 处，分布在 ${new Set(list.map(n=>(n.disp[0]||""))).size} 个地区。右侧按时间先后排列，色条是往年的大致最佳时期，点景点名可跳转。</p>
+  const L=`<span class="eyebrow">时令</span><div class="tagtitle">${esc(tagLabel(T))}</div>${(x=>x?`<div class="fwrap">${x}</div>`:"")(subBar(ORDER.filter(n=>hasTag(n,t)),T,"data-tag"))}<p style="color:var(--ink-2)">共 ${list.length} 处，分布在 ${new Set(list.map(n=>(n.disp[0]||""))).size} 个地区。右侧按时间先后排列，色条是往年的大致最佳时期，点景点名可跳转。</p>
    <div class="cloud">${others.map(k=>`<button class="tag${k===t?" cur":""}" data-tag="${k}">${esc(TAGS[k])} <span class="mono" style="opacity:.6">${TAGCOUNT[k]}</span></button>`).join("")}</div>
    <div class="sec" style="margin-top:22px">时令总览</div><div class="scal"><div class="scgrid">${others.map(k=>{const ns=ORDER.filter(n=>hasTag(n,k));const segs=ns.flatMap(n=>(n.sm&&n.sm[k])||SC_DEF[k]||[]);return `<div class="scrow"><button class="scl scbtn" data-tag="${k}">${esc(TAGS[k])}</button><div class="sctrack">${segs.map(([a,b])=>`<i class="sc-${k}" style="left:${pct(a)}%;width:${Math.max(1.2,(b-a)/12*100).toFixed(2)}%;opacity:${k===t?.35:.18}"></i>`).join("")}</div></div>`}).join("")}${axis}</div></div>
    <p class="scnote">色条为往年大致时期，每年会有前后浮动，${CFG.SC_NOTE}${(CFG.SC_NOTE_T||{})[t]||""}</p><span class="folio">时令</span>`;
@@ -589,7 +736,7 @@ function seasonTagPages(t,list,T=t){
 }
 function tagPages(T){
   const t=T.split("&")[0],list=ORDER.filter(n=>matchTag(n,T));
-  const L=`<span class="eyebrow">标签</span><div class="tagtitle">${esc(TAGS[t])}</div>${TAG_PARENT[t]?`<p style="margin:0 0 6px"><span class="eyebrow">上级标签</span> <button class="tag" data-tag="${TAG_PARENT[t]}">${esc(TAGS[TAG_PARENT[t]])}</button></p>`:""}${TAG_KIDS[t]?`<p style="margin:0 0 6px"><span class="eyebrow">包含</span> ${TAG_KIDS[t].filter(k=>TAGCOUNT[k]).map(k=>`<button class="tag" data-tag="${k}">${esc(TAGS[k])} ${TAGCOUNT[k]}</button>`).join(" ")}</p>`:""}${subBar(ORDER.filter(n=>hasTag(n,t)),T,"data-tag")}<p style="color:var(--ink-2)">共 ${list.length} 处，分布在 ${new Set(list.map(n=>(n.disp[0]||"")) ).size} 个地区。点击右侧任意条目跳转。</p>
+  const L=`<span class="eyebrow">标签</span><div class="tagtitle">${esc(TAGS[t])}</div>${TAG_PARENT[t]?`<p style="margin:0 0 6px"><span class="eyebrow">上级标签</span> <button class="tag" data-tag="${TAG_PARENT[t]}">${esc(TAGS[TAG_PARENT[t]])}</button></p>`:""}${TAG_KIDS[t]?`<p style="margin:0 0 6px"><span class="eyebrow">包含</span> ${TAG_KIDS[t].filter(k=>TAGCOUNT[k]).map(k=>`<button class="tag" data-tag="${k}">${esc(TAGS[k])} ${TAGCOUNT[k]}</button>`).join(" ")}</p>`:""}${(x=>x?`<div class="fwrap">${x}</div>`:"")(subBar(ORDER.filter(n=>hasTag(n,t)),T,"data-tag"))}<p style="color:var(--ink-2)">共 ${list.length} 处，分布在 ${new Set(list.map(n=>(n.disp[0]||"")) ).size} 个地区。点击右侧任意条目跳转。</p>
    <div class="cloud">${Object.keys(TAGS).filter(k=>TAGCOUNT[k]&&(!SUBHIDE.has(k)||k===t)).map(k=>`<button class="tag${k===t?" cur":""}" data-tag="${k}">${esc(TAGS[k])} <span class="mono" style="opacity:.6">${TAGCOUNT[k]}</span></button>`).join("")}</div><span class="folio">TAG</span>`;
   if(SC_TAGS.includes(t))return seasonTagPages(t,list,T);
   const R=`<div class="kicker"><span class="kind">索引</span><span>按书页顺序</span></div><h1>${esc(tagLabel(T))}</h1><div class="kids" style="margin-top:14px">${list.map((n,i)=>`<button class="kid" data-go="${n.id}"><span class="n">${String(i+1).padStart(2,"0")}</span><span><b>${esc(n.n)}</b><small>${esc(n.disp.slice(0,-1).join(" › ")||"总览")} · ${n.kind}</small></span><em>P.${pg(n.page*2-1)}</em></button>`).join("")}</div><span class="folio">TAG</span>`;
@@ -679,7 +826,7 @@ document.addEventListener("click",e=>{
   if(!e.target.closest(".tpop"))hidePop();
   const tc=e.target.closest("[data-tcat]");if(tc){const c=tc.dataset.tcat;closeAll();const jump=()=>{const el=document.getElementById("tc-"+c);if(el)el.scrollIntoView({behavior:"smooth",block:"start"})};if(cur==="terms")jump();else{go("terms");setTimeout(jump,500)}return}
   const tj=e.target.closest("[data-tjump]");if(tj){e.preventDefault();const el=document.getElementById("tc-"+tj.dataset.tjump);if(el)el.scrollIntoView({behavior:"smooth",block:"start"});return}
-  const mt=e.target.closest("[data-mytoggle]");if(mt){const p=parseRoute(cur);if(!p.node)return;const v=mt.dataset.mytoggle;const a=MY[p.node.id]||[];MY[p.node.id]=a.includes(v)?a.filter(x=>x!==v):[...a,v];saveMy();refreshMine();return}
+  const mt=e.target.closest("[data-mytoggle]");if(mt){const p=parseRoute(cur);if(!p.node)return;const v=mt.dataset.mytoggle;const a=MY[p.node.id]||[];MY[p.node.id]=a.includes(v)?a.filter(x=>x!==v):[...a,v];if(v==="已去过"){if(MY[p.node.id].includes(v))VIS[p.node.id]=todayISO();else delete VIS[p.node.id];saveVis()}saveMy();refreshMine();return}
   if(e.target.closest("[data-myadd]")){addMy();return}
   const mr=e.target.closest("[data-myremove]");if(mr){const [id,v]=mr.dataset.myremove.split("|");MY[id]=(MY[id]||[]).filter(x=>x!==v);saveMy();render(cur,false);refreshMine();return}
   const rt=e.target.closest("[data-route]");if(rt){closeAll();hidePop();go(rt.dataset.route);return}

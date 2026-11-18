@@ -1,9 +1,9 @@
 import json, re, time, sys, os, io, urllib.parse, urllib.request
-sys.path.insert(0, "/home/claude/swiss/content")
+sys.path.insert(0, "/home/claude/techo/books/swiss/src/content")
 from PIL import Image
 UA = "SwissTravelTechoBuilder/1.0 (https://github.com/Shiyang0530; personal travel e-book)"
 OUT = "/home/claude/swiss/site/img"; os.makedirs(OUT, exist_ok=True)
-DB = "/home/claude/swiss/imgdb.json"
+DB = "/home/claude/techo/books/swiss/src/imgdb.json"
 db = json.load(open(DB)) if os.path.exists(DB) else {}
 
 import subprocess
@@ -84,7 +84,7 @@ def download(id, info):
     im.save(f"{OUT}/{id}.webp", "WEBP", quality=72, method=6)
 
 if __name__ == "__main__":
-    jobs = json.load(open("/home/claude/swiss/imgjobs.json"))
+    jobs = json.load(open("/home/claude/techo/books/swiss/src/imgjobs.json"))
     only = set(sys.argv[1:])
     for j in jobs:
         id = j["id"]

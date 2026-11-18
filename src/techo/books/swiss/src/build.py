@@ -1,10 +1,13 @@
 import sys, os, json, math, re, importlib
-sys.path.insert(0, "/home/claude/swiss/content")
+_HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _HERE + "/content")
+sys.path.insert(0, "/home/claude/techo/engine/geo")
+os.environ.setdefault("TECHO_BOOK_SRC", _HERE)
 from shapely.geometry import shape, box, mapping, LineString
 from shapely.ops import unary_union
 
-TREE = "/home/claude/swiss/tree"
-OUT = "/home/claude/swiss/out"
+TREE = _HERE + "/tree"
+OUT = "/home/claude/techo/build/swiss"
 os.makedirs(OUT, exist_ok=True)
 
 def folders(path):
@@ -54,7 +57,10 @@ def mk(id, n, ja, f, d, t, **kw):
 IDS = set()
 PLANDATA = {}
 LEAVES = []
-sys.path.insert(0, "/home/claude/swiss/content")
+_HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _HERE + "/content")
+sys.path.insert(0, "/home/claude/techo/engine/geo")
+os.environ.setdefault("TECHO_BOOK_SRC", _HERE)
 from topo import HIKE as _HK
 import hot as _HOT
 HIKE_ROUTES = {k for k, v in _HK.items() if not (len(v) > 3 and v[3] == "ski")}
@@ -233,7 +239,7 @@ from gloss import GLOSS
 mapx.HIKE_NODES.update(k for k, v in HIKE.items() if (v[3] if len(v) > 3 else "hike") == "hike")
 mapx.SKI_NODES.update(k for k in SKI_USE if k not in ("glacier3000", "corvatsch", "piznair", "parsenn", "jakobshorn", "weisshorn", "glacierparadise"))
 mapx.SKI_NODES.update(k for k, v in HIKE.items() if len(v) > 3 and v[3] == "ski")
-G = lambda f: json.load(open("/home/claude/geo/" + f))
+G = lambda f: json.load(open(os.environ.get("TECHO_GEO", "/home/claude/geo") + "/" + f))
 countries = [(ft["properties"]["ADM0_A3"], shape(ft["geometry"])) for ft in G("ne_10m_admin_0_countries.geojson")["features"]]
 REG = box(4.5, 44.8, 11.8, 48.5)
 countries = [(a, g.intersection(REG)) for a, g in countries if g.intersects(REG)]
@@ -850,7 +856,7 @@ def _aps(n):
 for R in BOOK["c"]:
     if "hub" in R: _aps(R)
 
-IMGDB = json.load(open("/home/claude/swiss/imgdb.json")) if os.path.exists("/home/claude/swiss/imgdb.json") else {}
+IMGDB = json.load(open(_HERE + "/imgdb.json")) if os.path.exists(_HERE + "/imgdb.json") else {}
 # 共享资料库（/home/claude/techo）：内容与图片以资料库为准，见 techo/tools/overlay_swiss.py
 sys.path.insert(0, "/home/claude/techo/tools")
 import overlay_swiss as _OV
