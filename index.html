@@ -552,6 +552,18 @@ svg.map.zoomed g.mk,svg.map.zoomed text,svg.map.zoomed .tnm,svg.map.zoomed .pkm,
 .pf{background:#E3F0DC;color:#2F6420}.pd{background:#FBEFD6;color:#8A5A0E}.pn{background:#EEE;color:#777}
 .pmini{display:inline-flex;gap:4px;margin-left:6px;vertical-align:1px}.pmini i{font-style:normal;font-size:10.5px;padding:1px 6px;border-radius:5px;font-weight:600}
 .ptab td.pf,.ptab td.pd,.ptab td.pn{font-weight:700;text-align:center;font-size:13px}.ptab tr.pg th{text-align:left;padding-top:12px;font-size:12px;color:var(--muted)}
+.mtab table.ptab{min-width:0;width:100%;table-layout:fixed}.ptab th:first-child,.ptab td:first-child{width:46%;text-align:left;white-space:normal}.ptab td .mylink{white-space:normal;text-align:left;line-height:1.35}
+@media(max-width:760px){.crumbs{flex-wrap:wrap!important;overflow-x:visible!important;white-space:normal!important;row-gap:0}
+.mtab table:not(.ptab){min-width:0}.mtab table:not(.ptab) thead{display:none}
+.mtab table:not(.ptab) tr{display:grid;grid-template-columns:2.4em 1fr;column-gap:8px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.mtab table:not(.ptab) td{display:block;border:0;padding:1px 0;white-space:normal!important;grid-column:2}
+.mtab table:not(.ptab) td:first-child{grid-column:1;grid-row:1 / span 6}
+.mtab table:not(.ptab) td:empty{display:none}
+.mtab table:not(.ptab) td:nth-child(3)::before{content:"距离 ";font-family:var(--f-body);color:var(--muted)}.mtab table:not(.ptab) td:nth-child(3)::after{content:" km"}
+.mtab table:not(.ptab) td:nth-child(4)::before{content:"爬升 / 下降 ";font-family:var(--f-body);color:var(--muted)}.mtab table:not(.ptab) td:nth-child(4)::after{content:" m"}
+.mtab table:not(.ptab) td:nth-child(5)::before{content:"最高点 ";color:var(--muted)}
+.mtab table:not(.ptab) td:nth-child(6)::before{content:"缩短与交通 ";color:var(--muted)}}
+@media(max-width:520px){.ptab td.pf,.ptab td.pd,.ptab td.pn{font-size:12px;padding-left:2px;padding-right:2px}}
 .fsub{display:flex;flex-wrap:wrap;gap:6px 14px;margin:-4px 0 10px;padding:7px 10px;border-radius:8px;background:rgba(0,0,0,.035)}
 .fsub .fsg{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
 .fsub .fsg b{font:600 11px var(--f-mono,monospace);color:var(--muted);margin-right:2px}
