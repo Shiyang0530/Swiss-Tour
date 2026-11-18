@@ -15,6 +15,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from tdb import ROOT, BOOKS, jdump
 
 ENG = os.path.join(ROOT, "engine")
+if os.path.exists(os.path.join(ENG, "app.js")) and "--force" not in sys.argv:
+    sys.exit("引擎已经生成，以后直接改 engine/ 和 books/*/engine.json；确实要从头重新合并请加 --force（会覆盖这些修改）。")
 K = open("/home/claude/work/app.js", encoding="utf-8").read()
 SW = pickle.load(open("/tmp/sw_parts.pkl", "rb"))
 S = SW["a"]

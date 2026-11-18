@@ -500,5 +500,9 @@
   "literature": "history",
   "cheese": "food",
   "chocolate": "food"
- }
+ },
+ "basemaps": [
+  "topo",
+  "osm"
+ ]
 }

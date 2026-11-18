@@ -205,7 +205,7 @@ function autoPages(){
     if(r.warn.length)R+=`<p class="scnote apwarn">${r.warn.map(esc).join("<br>")}</p>`;
     R+=r.days.map((d,i)=>`<div class="sec">第${i+1}天 · ${fmtD(d,true)}</div>${r.plan[d].length||r.meta[d].rows.length?apSchedule(d,r.meta,r.plan,true):'<p class="scnote">自由活动 / 休息日</p>'+apSchedule(d,{[d]:{rows:[],back:0,food:[],note:[]}},r.plan,true)}${(()=>{const M=r.meta[d],L=M.rows.filter(x=>!x.mv).slice(-1)[0];return L&&!M.dep?`<p class="scnote">约 ${hm(L.at+(L.dur||60)+M.back)} 回到住处</p>`:""})()}`).join("");
     const nm=`自动行程 ${fmtD(r.days[0])}–${fmtD(r.days[r.days.length-1])} · ${AP_PACE[r.opt.pace].n}`;
-    R+=`<div class="apsave"><input id="ap-name" value="${esc(nm)}" maxlength="40" aria-label="版本名称"><button class="btn pri" data-apsave="1">保存为新版本并设为当前行程</button></div>
+    R+=`<div class="apsave"><input id="ap-name" value="${esc(nm)}" maxlength="40" aria-label="版本名称">${CFG.feat.autoDraft?`<button class="btn pri" data-apsave="1">命名并打开旅行计划</button></div><p class="scnote">生成的行程已经自动放进「旅行计划」，作为当前版本「自动行程（草稿）」；再点「换一种排法」会覆盖这个草稿。想保留，就在这里起个名字。</p><div></div>`:`<button class="btn pri" data-apsave="1">保存为新版本并设为当前行程</button></div>`}
     <p class="scnote">时间为大致估算（按直线距离和交通方式推算），开放时间、预约和交通以官方信息为准。</p>`}
   R+=`<span class="folio">AUTO</span>`;
   return [L,R];

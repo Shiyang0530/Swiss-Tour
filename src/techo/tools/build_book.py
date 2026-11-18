@@ -22,12 +22,23 @@ def book_data(book):
     if book == "kyoto":
         import export
         C = export.kyoto_consts()
-        return "/* 以下数据由共享资料库生成（techo/tools/build_book.py），请改资料库，不要直接改这里 */\n" + "".join(f"const {k}={js(C[k])};\n" for k in KY_ORDER)
+        txt = "/* 以下数据由共享资料库生成（techo/tools/build_book.py），请改资料库，不要直接改这里 */\n" + "".join(f"const {k}={js(C[k])};\n" for k in KY_ORDER)
+        return txt + plan_proj(C["PLANDATA"])
     if book == "swiss":
         d = rd("/home/claude/swiss/out/data.js")
         hy = base64.b64encode(open("/home/claude/swiss/out/hypso.webp", "rb").read()).decode()
         return d + f'const HYPSO_DATA="data:image/webp;base64,{hy}";\n'
     raise SystemExit("未知的书：" + book)
+
+def plan_proj(PLAN):
+    """没有地理底图的书（京都是插画地图）：给行程地图算一个经纬度投影，联网时叠加在线街道底图。"""
+    import math
+    la = [v[0] for v in PLAN.values()]; lo = [v[1] for v in PLAN.values()]
+    cy, cx = (min(la) + max(la)) / 2, (min(lo) + max(lo)) / 2; cl = math.cos(math.radians(cy))
+    k = min(560 / ((max(lo) - min(lo)) * cl), 400 / (max(la) - min(la)))
+    pxy = {i: [round(300 + (v[1] - cx) * cl * k, 1), round(220 - (v[0] - cy) * k, 1)] for i, v in PLAN.items()}
+    bg = f'<g class="geoP" data-p="{cx:.6f} {cy:.6f} {cl:.6f} {k:.3f}"></g>'
+    return f"const PXY={js(pxy)};\nconst PLANBG={js(bg)};\n"
 
 def subset(src, out, textfile):
     subprocess.run(["pyftsubset", src, f"--text-file={textfile}", f"--output-file={out}", "--flavor=woff", "--layout-features=*"], check=True)
