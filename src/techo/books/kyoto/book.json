@@ -1,0 +1,195 @@
+{
+ "book_id": "kyoto",
+ "title": "京都旅行手帖",
+ "subtitle": "KYOTO · TRAVEL NOTEBOOK",
+ "scope": {
+  "countries": [
+   "JP"
+  ],
+  "note": "京都府、奈良县、滋贺县、大阪府"
+ },
+ "languages": [
+  "zh"
+ ],
+ "min_tier": 3,
+ "max_depth": 5,
+ "seasons": [
+  {
+   "key": "sakura",
+   "name": "樱花",
+   "months": [
+    3,
+    4
+   ]
+  },
+  {
+   "key": "momiji",
+   "name": "红叶",
+   "months": [
+    11,
+    12
+   ]
+  },
+  {
+   "key": "snow",
+   "name": "雪景",
+   "months": [
+    12,
+    2
+   ]
+  },
+  {
+   "key": "matsuri",
+   "name": "祭典节庆",
+   "months": null
+  }
+ ],
+ "theme_tab": null,
+ "dict_categories": [
+  "人物",
+  "佛像·美术",
+  "历史·时代",
+  "宗派",
+  "庭园",
+  "建筑",
+  "文学",
+  "温泉",
+  "祭典",
+  "美食"
+ ],
+ "filter_facets": {},
+ "regions": [
+  {
+   "id": "3000109",
+   "name": "京都",
+   "admin": [
+    "JP-26（京都市）"
+   ],
+   "stays": []
+  },
+  {
+   "id": "3000110",
+   "name": "奈良",
+   "admin": [
+    "JP-29"
+   ],
+   "stays": []
+  },
+  {
+   "id": "3000111",
+   "name": "滋贺",
+   "admin": [
+    "JP-25"
+   ],
+   "stays": []
+  },
+  {
+   "id": "3000112",
+   "name": "大阪",
+   "admin": [
+    "JP-27"
+   ],
+   "stays": []
+  },
+  {
+   "id": "3000113",
+   "name": "海之京都",
+   "admin": [
+    "JP-26（丹后、中丹）"
+   ],
+   "stays": []
+  },
+  {
+   "id": "3000114",
+   "name": "森之京都",
+   "admin": [
+    "JP-26（南丹、中丹的山区）"
+   ],
+   "stays": []
+  }
+ ],
+ "chapters": [],
+ "country_info": {
+  "currency": "JPY",
+  "languages": [
+   "日语"
+  ],
+  "plug": "A 型 100 V",
+  "emergency": "110（警察）/ 119（急救、消防）"
+ },
+ "upsells": [],
+ "engine": {
+  "TAGS": {
+   "hot": "热门景点",
+   "temple": "佛寺",
+   "shrine": "神社",
+   "unesco": "世界遗产",
+   "garden": "庭园",
+   "street": "古街",
+   "nature": "自然",
+   "food": "美食",
+   "newyear": "跨年",
+   "night": "夜景",
+   "zen": "禅宗",
+   "view": "观景",
+   "history": "历史",
+   "hike": "徒步",
+   "sakura": "赏樱",
+   "matsuri": "祭典与活动",
+   "elderly": "适合老人",
+   "couple": "适合情侣",
+   "free": "免门票",
+   "allday": "全天开放",
+   "sengoku": "日本战国",
+   "literature": "文学",
+   "meiji": "明治维新",
+   "momiji": "赏枫",
+   "onsen": "温泉",
+   "myth": "神话传说",
+   "beach": "海滩",
+   "shopping": "购物",
+   "museum": "博物馆",
+   "family": "亲子",
+   "tea": "茶",
+   "deer": "动物",
+   "lake": "湖景",
+   "castle": "城郭",
+   "genji": "源氏物语",
+   "snow": "赏雪"
+  },
+  "TAG_PARENT": {
+   "sengoku": "history",
+   "meiji": "history",
+   "myth": "history",
+   "literature": "history",
+   "unesco": "history",
+   "genji": "literature"
+  },
+  "DIAG_NUKI": "<svg class=\"diag\" viewBox=\"0 0 640 300\" role=\"img\" aria-label=\"贯木穿柱与地狱止示意图\">\n<g style=\"fill:var(--ink-2);font:13px var(--f-body)\">\n<text x=\"20\" y=\"24\" style=\"font-weight:700;fill:var(--ink)\">① 贯：横木穿过柱身</text>\n<text x=\"340\" y=\"24\" style=\"font-weight:700;fill:var(--ink)\">② 地狱止：楔子把榫头撑开锁死</text></g>\n<g style=\"stroke:var(--ink);stroke-width:1.4\">\n<rect x=\"70\" y=\"40\" width=\"44\" height=\"240\" style=\"fill:var(--hill)\"/><rect x=\"220\" y=\"40\" width=\"44\" height=\"240\" style=\"fill:var(--hill)\"/>\n<rect x=\"30\" y=\"120\" width=\"270\" height=\"30\" style=\"fill:var(--shu-soft)\"/>\n<rect x=\"30\" y=\"200\" width=\"270\" height=\"30\" style=\"fill:var(--shu-soft)\"/>\n<path d=\"M114 120 L132 135 L114 150Z M264 120 L282 135 L264 150Z M114 200 L132 215 L114 230Z M264 200 L282 215 L264 230Z\" style=\"fill:var(--shu)\"/>\n<rect x=\"440\" y=\"44\" width=\"66\" height=\"186\" style=\"fill:var(--hill)\"/>\n<rect x=\"440\" y=\"110\" width=\"48\" height=\"56\" style=\"fill:var(--page)\"/>\n<path d=\"M340 118 L440 118 L488 105 L488 171 L440 158 L340 158Z\" style=\"fill:var(--shu-soft)\"/>\n<path d=\"M488 117 L460 125 L488 131Z M488 145 L460 151 L488 159Z\" style=\"fill:var(--shu)\"/>\n</g>\n<g style=\"stroke:var(--muted);stroke-width:1;fill:none\" stroke-dasharray=\"3 3\"><path d=\"M540 124 L492 124 M540 152 L492 152\"/></g>\n<g style=\"fill:var(--ink-2);font:12px var(--f-body)\">\n<text x=\"92\" y=\"295\" text-anchor=\"middle\">柱</text><text x=\"242\" y=\"295\" text-anchor=\"middle\">柱</text>\n<text x=\"165\" y=\"114\" text-anchor=\"middle\">贯（横木）</text><text x=\"140\" y=\"172\">楔</text>\n<text x=\"473\" y=\"246\" text-anchor=\"middle\">柱（卯眼不打穿）</text><text x=\"370\" y=\"180\">榫头</text>\n<text x=\"546\" y=\"128\">楔子顶底</text><text x=\"546\" y=\"156\">榫尾撑开</text>\n<text x=\"340\" y=\"274\" style=\"fill:var(--muted)\">打入后榫头呈燕尾状卡在柱内，</text><text x=\"340\" y=\"292\" style=\"fill:var(--muted)\">从外面看不到，也几乎拔不出来。</text></g>\n</svg>"
+ },
+ "root": {
+  "id": "root",
+  "n": "京都及周边",
+  "ja": "京都・大阪・奈良・滋賀・海の京都・森の京都",
+  "f": "",
+  "t": [
+   "history"
+  ],
+  "img": "ROOT",
+  "banner": {
+   "x": 55.4,
+   "y": 10.7
+  },
+  "d": "794 年，桓武天皇把都城迁到这片三面环山的盆地，取名平安京。此后一千多年，京都一直是日本的皇都，寺社、庭园与町屋层层叠叠地留到了今天。往南不到一小时是更古老的都城奈良，往东翻过东山是琵琶湖所在的滋贺，往西南是商人之城大阪，往北是茅草屋村落和原始森林散布的丹波山地「森之京都」，再往北就是面向日本海的「海之京都」。这本书把它们分成六个章节，从京都出发，每一章都在两小时车程之内。",
+  "i": {
+   "a": "京都–奈良：近铁特急约 35 分钟；京都–大津：JR 约 10 分钟；京都–大阪：JR 新快速约 30 分钟；京都–天桥立：JR 特急约 2 小时"
+  },
+  "w": [
+   "M430 60 C470 40 520 70 515 130 C512 190 470 230 455 290 C445 330 405 335 400 300 C395 250 420 210 410 160 C400 110 395 80 430 60Z"
+  ],
+  "r": [
+   "M300 200 C260 240 220 280 160 330 C130 355 100 370 60 380",
+   "M400 300 C370 290 340 260 305 230"
+  ]
+ }
+}
