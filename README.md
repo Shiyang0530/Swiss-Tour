@@ -21,10 +21,8 @@
 |---|---|
 | `index.html`、`sw.js`、`manifest.webmanifest`、`icon-*.png` | 电子书本体（单个 HTML 文件，可离线使用） |
 | `img/` | 景点照片（文件名 = 条目编号 + 用途后缀；维基共享资源，CC BY / CC BY-SA / CC0，页面上标注作者和许可）与作者提供的 AI 插画 |
-| `src/techo/` | 京都与瑞士共用的资料库和通用引擎，说明见 `src/techo/README.md`；瑞士的结构与地理数据在 `src/techo/books/swiss/src/` |
-| `src/data/folder_map.json` | 本地「瑞士旅游」文件夹新旧结构对照 |
 
-构建：`python3 src/techo/tools/build_book.py swiss`（需要 Natural Earth 的 GeoJSON，放在 `/home/claude/geo/` 或用环境变量 `TECHO_GEO` 指定）。
+源文件（共享资料库、通用引擎、瑞士的结构与地理数据、构建脚本）在私有素材库 Asset_Tourguide 的 `techo/` 里；本仓库只放成品。构建：`python3 techo/tools/build_book.py swiss`。
 
 ## 数据与版权
 

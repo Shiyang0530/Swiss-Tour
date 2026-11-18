@@ -1,6 +1,0 @@
-const CACHE="{{ID}}-techo-{{VER}}";const FILES={{FILES}};
-self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(async c=>{let i=0;const one=async f=>{try{const r=await fetch(f,{cache:"reload"});if(r.ok)await c.put(f,r)}catch(_){}};const q=[...FILES];await Promise.all([0,1,2,3,4,5].map(async()=>{while(q.length)await one(q.shift())}));await c.put("__offline_done__",new Response("1"))}));self.skipWaiting()});
-self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE&&k!=="{{ID}}-tiles").map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
-self.addEventListener("fetch",e=>{const r=e.request;if(r.method!=="GET")return;const u=new URL(r.url);if(u.host==="wmts.geo.admin.ch"||u.host==="tile.openstreetmap.org"){e.respondWith(caches.open("{{ID}}-tiles").then(c=>c.match(r).then(m=>m||fetch(r).then(res=>{if(res.ok||res.type==="opaque")c.put(r,res.clone());return res}))));return}if(u.origin!==location.origin)return;
-  if(r.mode==="navigate"){e.respondWith(fetch(r).then(res=>{const c=res.clone();caches.open(CACHE).then(x=>x.put("index.html",c));return res}).catch(()=>caches.match("index.html")));return}
-  e.respondWith(caches.match(r).then(m=>m||fetch(r)))});
